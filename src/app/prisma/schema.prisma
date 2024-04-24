@@ -1,0 +1,122 @@
+// Define your data model using Prisma Schema
+// Visit https://pris.ly/d/prisma-schema to learn more about Prisma Schema
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Prisma schema representing the database structure
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+// Define your database schema and models using Prisma Schema Language
+// Visit https://pris.ly/d/prisma-schema to learn more about it
+
+// Define the User model
+model Usuarios {
+  ID_User            Int                  @id @default(autoincrement())
+  Nombre             String
+  Email              String
+  Apellidos          String
+  Descripcion        String?
+  Password           String
+  Participantes_liga Participantes_liga[]
+}
+
+// Define the Liga model
+model Ligas {
+  ID_Liga             Int                   @id @default(autoincrement())
+  Nombre              String
+  Participantes_liga  Participantes_liga[]
+  Equipos             Equipos[]
+  Puntuaciones        Puntuaciones[]
+  Deportes_Inventados Deportes_Inventados[]
+  Deportes_liga       Deportes_liga[]
+}
+
+// Define the Deporte model
+model Deportes {
+  ID_Deporte    Int             @id @default(autoincrement())
+  Nombre        String
+  Reglas        String
+  Num_Jugadores Int
+  Deportes_liga Deportes_liga[]
+}
+
+// Define the Participantes_liga model
+model Participantes_liga {
+  ID_Participacion_Liga Int @id @default(autoincrement())
+  ID_Participante       Int
+  ID_Liga               Int
+
+  // Define the relationships
+  Usuarios         Usuarios           @relation(fields: [ID_Participante], references: [ID_User])
+  Ligas            Ligas              @relation(fields: [ID_Liga], references: [ID_Liga])
+  Jugadores_equipo Jugadores_equipo[]
+}
+
+// Define the Equipos model
+model Equipos {
+  ID_Equipo   Int    @id @default(autoincrement())
+  Nombre      String
+  Descripcion String
+  ID_Liga     Int
+
+  // Define the relationships
+  Ligas            Ligas              @relation(fields: [ID_Liga], references: [ID_Liga])
+  Jugadores_equipo Jugadores_equipo[]
+  Puntuaciones     Puntuaciones[]
+}
+
+// Define the Jugadores_equipo model
+model Jugadores_equipo {
+  ID_Jugador_Equipo Int @id @default(autoincrement())
+  ID_Equipo         Int
+  ID_Participante   Int
+
+  // Define the relationships
+  Equipos            Equipos            @relation(fields: [ID_Equipo], references: [ID_Equipo])
+  Participantes_liga Participantes_liga @relation(fields: [ID_Participante], references: [ID_Participacion_Liga])
+}
+
+// Define the Puntuaciones model
+model Puntuaciones {
+  ID_Puntuacion Int @id @default(autoincrement())
+  Nombre        Int
+  ID_Liga       Int
+  ID_Equipo     Int
+
+  // Define the relationships
+  Ligas   Ligas   @relation(fields: [ID_Liga], references: [ID_Liga])
+  Equipos Equipos @relation(fields: [ID_Equipo], references: [ID_Equipo])
+}
+
+// Define the Deportes_Inventados model
+model Deportes_Inventados {
+  ID_Deporte_Inventado Int    @id @default(autoincrement())
+  Nombre               String
+  Reglas               String
+  Num_Jugadores        Int
+  ID_Liga              Int
+
+  // Define the relationships
+  Ligas Ligas @relation(fields: [ID_Liga], references: [ID_Liga])
+}
+
+// Define the Deportes_liga model
+model Deportes_liga {
+  ID_Deporte_Liga Int @id @default(autoincrement())
+  ID_Deporte      Int
+  ID_Liga         Int
+
+  // Define the relationships
+  Deportes Deportes @relation(fields: [ID_Deporte], references: [ID_Deporte])
+  Ligas    Ligas    @relation(fields: [ID_Liga], references: [ID_Liga])
+}
