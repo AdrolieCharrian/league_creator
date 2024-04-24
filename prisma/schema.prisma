@@ -1,10 +1,8 @@
-// Define your data model using Prisma Schema
-// Visit https://pris.ly/d/prisma-schema to learn more about Prisma Schema
-
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Prisma schema representing the database structure
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
