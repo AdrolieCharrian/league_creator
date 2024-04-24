@@ -4,23 +4,21 @@ import Link from 'next/link'
 
 export default function League_parti() {
 
-  const [id_user, setid_user] = useState('');
-  const [id_liga, setid_liga] = useState('');
+  const [idUser, setIdUser] = useState('');
+  const [idLeague, setIdLeague] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Intentando enviar datos:', { id_user,id_liga });
 
     try {
-      console.log('Haciendo fetch a /api/particpants...');
+      console.log('Haciendo fetch a /api/participants...');
       await fetch('/api/participants', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: id_user,leagueId: id_liga}),
+        body: JSON.stringify({ userId: idUser, leagueId: idLeague}),
       });
-      console.log(id_user, id_liga);
     } catch (error) {
       console.error('Error durante el fetch:', error);
     }
@@ -33,16 +31,16 @@ export default function League_parti() {
         <input
           type="text"
           placeholder="id_user"
-          value={id_user}
-          onChange={(e) => setid_user(e.target.value)}
+          value={idUser}
+          onChange={(e) => setIdUser(e.target.value)}
         />
         <input
           type="text"
           placeholder="id_liga"
-          value={id_liga}
-          onChange={(e) => setid_liga(e.target.value)}
+          value={idLeague}
+          onChange={(e) => setIdLeague(e.target.value)}
         />
-        <button onClick={console.log(id_liga, id_user)}
+        <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >

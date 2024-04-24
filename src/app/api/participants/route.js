@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
 
 //const prisma = new PrismaClient();
@@ -12,12 +12,12 @@ export async function POST(request) {
   }
 
   // Verificar que el usuario y la liga existen
-  const user = await prisma.usuarios.findUnique({
-    where: { ID_User: Number(userId) },
+  const user = await prisma.users.findUnique({
+    where: { id_user: Number(userId) },
   });
 
-  const league = await prisma.ligas.findUnique({
-    where: { ID_Liga: Number(leagueId) },
+  const league = await prisma.leagues.findUnique({
+    where: { id_league: Number(leagueId) },
   });
 
   if (!user) {
@@ -30,10 +30,10 @@ export async function POST(request) {
 
   try {
     // Crear el nuevo participante de liga
-    const newParticipant = await prisma.participantes_liga.create({
+    const newParticipant = await prisma.league_players.create({
       data: {
-        ID_Participante: Number(userId),
-        ID_Liga: Number(leagueId),
+        id_player: Number(userId),
+        id_league: Number(leagueId),
       },
     });
 
