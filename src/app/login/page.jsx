@@ -7,12 +7,12 @@ export default function Login() {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
-  const [descrip, setDescrip] = useState('');
+  const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Intentando enviar datos:', { name, surname, email, descrip, password });
+    console.log('Intentando enviar datos:', { name, surname, email, description, password });
 
     try {
       console.log('Haciendo fetch a /api/user...');
@@ -21,7 +21,7 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, surname, email, descrip, password }),
+        body: JSON.stringify({ name, surname, email, description, password }),
       });
     } catch (error) {
       console.error('Error durante el fetch:', error);
@@ -53,8 +53,8 @@ export default function Login() {
         <input
           type="text"
           placeholder="Description"
-          value={descrip}
-          onChange={(e) => setDescrip(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <input
           type="password"

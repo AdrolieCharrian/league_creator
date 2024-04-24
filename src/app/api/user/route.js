@@ -3,17 +3,17 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const res = await request.json();
-  const { name, surname, email, descrip, password } = res;
+  const { name, surname, email, description, password } = res;
   console.log({ res });
 
   try {
-    const result = await prisma.usuarios.create({
+    const result = await prisma.users.create({
       data: {
-        Nombre: name,
-        Email: email,
+        name: name,
+        email: email,
         surname: surname,
-        Descripcion: descrip,
-        Password: password,
+        description: description,
+        password: password,
       },
     });
 
