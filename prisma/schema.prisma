@@ -69,6 +69,8 @@ model leagues {
   images images[] @relation("LeagueImages")
 }
 
+//Meter otra tabla para torneos
+
 // Define the Deporte model
 model sports {
   id_sport      Int             @id @default(autoincrement())

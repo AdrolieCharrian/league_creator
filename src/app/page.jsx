@@ -7,7 +7,7 @@ async function getLeagueUsers() {
   const userList = await prisma.leagues.findMany({
     include: {
       league_players: true,
-      score: true,
+      score: false,
       sports_custom: true,
       sports_league: true,
       teams: true
