@@ -17,92 +17,135 @@ datasource db {
 // Define your database schema and models using Prisma Schema Language
 // Visit https://pris.ly/d/prisma-schema to learn more about it
 
+// images table
+model images {
+  id_image  Int      @id @default(autoincrement())
+  format    String
+  version   String
+  createdAt DateTime @default(now())
+
+  id_user   Int?
+  id_league Int?
+  id_team   Int?
+
+  // Relaciones inversas
+  user   users?   @relation(fields: [id_user], references: [id_user], name: "UserImages")
+  league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
+  team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
+
+  @@index([id_user]) // Indices para optimizar búsquedas
+  @@index([id_league])
+  @@index([id_team])
+}
+
 // Define the User model
 model users {
-  id_user            Int                  @id @default(autoincrement())
-  name             String
-  email              String
-  surname          String
-  description        String?
-  password           String
+  id_user        Int              @id @default(autoincrement())
+  name           String
+  email          String
+  surname        String?
+  description    String?
+  password       String
   league_players league_players[]
+
+  // Relación a imágenes
+  images images[] @relation("UserImages")
 }
 
 // Define the league model
 model leagues {
-  id_league             Int                   @id @default(autoincrement())
-  name              String
-  league_players  league_players[]
-  teams             teams[]
-  score        score[]
-  sports_custom sports_custom[]
-  sports_league       sports_league[]
+  id_league      Int              @id @default(autoincrement())
+  name           String
+  description    String?
+  type           String
+  maxteams       Int              @default(16)
+  league_players league_players[]
+  teams          teams[]
+  score          score[]
+  sports_custom  sports_custom[]
+  sports_league  sports_league[]
+
+  // Relación a imágenes
+  images images[] @relation("LeagueImages")
 }
 
 // Define the Deporte model
 model sports {
-  id_sport    Int             @id @default(autoincrement())
-  name        String
-  rules        String
-  num_players Int
+  id_sport      Int             @id @default(autoincrement())
+  name          String
+  description   String?
+  rules         String
+  num_players   Int
   sports_league sports_league[]
 }
 
 // Define the league_players model
 model league_players {
   id_participation_league Int @id @default(autoincrement())
-  id_player       Int
+  id_player               Int
   id_league               Int
 
   // Define the relationships
-  users         users           @relation(fields: [id_player], references: [id_user])
-  leagues            leagues              @relation(fields: [id_league], references: [id_league])
+  users        users          @relation(fields: [id_player], references: [id_user])
+  leagues      leagues        @relation(fields: [id_league], references: [id_league])
   players_team players_team[]
 }
 
 // Define the teams model
 model teams {
-  id_team   Int    @id @default(autoincrement())
-  name      String
-  description String
-  id_league     Int
+  id_team     Int     @id @default(autoincrement())
+  name        String
+  description String?
+  id_league   Int
 
   // Define the relationships
-  leagues            leagues              @relation(fields: [id_league], references: [id_league])
+  leagues      leagues        @relation(fields: [id_league], references: [id_league])
   players_team players_team[]
-  score     score[]
+  score        score[]
+
+  // Relación a imágenes
+  images images[] @relation("TeamImages")
 }
 
 // Define the players_team model
 model players_team {
   id_player_team Int @id @default(autoincrement())
-  id_team         Int
-  id_player   Int
+  id_team        Int
+  id_player      Int
 
   // Define the relationships
-  teams            teams            @relation(fields: [id_team], references: [id_team])
+  teams          teams          @relation(fields: [id_team], references: [id_team])
   league_players league_players @relation(fields: [id_player], references: [id_participation_league])
 }
 
 // Define the score model
 model score {
-  id_score Int @id @default(autoincrement())
-  name        Int
-  id_league       Int
-  id_team     Int
-
+  id_score  Int    @id @default(autoincrement())
+  type      String
+  id_league Int
+  id_team   Int
+  // both
+  matches   Int?
+  wins      Int?
+  loses     Int?
+  // League
+  points    Int?
+  draws     Int?
+  // tournament
+  
   // Define the relationships
-  leagues   leagues   @relation(fields: [id_league], references: [id_league])
-  teams teams @relation(fields: [id_team], references: [id_team])
+  leagues leagues @relation(fields: [id_league], references: [id_league])
+  teams   teams   @relation(fields: [id_team], references: [id_team])
 }
 
 // Define the sports_custom model
 model sports_custom {
-  id_sport_custom Int    @id @default(autoincrement())
-  name               String
-  rules               String
-  num_players        Int
-  id_league              Int
+  id_sport_custom Int     @id @default(autoincrement())
+  name            String
+  description     String?
+  rules           String
+  num_players     Int
+  id_league       Int
 
   // Define the relationships
   leagues leagues @relation(fields: [id_league], references: [id_league])
@@ -111,10 +154,10 @@ model sports_custom {
 // Define the sports_league model
 model sports_league {
   id_sport_league Int @id @default(autoincrement())
-  id_sport      Int
-  id_league         Int
+  id_sport        Int
+  id_league       Int
 
   // Define the relationships
-  sports sports @relation(fields: [id_sport], references: [id_sport])
-  leagues    leagues    @relation(fields: [id_league], references: [id_league])
+  sports  sports  @relation(fields: [id_sport], references: [id_sport])
+  leagues leagues @relation(fields: [id_league], references: [id_league])
 }
