@@ -5,8 +5,10 @@ import jwt from "jsonwebtoken";
 
 export default function Login() {
   const token = cookies().get("access-token");
-  const user = jwt.decode(token.value);
-  console.log(user);
+  if (token) {
+    const user = jwt.decode(token.value);
+    console.log(user);
+  }
 
   return (
     <div className="bg-gray-50 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -15,7 +17,7 @@ export default function Login() {
           Sign in to your account
         </h2>
       </div>
-      <p className="mx-auto">Logged in as: {user.email}</p>
+      <p className="mx-auto">Logged in as: {}</p>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" action={login} method="POST">
           <div>
