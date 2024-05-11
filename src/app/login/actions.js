@@ -48,7 +48,9 @@ export const login = async (formData) => {
 
   // Set token in cookie
   cookies().set("access-token", token);
-  redirect("/login");
+  console.log("Token Set: ", token);
+
+  redirect("/");
 };
 
 export const register = async (formData) => {

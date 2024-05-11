@@ -38,6 +38,7 @@ model images {
   @@index([id_team])
 }
 
+// USERNAME instead of name/surname
 // Define the User model
 model users {
   id_user        Int              @id @default(autoincrement())
