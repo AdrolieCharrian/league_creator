@@ -18,7 +18,8 @@ module.exports = {
         "sidebar-dark":"#6A4D71",
         "sidebar-dark2":"#36273A",
         "background-light":"#D9D9D9",
-        "background-dark":"#1B1B1B"
+        "background-dark":"#1B1B1B",
+        "light-white":"#FFFFFF40"
       },
     },
   },
