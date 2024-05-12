@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import "./Sidebar.css";
+import "./sidebar.css";
 
 export default function Sidebar({}) {
   const [open, setOpen] = useState(true);
