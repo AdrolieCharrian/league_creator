@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
+import "./Sidebar.css"; // Importa el archivo CSS
 
-export default function Sidebar({}) {
+export default function Sidebar() {
   const [open, setOpen] = useState(true);
   const Menus = [
     { title: "My profile", src: "user-light" },
@@ -16,6 +17,9 @@ export default function Sidebar({}) {
         open ? "w-72" : "w-20"
       } duration-100 h-screen bg-sidebar-light relative p-5 pt-6`}
     >
+      <div className="triangle-container">
+        <div className="triangle"></div>
+      </div>
       <Image
         src="/sidebar/control-light.png"
         width={28}
@@ -44,9 +48,19 @@ export default function Sidebar({}) {
       </div>
       <ul className="pt-6">
         {Menus.map((menu, index) => (
-          <li key={index} className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}>
-            <Image src={`/sidebar/${menu.src}.png`} width={40} height={40} alt=""/>
-            <span className={`${!open && 'hidden'} origin-left duration-300`}>{menu.title}</span>
+          <li
+            key={index}
+            className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
+          >
+            <Image
+              src={`/sidebar/${menu.src}.png`}
+              width={40}
+              height={40}
+              alt=""
+            />
+            <span className={`${!open && "hidden"} origin-left duration-300`}>
+              {menu.title}
+            </span>
           </li>
         ))}
       </ul>
