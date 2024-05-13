@@ -50,14 +50,16 @@ model default_images {
 model users {
   id_user        Int              @id @default(autoincrement())
   name           String?
-  email          String           @unique
+  email          String
+  username       String?
   surname        String?
   description    String?
   password       String
   league_players league_players[]
-
   // Relación a imágenes
-  images images[] @relation("UserImages")
+  images         images[]         @relation("UserImages")
+
+  @@unique([email, username])
 }
 
 // Define the league model
