@@ -55,10 +55,10 @@ export default function Sidebar({}) {
                 width={35}
                 height={35}
                 alt=""
-                className={`${!open ? "ms-1 p-0.5" : ""}`}
+                className={`${!open ? "ms-1 p-0.5" : ""} duration-500`}
               />
               <span
-                className={`text-white origin-left font-medium text-md duration-500 ${
+                className={`text-white origin-left font-medium text-md duration-100 ${
                   !open && "scale-0"
                 }`}
               >
