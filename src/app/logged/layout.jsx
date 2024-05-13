@@ -14,9 +14,9 @@ export default function RootLayout({children}) {
           <p>User</p>
         </div>
         <div>
-          <Link href={"/app/profile"}>Profile</Link>
-          <Link href={"leagues/leagues"}>My Leagues</Link>
-          <Link href={"leagues/teams"}>My Teams</Link>
+          <Link href={"/logged/profile"}>Profile</Link>
+          <Link href={"/logged/leagues"}>My Leagues</Link>
+          <Link href={"/logged/teams"}>My Teams</Link>
         </div>
       </toolbar>
       {children}
