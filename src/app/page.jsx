@@ -26,13 +26,13 @@ export default async function Home() {
   const user = token ? jwt.decode(token.value) : null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-3">
+    <main className="min-h-screen text-center flex-col justify-between p-3">
       {!user ? (
         <p className="mx-auto">Logged in as: None</p>
       ) : (
         <p className="mx-auto">Logged in as: {user.email}</p>
       )}
-      <div className="flex flex-col justify-center space-y-3">
+      <div className="flex flex-col justify-center items-center space-y-3">
         {" "}
         {/* Cambiamos a flex-col y usamos espacio */}
         <Link href={"/login"}>Login</Link>
