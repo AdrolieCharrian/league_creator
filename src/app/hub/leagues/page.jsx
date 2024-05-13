@@ -1,7 +1,7 @@
 import React from "react";
 
 const Leagues = () => {
-  return <p>Hello Puta</p>;
+  return <p></p>;
 };
 
 export default Leagues;

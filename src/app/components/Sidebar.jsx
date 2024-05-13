@@ -1,14 +1,15 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import {useState} from "react";
 import "./sidebar.css";
+import Link from "next/link";
 
 export default function Sidebar({}) {
   const [open, setOpen] = useState(true);
   const Menus = [
-    { title: "My profile", src: "user-light" },
-    { title: "My leagues", src: "league-light" },
-    { title: "My teams", src: "team-light" },
+    {title: "My profile", src: "user-light", url: "profile"},
+    {title: "My leagues", src: "league-light", url: "leagues"},
+    {title: "My teams", src: "team-light", url: "teams"},
   ];
 
   return (
@@ -50,20 +51,24 @@ export default function Sidebar({}) {
               key={index}
               className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
             >
-              <Image
-                src={`/sidebar/${menu.src}.png`}
-                width={35}
-                height={35}
-                alt=""
-                className={`${!open ? "ms-1 p-0.5" : ""}`}
-              />
-              <span
-                className={`text-white origin-left font-medium text-md duration-500 ${
-                  !open && "scale-0"
-                }`}
-              >
-                {open ? menu.title : ""}
-              </span>
+              <Link href={`/hub/${menu.url}`}>
+                <Image
+                  src={`/sidebar/${menu.src}.png`}
+                  width={35}
+                  height={35}
+                  alt=""
+                  className={`${!open ? "ms-1 p-0.5" : ""}`}
+                />
+              </Link>
+              <Link href={`/hub/${menu.url}`}>
+                <span
+                  className={`text-white origin-left font-medium text-md duration-500 ${
+                    !open && "scale-0"
+                  }`}
+                >
+                  {open ? menu.title : ""}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>

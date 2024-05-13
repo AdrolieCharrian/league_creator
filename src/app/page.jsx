@@ -36,10 +36,8 @@ export default async function Home() {
         {" "}
         {/* Cambiamos a flex-col y usamos espacio */}
         <Link href={"/login"}>Login</Link>
-        <Link href={"/league"}>League</Link>
-        <Link href={"/league_parti"}>League parto</Link>
-        <Link href={"/logged/leagues"}>Leagues</Link>
-        <LogOut></LogOut>
+        <Link href={"/hub/leagues"}>Hub</Link>
+        <LogOut />
       </div>
     </main>
   );
