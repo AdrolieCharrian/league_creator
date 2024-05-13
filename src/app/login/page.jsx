@@ -10,6 +10,7 @@ export default function Login() {
     const user = jwt.decode(token.value);
     console.log(user);
   }
+
   return (
     <div className="bg-gray-50 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">

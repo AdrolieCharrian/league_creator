@@ -1,0 +1,19 @@
+.triangle-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+  }
+  
+  .triangle {
+    position: absolute;
+    left: 0; 
+    bottom: 0; 
+    width: 100%; /* Anchura del polígono */
+    height: 70%; /* Altura del polígono */
+    clip-path: polygon(0 20%, 100% 47%, 100% 100%, 0% 100%); /* Coordenadas de los vértices */
+    background-color: #C08754; /* Color del fondo */
+  }
+  
+  

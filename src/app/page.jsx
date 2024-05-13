@@ -4,6 +4,7 @@ import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {LogOut} from "./components/logOut";
 
+
 const prisma = new PrismaClient();
 
 async function getLeagueUsers() {
@@ -26,6 +27,7 @@ export default async function Home() {
   const user = token ? jwt.decode(token.value) : null;
 
   return (
+
     <main className="flex min-h-screen flex-col items-center justify-between p-3">
       {!user ? (
         <p className="mx-auto">Logged in as: None</p>

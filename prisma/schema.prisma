@@ -38,7 +38,14 @@ model images {
   @@index([id_team])
 }
 
-// USERNAME instead of name/surname
+// Define default images branch
+model default_images {
+  id_default_image Int      @id @default(autoincrement())
+  format           String
+  version          String
+  createdAt        DateTime @default(now())
+}
+
 // Define the User model
 model users {
   id_user        Int              @id @default(autoincrement())
@@ -72,18 +79,6 @@ model leagues {
   images images[] @relation("LeagueImages")
 }
 
-//Meter otra tabla para torneos
-
-// Define the Deporte model
-model sports {
-  id_sport      Int             @id @default(autoincrement())
-  name          String
-  description   String?
-  rules         String
-  num_players   Int
-  sports_league sports_league[]
-}
-
 // Define the league_players model
 model league_players {
   id_participation_league Int @id @default(autoincrement())
@@ -109,7 +104,10 @@ model teams {
   score        score[]
 
   // Relación a imágenes
-  images images[] @relation("TeamImages")
+  images           images[]  @relation("TeamImages")
+  // Relaciones con matches
+  matchesAsTeamOne matches[] @relation("TeamOneRelation")
+  matchesAsTeamTwo matches[] @relation("TeamTwoRelation")
 }
 
 // Define the players_team model
@@ -121,6 +119,26 @@ model players_team {
   // Define the relationships
   teams          teams          @relation(fields: [id_team], references: [id_team])
   league_players league_players @relation(fields: [id_player], references: [id_participation_league])
+}
+
+// Matches model
+model matches {
+  id_match    Int      @id @default(autoincrement())
+  id_team_one Int
+  id_team_two Int
+  match_date  DateTime
+  sport       String
+  winner      Int?
+  loser       Int?
+  draw        Boolean  @default(false)
+
+  // Relaciones con teams
+  teamOne teams @relation("TeamOneRelation", fields: [id_team_one], references: [id_team])
+  teamTwo teams @relation("TeamTwoRelation", fields: [id_team_two], references: [id_team])
+
+  // Índices para las claves foráneas
+  @@index([id_team_one], name: "idx_team_one")
+  @@index([id_team_two], name: "idx_team_two")
 }
 
 // Define the score model
@@ -143,6 +161,16 @@ model score {
   teams   teams   @relation(fields: [id_team], references: [id_team])
 }
 
+// Define the Sports model
+model sports {
+  id_sport      Int             @id @default(autoincrement())
+  name          String
+  description   String?
+  rules         String
+  num_players   Int
+  sports_league sports_league[] @relation("SportsToLeague")
+}
+
 // Define the sports_custom model
 model sports_custom {
   id_sport_custom Int     @id @default(autoincrement())
@@ -152,17 +180,25 @@ model sports_custom {
   num_players     Int
   id_league       Int
 
-  // Define the relationships
-  leagues leagues @relation(fields: [id_league], references: [id_league])
+  leagues       leagues         @relation(fields: [id_league], references: [id_league])
+  sports_league sports_league[] @relation("SportsCustomToLeague")
 }
 
 // Define the sports_league model
 model sports_league {
   id_sport_league Int @id @default(autoincrement())
-  id_sport        Int
   id_league       Int
 
-  // Define the relationships
-  sports  sports  @relation(fields: [id_sport], references: [id_sport])
-  leagues leagues @relation(fields: [id_league], references: [id_league])
+  // Uno de estos campos será usado para la relación
+  id_sport        Int?
+  id_sport_custom Int?
+
+  // Relaciones
+  sports        sports?        @relation("SportsToLeague", fields: [id_sport], references: [id_sport])
+  sports_custom sports_custom? @relation("SportsCustomToLeague", fields: [id_sport_custom], references: [id_sport_custom])
+  leagues       leagues        @relation(fields: [id_league], references: [id_league])
+
+  // Índices únicos para evitar duplicados
+  @@unique([id_league, id_sport])
+  @@unique([id_league, id_sport_custom])
 }
