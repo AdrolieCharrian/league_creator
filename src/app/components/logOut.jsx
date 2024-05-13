@@ -11,7 +11,6 @@ export const LogOut = () => {
   return (
     <div>
       <form action={() => delete_cookie("access-token")}>
-        <input type="text" name="logout" />
         <button type="submit">LogOut</button>
       </form>
     </div>
