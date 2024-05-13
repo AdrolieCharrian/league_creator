@@ -2,6 +2,7 @@ import {PrismaClient} from "@prisma/client";
 import Link from "next/link";
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
+import {LogOut} from "./components/logOut";
 
 const prisma = new PrismaClient();
 
@@ -26,7 +27,11 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-3">
-      <p className="mx-auto">Logged in as: {user.email}</p>
+      {!user ? (
+        <p className="mx-auto">Logged in as: None</p>
+      ) : (
+        <p className="mx-auto">Logged in as: {user.email}</p>
+      )}
       <div className="flex flex-col justify-center space-y-3">
         {" "}
         {/* Cambiamos a flex-col y usamos espacio */}
@@ -34,6 +39,7 @@ export default async function Home() {
         <Link href={"/league"}>League</Link>
         <Link href={"/league_parti"}>League parto</Link>
         <Link href={"/app/leagues"}>Leagues</Link>
+        <LogOut></LogOut>
       </div>
     </main>
   );
