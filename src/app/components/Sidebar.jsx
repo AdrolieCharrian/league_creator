@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
-import {useState} from "react";
+import { useState } from "react";
 import "./sidebar.css";
 import Link from "next/link";
 
 export default function Sidebar({}) {
   const [open, setOpen] = useState(true);
   const Menus = [
-    {title: "My profile", src: "user-light", url: "profile"},
-    {title: "My leagues", src: "league-light", url: "leagues"},
-    {title: "My teams", src: "team-light", url: "teams"},
+    { title: "My profile", src: "user-light", url: "profile" },
+    { title: "My leagues", src: "league-light", url: "leagues" },
+    { title: "My teams", src: "team-light", url: "teams" },
   ];
 
   return (
@@ -47,11 +47,10 @@ export default function Sidebar({}) {
         />
         <ul className="pt-7 mt-10 p-3 ">
           {Menus.map((menu, index) => (
-            <li
-              key={index}
-              className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
-            >
-              <Link href={`/hub/${menu.url}`}>
+            <Link href={`/hub/${menu.url}`} key={index}>
+              <li
+                className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
+              >
                 <Image
                   src={`/sidebar/${menu.src}.png`}
                   width={35}
@@ -59,8 +58,6 @@ export default function Sidebar({}) {
                   alt=""
                   className={`${!open ? "ms-1 p-0.5" : ""}`}
                 />
-              </Link>
-              <Link href={`/hub/${menu.url}`}>
                 <span
                   className={`text-white origin-left font-medium text-md duration-500 ${
                     !open && "scale-0"
@@ -68,8 +65,8 @@ export default function Sidebar({}) {
                 >
                   {open ? menu.title : ""}
                 </span>
-              </Link>
-            </li>
+              </li>
+            </Link>
           ))}
         </ul>
         <div className="triangle"></div>
