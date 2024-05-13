@@ -26,7 +26,9 @@ export default function Sidebar({}) {
           alt=""
         />
         <h1
-          className={`text-white origin-left font-medium text-xl duration-300 ${!open && "scale-0"}`}
+          className={`text-white origin-left font-medium text-xl duration-300 ${
+            !open && "scale-0"
+          }`}
         >
           Nombre
         </h1>
@@ -53,9 +55,14 @@ export default function Sidebar({}) {
                 width={35}
                 height={35}
                 alt=""
+                className={`${!open ? "ms-1 p-0.5" : ""}`}
               />
-              <span className={`${!open && "hidden"} origin-left duration-300 ${!open && "scale-0"}`}>
-                {menu.title}
+              <span
+                className={`text-white origin-left font-medium text-md duration-500 ${
+                  !open && "scale-0"
+                }`}
+              >
+                {open ? menu.title : ""}
               </span>
             </li>
           ))}
