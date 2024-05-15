@@ -47,11 +47,11 @@ export default function Sidebar({}) {
         />
         <ul className="pt-7 mt-10 p-3 ">
           {Menus.map((menu, index) => (
-            <li
-              key={index}
-              className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
-            >
-              <Link href={`/hub/${menu.url}`}>
+            <Link href={`/hub/${menu.url}`}>
+              <li
+                key={index}
+                className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
+              >
                 <Image
                   src={`/sidebar/${menu.src}.png`}
                   width={35}
@@ -59,8 +59,6 @@ export default function Sidebar({}) {
                   alt=""
                   className={`${!open ? "ms-1 p-0.5" : ""}`}
                 />
-              </Link>
-              <Link href={`/hub/${menu.url}`}>
                 <span
                   className={`text-white origin-left font-medium text-md duration-500 ${
                     !open && "scale-0"
@@ -68,8 +66,8 @@ export default function Sidebar({}) {
                 >
                   {open ? menu.title : ""}
                 </span>
-              </Link>
-            </li>
+              </li>
+            </Link>
           ))}
         </ul>
         <div className="triangle"></div>

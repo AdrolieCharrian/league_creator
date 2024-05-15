@@ -1,14 +1,11 @@
-.triangle-container {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+.google-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .triangle {
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: 0;
   width: 100%; /* Anchura del polígono */
   height: 70%; /* Altura del polígono */
@@ -19,5 +16,4 @@
     0% 100%
   ); /* Coordenadas de los vértices */
   background-color: #c08754; /* Color del fondo */
-  z-index: 10;
 }
