@@ -1,9 +1,10 @@
 import Link from "next/link";
+
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
+import {MdOutlineArrowBackIos} from "react-icons/md";
 import "./login.css";
-import {LogOut} from "../components/logOut";
 
 export default function Login() {
   const token = cookies().get("access-token");
@@ -33,6 +34,9 @@ export default function Login() {
       </div>
       {/* LEFT SIDE */}
       <div className="absolute left-0 w-2/3 h-screen flex flex-col justify-center items-center">
+        <Link className="absolute left-0 top-0 mt-5 ms-5" href={"/"}>
+          <MdOutlineArrowBackIos className="back-icon" />
+        </Link>
         <p className="text-center text-6xl mb-10 w-3/5">
           Login to League Creator
         </p>
