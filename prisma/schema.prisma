@@ -51,7 +51,7 @@ model users {
   id_user        Int              @id @default(autoincrement())
   name           String?
   email          String
-  username       String?
+  username       String
   surname        String?
   description    String?
   password       String
@@ -67,7 +67,7 @@ model leagues {
   id_league      Int              @id @default(autoincrement())
   name           String
   description    String?
-  type           String
+  type           String?
   maxteams       Int              @default(16)
   league_players league_players[]
   teams          teams[]
