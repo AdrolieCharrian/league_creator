@@ -47,9 +47,8 @@ export default function Sidebar({}) {
         />
         <ul className="pt-7 mt-10 p-3 ">
           {Menus.map((menu, index) => (
-            <Link href={`/hub/${menu.url}`}>
+            <Link key={index} href={`/hub/${menu.url}`}>
               <li
-                key={index}
                 className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
               >
                 <Image
