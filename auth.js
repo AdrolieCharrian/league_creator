@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
 

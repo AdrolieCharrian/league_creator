@@ -6,6 +6,9 @@ import "./login.css";
 import { login } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";
+import google from "next-auth/providers/google";
+import NextAuth from "next-auth";
+
 
 const Login = async () => {
   const token = cookies().get("access-token");
@@ -42,7 +45,7 @@ const Login = async () => {
         </p>
         <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
           "use server" 
-          await signIn()
+          await signIn("google")
           await Login()
         }}>
           <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
@@ -79,7 +82,7 @@ const Login = async () => {
         </form>
         </div>
         <div>
-          {session && session.user (
+          {session && session.user &&
             <div>
               <p>{session.user.name}</p>
               <form action={async() => {
@@ -89,7 +92,7 @@ const Login = async () => {
                 <button type="submit">Sign Out</button>
               </form>
             </div>
-          )}
+          }
         </div>
       </div>
     </div>
