@@ -59,7 +59,7 @@ model users {
   // Relación a imágenes
   images         images[]         @relation("UserImages")
 
-  @@unique([email, username])
+  @@unique([email])
 }
 
 // Define the league model

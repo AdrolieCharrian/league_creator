@@ -55,6 +55,7 @@ export const login = async (formData) => {
 
 export const register = async (formData) => {
   const email = formData.get("email");
+  const username = formData.get("username");
   const password = formData.get("password");
   const confirm = formData.get("confirm-password");
 
@@ -70,6 +71,7 @@ export const register = async (formData) => {
       const user = await prisma.users.create({
         data: {
           email: email,
+          username: username,
           password: passwordString,
         },
       });
