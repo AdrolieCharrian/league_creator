@@ -4,13 +4,17 @@ import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import "./login.css";
 import {LogOut} from "../components/logOut";
+import { auth, signOut, signIn } from "auth";
+import React from "react";
 
-export default function Login() {
+const Login = async () => {
   const token = cookies().get("access-token");
   if (token) {
     const user = jwt.decode(token.value);
     console.log(user);
   }
+
+  const session = await auth()
 
   return (
     <div className="relative h-screen font-light">
@@ -36,12 +40,17 @@ export default function Login() {
         <p className="text-center text-6xl mb-10 w-3/5">
           Login to League Creator
         </p>
-        <button className="flex items-center justify-center gap-3 rounded-full bg-background-light border-2 w-2/5 py-3">
-          Log in With Google{" "}
-          <span className="">
-            <FcGoogle className="google-icon" />
-          </span>
-        </button>
+        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
+          "use server" 
+          await signIn()
+        }}>
+          <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
+            Log in With Google{" "}
+            <span className="">
+              <FcGoogle className="google-icon" />
+            </span>
+          </button>
+        </form>
         <div className="container flex justify-center items-center gap-5 py-8">
           <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
           <p>OR</p>
@@ -59,7 +68,29 @@ export default function Login() {
             className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
           ></input>
         </div>
+        <div>
+          {session && session.user ? (
+            <div>
+              <p>{session.user.name}</p>
+              <form action={async() => {
+                "use server"
+                await signOut()
+              }}>
+                <button type="submit">Sign Out</button>
+              </form>
+            </div>
+          ) : (
+            <form action={async() => {
+              "use server"
+              await signIn()
+            }}>
+              <button type="submit">Sign In</button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default Login;
