@@ -5,13 +5,22 @@ import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import {MdOutlineArrowBackIos} from "react-icons/md";
 import "./login.css";
+import { login } from "./actions";
+import { auth, signOut, signIn } from "auth";
+import React from "react";
+import google from "next-auth/providers/google";
+import NextAuth from "next-auth";
 
-export default function Login() {
+
+
+const Login = async () => {
   const token = cookies().get("access-token");
   if (token) {
     const user = jwt.decode(token.value);
     console.log(user);
   }
+
+  const session = await auth()
 
   return (
     <div className="relative h-screen font-light">
@@ -40,30 +49,60 @@ export default function Login() {
         <p className="text-center text-6xl mb-10 w-3/5">
           Login to League Creator
         </p>
-        <button className="flex items-center justify-center gap-3 rounded-full bg-background-light border-2 w-2/5 py-3">
-          Log in With Google{" "}
-          <span className="">
-            <FcGoogle className="google-icon" />
-          </span>
-        </button>
+        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
+          "use server" 
+          await signIn("google")
+          await Login()
+        }}>
+          <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
+            Log in With Google{" "}
+            <span className="h-full">
+              <FcGoogle className="google-icon" />
+            </span>
+          </button>
+        </form>
         <div className="container flex justify-center items-center gap-5 py-8">
           <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
           <p>OR</p>
           <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
         </div>
-        <div className="container flex flex-col items-center gap-3">
+        <div className="container">
+        <form action={login} className=" flex flex-col items-center gap-3">
           <input
             type="text"
+            id="email"
+            name="email"
             placeholder="Username"
             className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
           ></input>
           <input
+            id="password"
             type="password"
+            name="password"
             placeholder="Password"
             className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
           ></input>
+          <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3">
+            Sign In
+          </button>
+        </form>
+        </div>
+        <div>
+          {session && session.user &&
+            <div>
+              <p>{session.user.name}</p>
+              <form action={async() => {
+                "use server"
+                await signOut()
+              }}>
+                <button type="submit">Sign Out</button>
+              </form>
+            </div>
+          }
         </div>
       </div>
     </div>
   );
 }
+
+export default Login;
