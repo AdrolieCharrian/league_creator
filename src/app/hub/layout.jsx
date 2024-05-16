@@ -8,7 +8,7 @@ export default function RootLayout({children}) {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="p-7 text-2x1 font-semibold flex-1 h-screen">
+      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll">
         {children}
       </div>
     </div>

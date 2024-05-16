@@ -15,8 +15,8 @@ export default function Sidebar({}) {
   return (
     <div
       className={`${
-        open ? "w-72" : "w-20"
-      } duration-100 h-screen bg-sidebar-light relative p-5 pt-6`}
+        open ? "w-48 sm:w-48 md:w-72" : "w-20"
+      } duration-100  bg-sidebar-light relative p-5 pt-6`}
     >
       <div className="flex gap-x-4 items-center">
         <Image

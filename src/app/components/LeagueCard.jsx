@@ -4,7 +4,7 @@ import "./sidebar.css";
 
 export default function LeagueCard() {
   return (
-    <div className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light">
+    <div className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1">
       <Image
         src="/sidebar/logo.png"
         width={300}
