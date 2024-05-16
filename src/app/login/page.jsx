@@ -3,7 +3,7 @@ import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import "./login.css";
-import {LogOut} from "../components/logOut";
+import { login } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";
 
@@ -43,10 +43,11 @@ const Login = async () => {
         <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
           "use server" 
           await signIn()
+          await Login()
         }}>
           <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
             Log in With Google{" "}
-            <span className="">
+            <span className="h-full">
               <FcGoogle className="google-icon" />
             </span>
           </button>
@@ -56,20 +57,29 @@ const Login = async () => {
           <p>OR</p>
           <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
         </div>
-        <div className="container flex flex-col items-center gap-3">
+        <div className="container">
+        <form action={login} className=" flex flex-col items-center gap-3">
           <input
             type="text"
+            id="email"
+            name="email"
             placeholder="Username"
             className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
           ></input>
           <input
+            id="password"
             type="password"
+            name="password"
             placeholder="Password"
             className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
           ></input>
+          <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3">
+            Sign In
+          </button>
+        </form>
         </div>
         <div>
-          {session && session.user ? (
+          {session && session.user (
             <div>
               <p>{session.user.name}</p>
               <form action={async() => {
@@ -79,13 +89,6 @@ const Login = async () => {
                 <button type="submit">Sign Out</button>
               </form>
             </div>
-          ) : (
-            <form action={async() => {
-              "use server"
-              await signIn()
-            }}>
-              <button type="submit">Sign In</button>
-            </form>
           )}
         </div>
       </div>
