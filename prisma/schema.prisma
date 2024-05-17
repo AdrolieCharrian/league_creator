@@ -17,7 +17,6 @@ model images {
   id_user   String?
   id_league Int?
   id_team   Int?
-  
 
   // Relaciones inversas
   user   User?    @relation(fields: [id_user], references: [id], name: "UserImages")
@@ -55,7 +54,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+}
 
 model leagues {
   id_league      Int              @id @default(autoincrement())
