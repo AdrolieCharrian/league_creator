@@ -30,7 +30,7 @@ export default async function Home() {
       {!user ? (
         <p className="mx-auto">Logged in as: None</p>
       ) : (
-        <p className="mx-auto">Logged in as: {user.email}</p>
+        <p className="mx-auto">Logged in as: {/*user.email*/}</p>
       )}
       <div className="flex flex-col justify-center items-center space-y-3">
         {" "}

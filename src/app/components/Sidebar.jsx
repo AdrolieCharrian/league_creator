@@ -1,22 +1,22 @@
 "use client";
 import Image from "next/image";
-import {useState} from "react";
+import { useState } from "react";
 import "./sidebar.css";
 import Link from "next/link";
 
 export default function Sidebar({}) {
   const [open, setOpen] = useState(true);
   const Menus = [
-    {title: "My profile", src: "user-light", url: "profile"},
-    {title: "My leagues", src: "league-light", url: "leagues"},
-    {title: "My teams", src: "team-light", url: "teams"},
+    { title: "My profile", src: "user-light", url: "profile" },
+    { title: "My leagues", src: "league-light", url: "leagues" },
+    { title: "My teams", src: "team-light", url: "teams" },
   ];
 
   return (
     <div
       className={`${
-        open ? "w-72" : "w-20"
-      } duration-100 h-screen bg-sidebar-light relative p-5 pt-6`}
+        open ? "w-48 sm:w-48 md:w-72" : "w-20"
+      } duration-100  bg-sidebar-light relative p-5 pt-6`}
     >
       <div className="flex gap-x-4 items-center">
         <Image
@@ -47,7 +47,7 @@ export default function Sidebar({}) {
         />
         <ul className="pt-7 mt-10 p-3 ">
           {Menus.map((menu, index) => (
-            <Link key={index} href={`/hub/${menu.url}`}>
+            <Link href={`/hub/${menu.url}`} key={index}>
               <li
                 className={`text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-3`}
               >
