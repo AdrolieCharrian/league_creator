@@ -1,94 +1,109 @@
 import Link from "next/link";
-import {login, logout} from "./actions";
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
-import {LogOut} from "../components/logOut";
+import {FcGoogle} from "react-icons/fc";
+import {MdOutlineArrowBackIos} from "react-icons/md";
+import "./login.css";
+import { login } from "./actions";
+import { auth, signOut, signIn } from "auth";
+import React from "react";
+import google from "next-auth/providers/google";
+import NextAuth from "next-auth";
 
-export default function Login() {
+
+
+const Login = async () => {
   const token = cookies().get("access-token");
   if (token) {
     const user = jwt.decode(token.value);
     console.log(user);
   }
 
+  const session = await auth()
+
   return (
-    <div className="bg-gray-50 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
-        </h2>
-      </div>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action={login} method="POST">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
+    <div className="relative h-screen font-light">
+      {/* RIGHT SIDE */}
+      <div className="absolute right-0 h-screen bg-sidebar-light w-1/3 z-10 flex items-center">
+        <div>
+          <p className="text-white text-center text-5xl px-3 pb-7">
+            New to League Creator?
+          </p>
+          <p className="text-white text-center text-xl px-6 pb-10">
+            Sign up to start and your leagues and tournaments
+          </p>
+          <div className="flex justify-center">
+          <Link href={"/login/register"}>
+            <button className="rounded-full bg-background-light border-2 w-2/3 py-3">
+              Sign Up
             </button>
+          </Link>  
           </div>
-        </form>
-
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?{" "}
-          <Link
-            href={"/login/register"}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            Register
-          </Link>
+        </div>
+        <div className="triangle -z-10"></div>
+      </div>
+      {/* LEFT SIDE */}
+      <div className="absolute left-0 w-2/3 h-screen flex flex-col justify-center items-center">
+        <Link className="absolute left-0 top-0 mt-5 ms-5" href={"/"}>
+          <MdOutlineArrowBackIos className="back-icon" />
+        </Link>
+        <p className="text-center text-6xl mb-10 w-3/5">
+          Login to League Creator
         </p>
-        <LogOut />
+        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
+          "use server" 
+          await signIn("google")
+          await Login()
+        }}>
+          <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
+            Log in With Google{" "}
+            <span className="h-full">
+              <FcGoogle className="google-icon" />
+            </span>
+          </button>
+        </form>
+        <div className="container flex justify-center items-center gap-5 py-8">
+          <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
+          <p>OR</p>
+          <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
+        </div>
+        <div className="container">
+        <form action={login} className=" flex flex-col items-center gap-3">
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Username"
+            className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
+          ></input>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="rounded-full bg-background-light border-2 w-2/5 ps-6 py-3"
+          ></input>
+          <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3">
+            Sign In
+          </button>
+        </form>
+        </div>
+        <div>
+          {session && session.user &&
+            <div>
+              <p>{session.user.name}</p>
+              <form action={async() => {
+                "use server"
+                await signOut()
+              }}>
+                <button type="submit">Sign Out</button>
+              </form>
+            </div>
+          }
+        </div>
       </div>
     </div>
   );
 }
+
+export default Login;

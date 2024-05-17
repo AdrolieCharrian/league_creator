@@ -13,14 +13,17 @@ model images {
   format    String
   version   String
   createdAt DateTime @default(now())
-  id_user   Int?
+
+  id_user   String?
   id_league Int?
   id_team   Int?
-  league    leagues? @relation("LeagueImages", fields: [id_league], references: [id_league])
-  team      teams?   @relation("TeamImages", fields: [id_team], references: [id_team])
-  user      users?   @relation("UserImages", fields: [id_user], references: [id_user])
 
-  @@index([id_user])
+  // Relaciones inversas
+  user   User?    @relation(fields: [id_user], references: [id], name: "UserImages")
+  league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
+  team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
+
+  @@index([id_user]) // Indices para optimizar búsquedas
   @@index([id_league])
   @@index([id_team])
 }
@@ -32,17 +35,25 @@ model default_images {
   createdAt        DateTime @default(now())
 }
 
-model users {
-  id_user        Int              @id @default(autoincrement())
+// Define the User model, integrating both User and users fields
+model User {
+  id             String           @id @default(cuid())
   name           String?
   email          String           @unique
-  username       String
+  emailVerified  DateTime?
+  image          String?
+  username       String?
   surname        String?
   description    String?
-  password       String
+  password       String?
+  accounts       Account[]
+  sessions       Session[]
+  Authenticator  Authenticator[]
+  league_players league_players[]
   images         images[]         @relation("UserImages")
 
-  league_players league_players[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model leagues {
@@ -60,12 +71,14 @@ model leagues {
 }
 
 model league_players {
-  id_participation_league Int            @id @default(autoincrement())
-  id_player               Int
+  id_participation_league Int    @id @default(autoincrement())
+  id_player               String
   id_league               Int
-  leagues                 leagues        @relation(fields: [id_league], references: [id_league])
-  users                   users          @relation(fields: [id_player], references: [id_user])
-  players_team            players_team[]
+
+  // Define the relationships
+  user         User           @relation(fields: [id_player], references: [id])
+  leagues      leagues        @relation(fields: [id_league], references: [id_league])
+  players_team players_team[]
 }
 
 model teams {
@@ -150,4 +163,62 @@ model sports_league {
 
   @@unique([id_league, id_sport])
   @@unique([id_league, id_sport_custom])
+}
+
+//------------------------------------------------------
+// GoogleAuth Scope
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }

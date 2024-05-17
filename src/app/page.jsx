@@ -6,21 +6,21 @@ import {LogOut} from "./components/logOut";
 
 const prisma = new PrismaClient();
 
-async function getLeagueUsers() {
-  const userList = await prisma.leagues.findMany({
-    include: {
-      league_players: true,
-      score: false,
-      sports_custom: true,
-      sports_league: true,
-      teams: true,
-    },
-  });
-  return userList;
-}
+// async function getLeagueUsers() {
+//   const userList = await prisma.leagues.findMany({
+//     include: {
+//       league_players: true,
+//       score: false,
+//       sports_custom: true,
+//       sports_league: true,
+//       teams: true,
+//     },
+//   });
+//   return userList;
+// }
 
 export default async function Home() {
-  const userList = await getLeagueUsers();
+  //const userList = await getLeagueUsers();
 
   const token = cookies().get("access-token");
   const user = token ? jwt.decode(token.value) : null;

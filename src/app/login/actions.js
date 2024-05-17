@@ -10,7 +10,7 @@ export const login = async (formData) => {
   const email = formData.get("email");
   const password = formData.get("password");
 
-  const user = await prisma.users.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email: email,
     },
@@ -68,7 +68,7 @@ export const register = async (formData) => {
       //convert to string
       const passwordString = JSON.stringify({hash, salt});
 
-      const user = await prisma.users.create({
+      const user = await prisma.user.create({
         data: {
           email: email,
           username: username,
