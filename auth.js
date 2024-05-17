@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import google from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/app/lib/prisma";
 
 const credentialsConfig = CredentialsProvider({
     name:"Credentials",
@@ -24,6 +26,7 @@ const credentialsConfig = CredentialsProvider({
 })
 
 const authConfig = {
+    adapter: PrismaAdapter(prisma),
     providers: [google, credentialsConfig]
 };
 

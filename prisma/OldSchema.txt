@@ -24,12 +24,12 @@ model images {
   version   String
   createdAt DateTime @default(now())
 
-  id_user   String?
+  id_user   Int?
   id_league Int?
   id_team   Int?
 
   // Relaciones inversas
-  user   User?    @relation(fields: [id_user], references: [id], name: "UserImages")
+  user   users?   @relation(fields: [id_user], references: [id_user], name: "UserImages")
   league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
   team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
 
@@ -48,23 +48,23 @@ model default_images {
 
 // Define the User model, integrating both User and users fields
 model User {
-  id             String           @id @default(cuid())
-  name           String?
-  email          String           @unique
-  emailVerified  DateTime?
-  image          String?
-  username       String?
-  surname        String?
-  description    String?
-  password       String?
-  accounts       Account[]
-  sessions       Session[]
-  Authenticator  Authenticator[]
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  username      String?
+  surname       String?
+  description   String?
+  password      String?
+  accounts      Account[]
+  sessions      Session[]
+  Authenticator Authenticator[]
   league_players league_players[]
-  images         images[]         @relation("UserImages")
+  images        images[]         @relation("UserImages")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 // Define the league model
@@ -86,14 +86,14 @@ model leagues {
 
 // Define the league_players model
 model league_players {
-  id_participation_league Int    @id @default(autoincrement())
+  id_participation_league Int @id @default(autoincrement())
   id_player               String
   id_league               Int
 
   // Define the relationships
-  user         User           @relation(fields: [id_player], references: [id])
-  leagues      leagues        @relation(fields: [id_league], references: [id_league])
-  players_team players_team[]
+  user          User           @relation(fields: [id_player], references: [id])
+  leagues       leagues        @relation(fields: [id_league], references: [id_league])
+  players_team  players_team[]
 }
 
 // Define the teams model
