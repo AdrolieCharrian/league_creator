@@ -1,6 +1,6 @@
 import React from "react";
 import LeagueCard from "@/app/components/LeagueCard";
-import { getLeaguesFromUser } from "./../actions";
+import { getLeaguesFromUser,identifyUser } from "./../actions";
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 
@@ -14,7 +14,7 @@ const Leagues = () => {
   return (
     <div className="h-100 w-100 ">
       <div className="mb-3">
-        <form action={getLeaguesFromUser}>
+        <form action={identifyUser}>
           <button className="bg-sidebar-light hover:bg-sidebar-light2 text-white font-bold py-2 px-4 rounded">
             Create League
           </button>

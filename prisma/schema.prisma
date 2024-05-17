@@ -74,6 +74,7 @@ model league_players {
   id_participation_league Int    @id @default(autoincrement())
   id_player               String
   id_league               Int
+  admin                   Boolean @default(false)
 
   // Define the relationships
   user         User           @relation(fields: [id_player], references: [id])
