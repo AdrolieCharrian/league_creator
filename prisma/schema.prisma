@@ -1,44 +1,30 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-// Define your database schema and models using Prisma Schema Language
-// Visit https://pris.ly/d/prisma-schema to learn more about it
-
-// images table
 model images {
   id_image  Int      @id @default(autoincrement())
   format    String
   version   String
   createdAt DateTime @default(now())
-
   id_user   Int?
   id_league Int?
   id_team   Int?
+  league    leagues? @relation("LeagueImages", fields: [id_league], references: [id_league])
+  team      teams?   @relation("TeamImages", fields: [id_team], references: [id_team])
+  user      users?   @relation("UserImages", fields: [id_user], references: [id_user])
 
-  // Relaciones inversas
-  user   users?   @relation(fields: [id_user], references: [id_user], name: "UserImages")
-  league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
-  team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
-
-  @@index([id_user]) // Indices para optimizar búsquedas
+  @@index([id_user])
   @@index([id_league])
   @@index([id_team])
 }
 
-// Define default images branch
 model default_images {
   id_default_image Int      @id @default(autoincrement())
   format           String
@@ -46,82 +32,63 @@ model default_images {
   createdAt        DateTime @default(now())
 }
 
-// Define the User model
 model users {
   id_user        Int              @id @default(autoincrement())
   name           String?
-  email          String
+  email          String           @unique
   username       String
   surname        String?
   description    String?
   password       String
-  league_players league_players[]
-  // Relación a imágenes
   images         images[]         @relation("UserImages")
 
-  @@unique([email, username])
+  league_players league_players[]
 }
 
-// Define the league model
 model leagues {
   id_league      Int              @id @default(autoincrement())
   name           String
   description    String?
   type           String?
   maxteams       Int              @default(16)
+  images         images[]         @relation("LeagueImages")
   league_players league_players[]
-  teams          teams[]
   score          score[]
   sports_custom  sports_custom[]
   sports_league  sports_league[]
-
-  // Relación a imágenes
-  images images[] @relation("LeagueImages")
+  teams          teams[]
 }
 
-// Define the league_players model
 model league_players {
-  id_participation_league Int @id @default(autoincrement())
+  id_participation_league Int            @id @default(autoincrement())
   id_player               Int
   id_league               Int
-
-  // Define the relationships
-  users        users          @relation(fields: [id_player], references: [id_user])
-  leagues      leagues        @relation(fields: [id_league], references: [id_league])
-  players_team players_team[]
+  leagues                 leagues        @relation(fields: [id_league], references: [id_league])
+  users                   users          @relation(fields: [id_player], references: [id_user])
+  players_team            players_team[]
 }
 
-// Define the teams model
 model teams {
-  id_team     Int     @id @default(autoincrement())
-  name        String
-  description String?
-  id_league   Int
-
-  // Define the relationships
-  leagues      leagues        @relation(fields: [id_league], references: [id_league])
-  players_team players_team[]
-  score        score[]
-
-  // Relación a imágenes
-  images           images[]  @relation("TeamImages")
-  // Relaciones con matches
-  matchesAsTeamOne matches[] @relation("TeamOneRelation")
-  matchesAsTeamTwo matches[] @relation("TeamTwoRelation")
+  id_team          Int            @id @default(autoincrement())
+  name             String
+  description      String?
+  id_league        Int
+  images           images[]       @relation("TeamImages")
+  matchesAsTeamOne matches[]      @relation("TeamOneRelation")
+  matchesAsTeamTwo matches[]      @relation("TeamTwoRelation")
+  players_team     players_team[]
+  score            score[]
+  leagues          leagues        @relation(fields: [id_league], references: [id_league])
 }
 
-// Define the players_team model
 model players_team {
-  id_player_team Int @id @default(autoincrement())
+  id_player_team Int            @id @default(autoincrement())
   id_team        Int
   id_player      Int
-
-  // Define the relationships
-  teams          teams          @relation(fields: [id_team], references: [id_team])
   league_players league_players @relation(fields: [id_player], references: [id_participation_league])
+  teams          teams          @relation(fields: [id_team], references: [id_team])
 }
 
-// Matches model
 model matches {
   id_match    Int      @id @default(autoincrement())
   id_team_one Int
@@ -131,37 +98,27 @@ model matches {
   winner      Int?
   loser       Int?
   draw        Boolean  @default(false)
+  teamOne     teams    @relation("TeamOneRelation", fields: [id_team_one], references: [id_team])
+  teamTwo     teams    @relation("TeamTwoRelation", fields: [id_team_two], references: [id_team])
 
-  // Relaciones con teams
-  teamOne teams @relation("TeamOneRelation", fields: [id_team_one], references: [id_team])
-  teamTwo teams @relation("TeamTwoRelation", fields: [id_team_two], references: [id_team])
-
-  // Índices para las claves foráneas
-  @@index([id_team_one], name: "idx_team_one")
-  @@index([id_team_two], name: "idx_team_two")
+  @@index([id_team_one], map: "idx_team_one")
+  @@index([id_team_two], map: "idx_team_two")
 }
 
-// Define the score model
 model score {
-  id_score  Int    @id @default(autoincrement())
+  id_score  Int     @id @default(autoincrement())
   type      String
   id_league Int
   id_team   Int
-  // both
   matches   Int?
   wins      Int?
   loses     Int?
-  // League
   points    Int?
   draws     Int?
-  // tournament
-
-  // Define the relationships
-  leagues leagues @relation(fields: [id_league], references: [id_league])
-  teams   teams   @relation(fields: [id_team], references: [id_team])
+  leagues   leagues @relation(fields: [id_league], references: [id_league])
+  teams     teams   @relation(fields: [id_team], references: [id_team])
 }
 
-// Define the Sports model
 model sports {
   id_sport      Int             @id @default(autoincrement())
   name          String
@@ -171,34 +128,26 @@ model sports {
   sports_league sports_league[] @relation("SportsToLeague")
 }
 
-// Define the sports_custom model
 model sports_custom {
-  id_sport_custom Int     @id @default(autoincrement())
+  id_sport_custom Int             @id @default(autoincrement())
   name            String
   description     String?
   rules           String
   num_players     Int
   id_league       Int
-
-  leagues       leagues         @relation(fields: [id_league], references: [id_league])
-  sports_league sports_league[] @relation("SportsCustomToLeague")
+  leagues         leagues         @relation(fields: [id_league], references: [id_league])
+  sports_league   sports_league[] @relation("SportsCustomToLeague")
 }
 
-// Define the sports_league model
 model sports_league {
-  id_sport_league Int @id @default(autoincrement())
+  id_sport_league Int            @id @default(autoincrement())
   id_league       Int
-
-  // Uno de estos campos será usado para la relación
   id_sport        Int?
   id_sport_custom Int?
+  leagues         leagues        @relation(fields: [id_league], references: [id_league])
+  sports_custom   sports_custom? @relation("SportsCustomToLeague", fields: [id_sport_custom], references: [id_sport_custom])
+  sports          sports?        @relation("SportsToLeague", fields: [id_sport], references: [id_sport])
 
-  // Relaciones
-  sports        sports?        @relation("SportsToLeague", fields: [id_sport], references: [id_sport])
-  sports_custom sports_custom? @relation("SportsCustomToLeague", fields: [id_sport_custom], references: [id_sport_custom])
-  leagues       leagues        @relation(fields: [id_league], references: [id_league])
-
-  // Índices únicos para evitar duplicados
   @@unique([id_league, id_sport])
   @@unique([id_league, id_sport_custom])
 }
