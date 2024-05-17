@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
@@ -34,9 +33,11 @@ const Login = async () => {
             Sign up to start and your leagues and tournaments
           </p>
           <div className="flex justify-center">
+          <Link href={"/login/register"}>
             <button className="rounded-full bg-background-light border-2 w-2/3 py-3">
               Sign Up
             </button>
+          </Link>  
           </div>
         </div>
         <div className="triangle -z-10"></div>

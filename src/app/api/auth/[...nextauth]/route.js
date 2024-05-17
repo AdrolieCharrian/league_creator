@@ -1,7 +1,4 @@
 import { handlers } from "auth";
-import { NextApiRequest, NextApiResponse } from "next"
-import NextAuth from "next-auth"
-
 export const { GET, POST } = handlers;
 
 
