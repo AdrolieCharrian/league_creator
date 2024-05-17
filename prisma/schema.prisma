@@ -41,6 +41,7 @@ model users {
   description    String?
   password       String
   images         images[]         @relation("UserImages")
+
   league_players league_players[]
 }
 
