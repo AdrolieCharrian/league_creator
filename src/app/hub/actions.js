@@ -1,15 +1,21 @@
-// "use server";
-// import prisma from "@/app/lib/prisma";
-// import jwt from "jsonwebtoken";
+"use server";
+import prisma from "@/app/lib/prisma";
+import jwt from "jsonwebtoken";
+import { auth } from "auth";
 
-// export const getLeaguesFromUser = async (userInfo) => {
-//   const { emailuser } = userInfo;
+export const getLeaguesFromUser = async () => {
+  const session = await auth();
+  console.log(session);
 
-//   const leagues = await prisma.leagues.findUnique({
-//     where: {
-//       email:emailuser
-//     },
-//   });
+  const emailuser = session.user.email;
+  console.log("email", emailuser);
 
-//   return leagues;
-// };
+  const user = await prisma.user.findUnique({
+    where: {
+      email: emailuser,
+    },
+  }).then((res)=>{
+    console.log(res);
+  });
+
+};
