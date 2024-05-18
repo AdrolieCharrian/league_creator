@@ -4,14 +4,20 @@ import { identifyUser, getLeaguesFromUser } from "./../actions";
 import { useEffect, useState } from "react";
 
 const Leagues = () => {
-  const [leagues, setLeagues] = useState([]); // Inicializar con un array vacío
+  const [leagues, setLeagues] = useState([]);
 
   useEffect(() => {
-    const fetchLeagues = async () => {
-      const leaguesData = await getLeaguesFromUser();
-      setLeagues(leaguesData);
-    };
-    fetchLeagues();
+    const storedLeagues = sessionStorage.getItem('leagues');
+    if (storedLeagues) {
+      setLeagues(JSON.parse(storedLeagues));
+    } else {
+      const fetchLeagues = async () => {
+        const leaguesData = await getLeaguesFromUser();
+        setLeagues(leaguesData);
+        sessionStorage.setItem('leagues', JSON.stringify(leaguesData));
+      };
+      fetchLeagues();
+    }
   }, []);
 
   return (

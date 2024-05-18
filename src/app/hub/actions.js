@@ -25,8 +25,6 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  console.log("listas: ", leagues_player);
-
   const leagueIds = leagues_player.map(lp => lp.id_league);
 
   const leagues = await prisma.leagues.findMany({
@@ -37,8 +35,11 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  console.log(leagues);
-  return leagues
+  return leagues.map(league => ({
+    id_league: league.id_league,
+    name: league.name,
+    description: league.description || "No description available",
+  }));
 };
 
 // Creation new League

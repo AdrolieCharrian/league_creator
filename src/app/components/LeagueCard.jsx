@@ -14,7 +14,6 @@ export default function LeagueCard({ league }) {
       />
       <div className="py-4">
         <div className="font-bold text-xl mb-2">{league.name}</div>
-        <p className="text-gray-700 text-base">{league.description}</p>
       </div>
     </div>
   );
