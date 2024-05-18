@@ -3,6 +3,7 @@ import LeagueCard from "@/app/components/LeagueCard";
 import { identifyUser, getLeaguesFromUser } from "./../actions";
 import { useEffect, useState } from "react";
 
+
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
 
