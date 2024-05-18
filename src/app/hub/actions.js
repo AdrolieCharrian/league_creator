@@ -11,39 +11,53 @@ export const identifyUser = async () => {
 
 export const getLeaguesFromUser = async () => {
   const session = await auth();
-  console.log(session);
-
   const emailuser = session.user.email;
-  console.log("email", emailuser);
 
-  const user = await prisma.user
-    .findUnique({
-      where: {
-        email: emailuser,
+  const user = await prisma.user.findUnique({
+    where: {
+      email: emailuser,
+    },
+  });
+
+  const leagues_player = await prisma.league_players.findMany({
+    where: {
+      id_player: user.id,
+    },
+  });
+
+  console.log("listas: ", leagues_player);
+
+  const leagueIds = leagues_player.map(lp => lp.id_league);
+
+  const leagues = await prisma.leagues.findMany({
+    where: {
+      id_league: {
+        in: leagueIds,
       },
-    })
-    .then((res) => {
-      console.log(res);
-    });
+    },
+  });
+
+  console.log(leagues);
+  return leagues
 };
 
 // Creation new League
 export const createNewLeague = async (idAdmin) => {
-  let idLeague;
+  
   console.log("dentro create new league");
-  await prisma.leagues
+  const idLeague = await prisma.leagues
     .create({
       data: {
         name: "prueba3",
       },
-    })
-    .then((res) => (idLeague = res.id_league));
+    });
 
   await prisma.league_players.create({
     data: {
       id_player: idAdmin, 
-      id_league: idLeague,
+      id_league: idLeague.id_league,
       admin: true, 
     },
   });
 };
+

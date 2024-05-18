@@ -2,7 +2,7 @@
 import Image from "next/image";
 import "./sidebar.css";
 
-export default function LeagueCard() {
+export default function LeagueCard({ league }) {
   return (
     <div className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1">
       <Image
@@ -13,7 +13,8 @@ export default function LeagueCard() {
         alt=""
       />
       <div className="py-4">
-        <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
+        <div className="font-bold text-xl mb-2">{league.name}</div>
+        <p className="text-gray-700 text-base">{league.description}</p>
       </div>
     </div>
   );
