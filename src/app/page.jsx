@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client";
 import Link from "next/link";
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
-import {LogOut} from "./components/logOut";
+import HomeComponent from "./components/homeComponent";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,16 @@ const prisma = new PrismaClient();
 //   });
 //   return userList;
 // }
-
+// {!user ? (
+//         <p className="mx-auto">Logged in as: None</p>
+//       ) : (
+//         <p className="mx-auto">Logged in as: {/*user.email*/}</p>
+//       )}
+{/* <div className="flex justify-center items-center">
+  <Link href={"/login"}>Login</Link>
+  <Link href={"/hub/leagues"}>Hub</Link>
+  <LogOut />
+</div> */}
 export default async function Home() {
   //const userList = await getLeagueUsers();
 
@@ -26,19 +35,8 @@ export default async function Home() {
   const user = token ? jwt.decode(token.value) : null;
 
   return (
-    <main className="min-h-screen text-center flex-col justify-between p-3">
-      {!user ? (
-        <p className="mx-auto">Logged in as: None</p>
-      ) : (
-        <p className="mx-auto">Logged in as: {/*user.email*/}</p>
-      )}
-      <div className="flex flex-col justify-center items-center space-y-3">
-        {" "}
-        {/* Cambiamos a flex-col y usamos espacio */}
-        <Link href={"/login"}>Login</Link>
-        <Link href={"/hub/leagues"}>Hub</Link>
-        <LogOut />
-      </div>
+    <main className="min-h-screen">
+      <HomeComponent />
     </main>
   );
 }
