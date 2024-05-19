@@ -1,12 +1,18 @@
 "use server";
 import prisma from "@/app/lib/prisma";
-import jwt from "jsonwebtoken";
 import { auth } from "auth";
 
-export const identifyUser = async () => {
+
+export const justIdentifyIdUser = async () => {
   const session = await auth();
   const userId = session.user.id;
-  createNewLeague(userId);
+  return userId
+};
+
+export const identifyUser = async (league) => {
+  const session = await auth();
+  const userId = session.user.id;
+  await createNewLeague(userId, league);
 };
 
 export const getLeaguesFromUser = async () => {
@@ -25,7 +31,7 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  const leagueIds = leagues_player.map(lp => lp.id_league);
+  const leagueIds = leagues_player.map((lp) => lp.id_league);
 
   const leagues = await prisma.leagues.findMany({
     where: {
@@ -35,30 +41,26 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  return leagues.map(league => ({
+  return leagues.map((league) => ({
     id_league: league.id_league,
     name: league.name,
     description: league.description || "No description available",
   }));
 };
 
-// Creation new League
-export const createNewLeague = async (idAdmin) => {
-  
-  console.log("dentro create new league");
-  const idLeague = await prisma.leagues
-    .create({
-      data: {
-        name: "prueba3",
-      },
-    });
+export const createNewLeague = async (idAdmin, newLeague) => {
+  const createdLeague = await prisma.leagues.create({
+    data: {
+      name: newLeague.name,
+      description: newLeague.description,
+    },
+  });
 
   await prisma.league_players.create({
     data: {
-      id_player: idAdmin, 
-      id_league: idLeague.id_league,
-      admin: true, 
+      id_player: idAdmin,
+      id_league: createdLeague.id_league,
+      admin: true,
     },
   });
 };
-
