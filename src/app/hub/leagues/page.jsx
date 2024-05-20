@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import LeagueCard from "@/app/components/LeagueCard";
-import { identifyUser, getLeaguesFromUser } from "../actions";
+import { identifyUser, getLeaguesFromUser, deleteLeague } from "../actions";
 
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
@@ -47,6 +47,15 @@ const Leagues = () => {
     }
   };
 
+  const handleDelete = async (id_league) => {
+    try {
+      await deleteLeague(id_league);
+      await getLeagues();
+    } catch (error) {
+      console.error("Error deleting league:", error);
+    }
+  };
+
   return (
     <div className="h-100 w-100">
       <div className="mb-3">
@@ -59,7 +68,7 @@ const Leagues = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {leagues.map((league, index) => (
-          <LeagueCard key={index} league={league} />
+          <LeagueCard key={index} league={league} onDelete={handleDelete} />
         ))}
       </div>
       {isModalOpen && (

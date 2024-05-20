@@ -2,11 +2,10 @@
 import prisma from "@/app/lib/prisma";
 import { auth } from "auth";
 
-
 export const justIdentifyIdUser = async () => {
   const session = await auth();
   const userId = session.user.id;
-  return userId
+  return userId;
 };
 
 export const identifyUser = async (league) => {
@@ -45,6 +44,7 @@ export const getLeaguesFromUser = async () => {
     id_league: league.id_league,
     name: league.name,
     description: league.description || "No description available",
+    admin: league.adminId === user.id, // Aquí comprobamos si el usuario es administrador
   }));
 };
 
@@ -53,6 +53,7 @@ export const createNewLeague = async (idAdmin, newLeague) => {
     data: {
       name: newLeague.name,
       description: newLeague.description,
+      adminId: idAdmin,
     },
   });
 
@@ -60,7 +61,20 @@ export const createNewLeague = async (idAdmin, newLeague) => {
     data: {
       id_player: idAdmin,
       id_league: createdLeague.id_league,
-      admin: true,
+    },
+  });
+};
+
+export const deleteLeague = async (idLeague) => {
+  await prisma.league_players.deleteMany({
+    where: {
+      id_league: idLeague,
+    },
+  });
+
+  await prisma.leagues.delete({
+    where: {
+      id_league: idLeague,
     },
   });
 };
