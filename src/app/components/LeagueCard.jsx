@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import "./sidebar.css";
+import { useRouter } from "next/navigation";
 
 export default function LeagueCard({ league, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const router = useRouter();
 
   const openConfirmModal = () => {
     setIsConfirmModalOpen(true);
@@ -20,20 +21,27 @@ export default function LeagueCard({ league, onDelete }) {
     closeConfirmModal();
   };
 
+  const handleNavigate = () => {
+    sessionStorage.setItem("id_league", league.id_league);
+    router.push("/hub/leagues/teams");
+  };
+
   return (
-    <div className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative">
-      <Link href={`/hub/leagues/teams`}>
-        <Image
-          src="/sidebar/logo.png"
-          width={300}
-          height={300}
-          className="cursor-pointer duration-500 w-full p-3"
-          alt=""
-        />
-        <div className="py-4">
-          <div className="font-bold text-xl mb-2">{league.name}</div>
-        </div>
-      </Link>
+    <div
+      className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
+      onClick={handleNavigate}
+    >
+      <Image
+        src="/sidebar/logo.png"
+        width={300}
+        height={300}
+        className="cursor-pointer duration-500 w-full p-3"
+        alt=""
+      />
+      <div className="py-4">
+        <div className="font-bold text-xl mb-2">{league.name}</div>
+      </div>
+
       {league.admin && (
         <>
           <button

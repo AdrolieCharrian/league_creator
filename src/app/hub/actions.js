@@ -14,6 +14,8 @@ export const identifyUser = async (league) => {
   await createNewLeague(userId, league);
 };
 
+// ---- Leagues
+
 export const getLeaguesFromUser = async () => {
   const session = await auth();
   const emailuser = session.user.email;
@@ -79,7 +81,7 @@ export const deleteLeague = async (idLeague) => {
   });
 };
 
-// ---- Teams
+// ---- General Teams
 
 export const getTeamsFromUser = async () => {
   const session = await auth();
@@ -120,6 +122,23 @@ export const getTeamsFromUser = async () => {
       id_team: {
         in: teamIds,
       },
+    },
+  });
+
+  return teams.map((team) => ({
+    id_team: team.id_team,
+    name: team.name,
+    description: team.description || "No description available",
+  }));
+};
+
+// ---- Teams inside league
+
+export const getTeamsFromLeague = async (idLeague) => {
+
+  const teams = await prisma.teams.findMany({
+    where: {
+      id_team: idLeague
     },
   });
 
