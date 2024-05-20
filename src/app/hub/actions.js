@@ -85,17 +85,13 @@ export const deleteLeague = async (idLeague) => {
 
 export const getTeamsFromUser = async () => {
   const session = await auth();
-  const emailuser = session.user.email;
+  const userId = session.user.id;
 
   const user = await prisma.user.findUnique({
     where: {
-      email: emailuser,
+      id: userId,
     },
   });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
 
   const leaguesPlayer = await prisma.league_players.findMany({
     where: {
@@ -132,18 +128,38 @@ export const getTeamsFromUser = async () => {
   }));
 };
 
+export const createNewTeam = async (formData) => {
+  const name = formData.get("name")
+  const description = formData.get("description")
+  const session = await auth();
+  const userId = session.user.id;
+
+  const createdTeam = await prisma.leagues.create({
+    data: {
+      name: name,
+      description: description,
+      adminId: userId,
+    },
+  });
+
+  await prisma.players_team.create({
+    data: {
+      id_player: userId,
+      id_team: createdTeam.id_team,
+    },
+  });
+};
+
 // ---- Teams inside league
 
 export const getTeamsFromLeague = async (idLeague) => {
 
-  console.log(idLeague);
-
   const teams = await prisma.teams.findMany({
     where: {
-      id_team: idLeague
+      id_league: parseInt(idLeague)
     },
-  }).then((res)=>{console.log(res)});
-
+  })
+  // El then sustituye el valor de la respuesta de la promesa
   return teams.map((team) => ({
     id_team: team.id_team,
     name: team.name,
