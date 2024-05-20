@@ -44,7 +44,7 @@ export const getLeaguesFromUser = async () => {
     id_league: league.id_league,
     name: league.name,
     description: league.description || "No description available",
-    admin: league.adminId === user.id, // Aquí comprobamos si el usuario es administrador
+    admin: league.adminId === user.id
   }));
 };
 
@@ -78,3 +78,7 @@ export const deleteLeague = async (idLeague) => {
     },
   });
 };
+
+// ---- Teams 
+
+

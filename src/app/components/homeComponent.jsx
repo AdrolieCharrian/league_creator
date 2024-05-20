@@ -44,7 +44,7 @@ const HomeComponent = (props) => {
                         </li>
                     </ul>
                     <div className="">
-                        {props.session ? <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" /> :
+                        {!props.session ? <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" /> :
                         <button className="">
                             <Link className="" href="/login">LogIn</Link>
                         </button>}
@@ -67,7 +67,7 @@ const HomeComponent = (props) => {
                         </li>
                     </ul>
                     <div className="flex gap-2">
-                        {props.session ? <img className="h-9 w-9 border-black sm:h-14 sm:w-14 border rounded-full" /> :
+                        {!props.session ? <img className="h-9 w-9 border-black sm:h-14 sm:w-14 border rounded-full" /> :
                         <button className="">
                             <Link className="" href="/login">LogIn</Link>
                         </button>}
