@@ -136,11 +136,13 @@ export const getTeamsFromUser = async () => {
 
 export const getTeamsFromLeague = async (idLeague) => {
 
+  console.log(idLeague);
+
   const teams = await prisma.teams.findMany({
     where: {
       id_team: idLeague
     },
-  });
+  }).then((res)=>{console.log(res)});
 
   return teams.map((team) => ({
     id_team: team.id_team,
