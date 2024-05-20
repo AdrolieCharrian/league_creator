@@ -51,17 +51,21 @@ model User {
   Authenticator  Authenticator[]
   league_players league_players[]
   images         images[]         @relation("UserImages")
+  adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model leagues {
-  id_league      Int              @id @default(autoincrement())
-  name           String
-  description    String?
-  type           String?
-  maxteams       Int              @default(16)
+  id_league   Int     @id @default(autoincrement())
+  name        String
+  description String?
+  type        String?
+  maxteams    Int     @default(16)
+  adminId     String
+  admin       User    @relation("UserLeaguesAdmin", fields: [adminId], references: [id])
+
   images         images[]         @relation("LeagueImages")
   league_players league_players[]
   score          score[]
@@ -71,14 +75,13 @@ model leagues {
 }
 
 model league_players {
-  id_participation_league Int    @id @default(autoincrement())
+  id_participation_league Int            @id @default(autoincrement())
   id_player               String
   id_league               Int
-
   // Define the relationships
-  user         User           @relation(fields: [id_player], references: [id])
-  leagues      leagues        @relation(fields: [id_league], references: [id_league])
-  players_team players_team[]
+  user                    User           @relation(fields: [id_player], references: [id])
+  leagues                 leagues        @relation(fields: [id_league], references: [id_league])
+  players_team            players_team[]
 }
 
 model teams {

@@ -1,0 +1,14 @@
+.side {
+    height: 100vh;
+    overflow: hidden;
+    position: absolute;
+    place-items: center;
+    display: grid;
+    grid-template-rows: 40px auto;
+}
+
+.side .title {
+    font-weight: 800;
+    margin: 0px 10vw 0px 15vw;
+    width: 75vw;
+}
