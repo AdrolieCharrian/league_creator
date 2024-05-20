@@ -44,7 +44,7 @@ export const getLeaguesFromUser = async () => {
     id_league: league.id_league,
     name: league.name,
     description: league.description || "No description available",
-    admin: league.adminId === user.id
+    admin: league.adminId === user.id,
   }));
 };
 
@@ -79,6 +79,53 @@ export const deleteLeague = async (idLeague) => {
   });
 };
 
-// ---- Teams 
+// ---- Teams
 
+export const getTeamsFromUser = async () => {
+  const session = await auth();
+  const emailuser = session.user.email;
 
+  const user = await prisma.user.findUnique({
+    where: {
+      email: emailuser,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const leaguesPlayer = await prisma.league_players.findMany({
+    where: {
+      id_player: user.id,
+    },
+  });
+
+  const participationIds = leaguesPlayer.map(
+    (lp) => lp.id_participation_league
+  );
+
+  const playersTeam = await prisma.players_team.findMany({
+    where: {
+      id_player: {
+        in: participationIds,
+      },
+    },
+  });
+
+  const teamIds = playersTeam.map((pt) => pt.id_team);
+
+  const teams = await prisma.teams.findMany({
+    where: {
+      id_team: {
+        in: teamIds,
+      },
+    },
+  });
+
+  return teams.map((team) => ({
+    id_team: team.id_team,
+    name: team.name,
+    description: team.description || "No description available",
+  }));
+};
