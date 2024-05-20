@@ -58,6 +58,8 @@ export const register = async (formData) => {
   const username = formData.get("username");
   const password = formData.get("password");
   const confirm = formData.get("confirm-password");
+  const name = formData.get("name");
+  const surname = formData.get("surname");
 
   if (password == confirm) {
     try {
@@ -73,6 +75,8 @@ export const register = async (formData) => {
           email: email,
           username: username,
           password: passwordString,
+          name: name,
+          surname: surname,
         },
       });
       console.log(NextResponse.json({user}));

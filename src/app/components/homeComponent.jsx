@@ -44,13 +44,13 @@ const HomeComponent = (props) => {
                         </li>
                     </ul>
                     <div className="">
-                        {!props.session ? <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" /> :
+                        {props.session ? <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" /> :
                         <button className="">
                             <Link className="" href="/login">LogIn</Link>
                         </button>}
                     </div>
                 </nav>
-                <h1 ref={h1Ref} className="title text-5xl sm:text-7xl md:text-8xl xl:px-32">
+                <h1 ref={h1Ref} className="title text-5xl sm:text-7xl md:text-8xl xl:px-28">
                 Ultimate League & Team{" "}
                     <span className={`${merienda.className} text-sidebar-light2`}>Manager</span>
                 </h1>
@@ -67,7 +67,7 @@ const HomeComponent = (props) => {
                         </li>
                     </ul>
                     <div className="flex gap-2">
-                        {!props.session ? <img className="h-9 w-9 border-black sm:h-14 sm:w-14 border rounded-full" /> :
+                        {props.session ? <img className="h-9 w-9 border-black sm:h-14 sm:w-14 border rounded-full" /> :
                         <button className="">
                             <Link className="" href="/login">LogIn</Link>
                         </button>}
