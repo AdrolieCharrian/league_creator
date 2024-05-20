@@ -11,7 +11,6 @@ import google from "next-auth/providers/google";
 import NextAuth from "next-auth";
 
 
-
 const Login = async () => {
   const token = cookies().get("access-token");
   if (token) {
@@ -50,10 +49,11 @@ const Login = async () => {
         <p className="text-center text-6xl mb-10 w-3/5">
           Login to League Creator
         </p>
-        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" action={async() => {
-          "use server" 
-          await signIn("google")
-          await Login()
+        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3 w-2/5" 
+          action={async() => {
+            "use server" 
+            await signIn("google")
+            await Login()
         }}>
           <button type="submit" className="flex items-center justify-center gap-3 rounded-full bg-background-light h-full w-full">
             Log in With Google{" "}
