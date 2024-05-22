@@ -8,7 +8,8 @@ export default function LeagueCard({ league, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const router = useRouter();
 
-  const openConfirmModal = () => {
+  const openConfirmModal = (event) => {
+    event.stopPropagation(); // Detener la propagación del evento
     setIsConfirmModalOpen(true);
   };
 
