@@ -22,15 +22,14 @@ export default function LeagueCard({ league, onDelete }) {
     closeConfirmModal();
   };
 
-  const handleNavigate = () => {
-    sessionStorage.setItem("id_league", league.id_league);
-    router.push("/hub/leagues/teams");
+  const handleNavigate = (id) => {
+    router.push(`/hub/leagues/${id}/teams`);
   };
 
   return (
     <div
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
-      onClick={handleNavigate}
+      onClick={() => handleNavigate(league.id_league)}
     >
       <Image
         src="/sidebar/logo.png"

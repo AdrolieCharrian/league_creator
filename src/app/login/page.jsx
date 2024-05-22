@@ -22,25 +22,6 @@ const Login = async () => {
 
   return (
     <div className="h-screen font-light">
-      {/* RIGHT/TOP SIDE */}
-      <div className="relative bg-sidebar-light flex items-center md:absolute right-0 md:h-screen md:w-2/5 xl:w-1/3 z-10">
-        <div className="py-8">
-          <p className="text-white text-center text-4xl px-3 md:text-6xl md:pb-4 xl:px-6">
-            New to League Creator?
-          </p>
-          <p className="text-white text-center text-lg px-6 py-4 md:text-xl xl:text-base xl:px-12">
-            Sign up to start and your leagues and tournaments
-          </p>
-          <div className="flex justify-center">
-          <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login/register"}>
-            <button className="">
-              Sign Up
-            </button>
-          </Link>  
-          </div>
-        </div>
-        <div className="triangle -z-10"></div>
-      </div>
       {/* LEFT/BOT SIDE */}
       <div className="left-0 flex flex-col items-center pt-2 pb-6 md:text-xl md:h-screen md:absolute md:justify-center
       md:w-3/5 xl:text-base xl:w-2/3">
@@ -103,6 +84,25 @@ const Login = async () => {
             </div>
           }
         </div>
+      </div>
+      {/* RIGHT/TOP SIDE */}
+      <div className="relative bg-sidebar-light flex items-center md:absolute right-0 md:h-screen md:w-2/5 xl:w-1/3 z-10">
+        <div className="py-8">
+          <p className="text-white text-center text-4xl px-3 md:text-6xl md:pb-4 xl:px-6">
+            New to League Creator?
+          </p>
+          <p className="text-white text-center text-lg px-6 py-4 md:text-xl xl:text-base xl:px-12">
+            Sign up to start and your leagues and tournaments
+          </p>
+          <div className="flex justify-center">
+          <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login/register"}>
+            <button className="">
+              Sign Up
+            </button>
+          </Link>  
+          </div>
+        </div>
+        <div className="triangle -z-10"></div>
       </div>
     </div>
   );
