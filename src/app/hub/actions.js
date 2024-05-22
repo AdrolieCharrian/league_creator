@@ -83,67 +83,62 @@ export const deleteLeague = async (idLeague) => {
 
 // ---- General Teams
 
-export const getTeamsFromUser = async () => {
-  const session = await auth();
-  const emailuser = session.user.email;
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email: emailuser,
-    },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  const leaguesPlayer = await prisma.league_players.findMany({
-    where: {
-      id_player: user.id,
-    },
-  });
-
-  const participationIds = leaguesPlayer.map(
-    (lp) => lp.id_participation_league
-  );
-
-  const playersTeam = await prisma.players_team.findMany({
-    where: {
-      id_player: {
-        in: participationIds,
-      },
-    },
-  });
-
-  const teamIds = playersTeam.map((pt) => pt.id_team);
-
+export const getTeamsFromUser = async (userId) => {
   const teams = await prisma.teams.findMany({
     where: {
-      id_team: {
-        in: teamIds,
+      players_team: {
+        some: {
+          league_players: {
+            id_player: userId,
+          },
+        },
+      },
+    },
+    include: {
+      leagues: true, // This will include the league details for each team
+      players_team: {
+        include: {
+          league_players: true, // This will include the details of league_players
+        },
       },
     },
   });
 
-  return teams.map((team) => ({
-    id_team: team.id_team,
-    name: team.name,
-    description: team.description || "No description available",
-  }));
+  return teams;
+}
+
+export const createNewTeam = async (formData) => {
+  const name = formData.get("name")
+  const description = formData.get("description")
+  const session = await auth();
+  const userId = session.user.id;
+
+  const createdTeam = await prisma.leagues.create({
+    data: {
+      name: name,
+      description: description,
+      adminId: userId,
+    },
+  });
+
+  await prisma.players_team.create({
+    data: {
+      id_player: userId,
+      id_team: createdTeam.id_team,
+    },
+  });
 };
 
 // ---- Teams inside league
 
 export const getTeamsFromLeague = async (idLeague) => {
 
-  console.log(idLeague);
-
   const teams = await prisma.teams.findMany({
     where: {
-      id_team: idLeague
+      id_league: parseInt(idLeague)
     },
-  }).then((res)=>{console.log(res)});
-
+  })
+  // El then sustituye el valor de la respuesta de la promesa
   return teams.map((team) => ({
     id_team: team.id_team,
     name: team.name,

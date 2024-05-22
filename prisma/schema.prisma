@@ -13,17 +13,14 @@ model images {
   format    String
   version   String
   createdAt DateTime @default(now())
-
   id_user   String?
   id_league Int?
   id_team   Int?
+  league    leagues? @relation("LeagueImages", fields: [id_league], references: [id_league])
+  team      teams?   @relation("TeamImages", fields: [id_team], references: [id_team])
+  user      User?    @relation("UserImages", fields: [id_user], references: [id])
 
-  // Relaciones inversas
-  user   User?    @relation(fields: [id_user], references: [id], name: "UserImages")
-  league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
-  team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
-
-  @@index([id_user]) // Indices para optimizar búsquedas
+  @@index([id_user])
   @@index([id_league])
   @@index([id_team])
 }
@@ -35,7 +32,6 @@ model default_images {
   createdAt        DateTime @default(now())
 }
 
-// Define the User model, integrating both User and users fields
 model User {
   id             String           @id @default(cuid())
   name           String?
@@ -46,28 +42,26 @@ model User {
   surname        String?
   description    String?
   password       String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   accounts       Account[]
-  sessions       Session[]
   Authenticator  Authenticator[]
-  league_players league_players[]
+  sessions       Session[]
   images         images[]         @relation("UserImages")
+  league_players league_players[]
   adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model leagues {
-  id_league   Int     @id @default(autoincrement())
-  name        String
-  description String?
-  type        String?
-  maxteams    Int     @default(16)
-  adminId     String
-  admin       User    @relation("UserLeaguesAdmin", fields: [adminId], references: [id])
-
+  id_league      Int              @id @default(autoincrement())
+  name           String
+  description    String?
+  type           String?
+  maxteams       Int              @default(16)
+  adminId        String
   images         images[]         @relation("LeagueImages")
   league_players league_players[]
+  admin          User             @relation("UserLeaguesAdmin", fields: [adminId], references: [id])
   score          score[]
   sports_custom  sports_custom[]
   sports_league  sports_league[]
@@ -78,9 +72,8 @@ model league_players {
   id_participation_league Int            @id @default(autoincrement())
   id_player               String
   id_league               Int
-  // Define the relationships
-  user                    User           @relation(fields: [id_player], references: [id])
   leagues                 leagues        @relation(fields: [id_league], references: [id_league])
+  user                    User           @relation(fields: [id_player], references: [id])
   players_team            players_team[]
 }
 
@@ -168,9 +161,6 @@ model sports_league {
   @@unique([id_league, id_sport_custom])
 }
 
-//------------------------------------------------------
-// GoogleAuth Scope
-
 model Account {
   userId            String
   type              String
@@ -183,11 +173,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -196,10 +184,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
 }
 
 model VerificationToken {
@@ -210,7 +197,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -220,8 +206,7 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
