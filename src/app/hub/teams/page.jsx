@@ -1,9 +1,11 @@
 import TeamCard from "@/app/components/TeamCard";
-import { getTeamsFromUser, identifyUserTeam } from "../actions";
-import ModalCreateTeam from "@/app/components/teams/modalCreateTeam";
+import { getTeamsFromUser } from "../actions";
+import { auth } from "auth";
 
 const Teams = async () => {
-  const teamsData = await getTeamsFromUser()  
+  const session = await auth()
+  console.log(session)
+  const teamsData = await getTeamsFromUser(session.id)
 
   return (
     <div className="h-100 w-100">
@@ -12,7 +14,6 @@ const Teams = async () => {
           <TeamCard key={index} team={team} />
         ))}
       </div>
-      <ModalCreateTeam />
     </div>
   );
 };
