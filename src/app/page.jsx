@@ -14,7 +14,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      <HomeComponent session={session} name={session.user.name}/>
+      <HomeComponent session={session} name={session.user.name} image={session.user.image}/>
     </main>
   );
 }

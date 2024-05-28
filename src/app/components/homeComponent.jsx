@@ -3,6 +3,7 @@ import "./home.css";
 import React, { useRef, useEffect } from "react";
 import { Merienda } from "next/font/google";
 import Link from "next/link";
+import Image from "next/image";
 
 const merienda = Merienda({ subsets: ["latin"] });
 
@@ -54,7 +55,13 @@ const HomeComponent = (props) => {
             )}
 
             {props.session ? (
-              <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" />
+              <Image
+                src={props.image}
+                width={50}
+                height={50}
+                className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+                alt="User Profile Image"
+              />
             ) : (
               <button className="">
                 <Link className="" href="/login">
@@ -94,7 +101,13 @@ const HomeComponent = (props) => {
               ""
             )}
             {props.session ? (
-              <img className="h-9 w-9 sm:h-14 sm:w-14 border rounded-full" />
+               <Image
+               src={props.image}
+               width={50}
+               height={50}
+               className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+               alt="User Profile Image"
+             />
             ) : (
               <button className="">
                 <Link className="" href="/login">

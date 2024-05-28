@@ -20,8 +20,8 @@ const Sidebar = (props) => {
     >
       <div className="flex gap-x-4 items-center">
         <Image
-          // src={props.image}
-          src={"/sidebar/logo.png"}
+          src={props.image}
+         // src={"/sidebar/logo.png"}
           width={50}
           height={50}
           className={` rounded-full duration-500 ${open && "rotate-[360deg]"}`}
