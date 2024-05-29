@@ -50,7 +50,7 @@ const HomeComponent = (props) => {
                         </button>}
                     </div>
                 </nav>
-                <h1 ref={h1Ref} className="title text-5xl sm:text-7xl md:text-8xl xl:px-32">
+                <h1 ref={h1Ref} className="title text-5xl sm:text-7xl md:text-8xl xl:px-28">
                 Ultimate League & Team{" "}
                     <span className={`${merienda.className} text-sidebar-light2`}>Manager</span>
                 </h1>

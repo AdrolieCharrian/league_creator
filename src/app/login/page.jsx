@@ -3,11 +3,11 @@ import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import {MdOutlineArrowBackIos} from "react-icons/md";
-import "./login.css";
-import { login, logout } from "./actions";
+
+import { login } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";
-
+import "./login.css";
 
 const Login = async () => {
   const token = cookies().get("access-token");
