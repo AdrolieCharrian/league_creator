@@ -103,7 +103,7 @@ export default function NewSidebar({ children, name, image }) {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold ms-2">{name}</h4>
+              <h4 className="font-semibold ms-2 text-white">{name}</h4>
             </div>
           </div>
         </div>
