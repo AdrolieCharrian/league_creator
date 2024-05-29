@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import LeagueCard from "@/app/components/LeagueCard";
 import { identifyUser, getLeaguesFromUser, deleteLeague } from "../actions";
 
+
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,7 +56,7 @@ const Leagues = () => {
     <div className="h-100 w-100">
       <div className="mb-3">
         <button
-          className="bg-sidebar-light hover:bg-sidebar-light2 text-white font-bold py-2 px-4 rounded"
+          className="bg-sidebar-light dark:bg-sidebar-dark hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-white font-bold py-2 px-4 rounded"
           onClick={openModal}
         >
           Create League

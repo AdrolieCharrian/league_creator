@@ -1,5 +1,4 @@
-
-const Leaderboard = () => {
+const Leaderboard = ({params:{id}}) => {
 
   return (
     <div className="h-100 w-100">

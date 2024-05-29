@@ -61,7 +61,7 @@ export default function NewSidebar({ children, name, image }) {
 
   return (
     <SidebarContext.Provider value={{ expanded, activeItem, handleSetActive }}>
-      <div className={`h-screen flex flex-col bg-sidebar-light dark:bg-sidebar-dark border-r shadow-sm relative transition-colors `}>
+      <div className={`h-screen flex flex-col bg-sidebar-light dark:bg-sidebar-dark  shadow-sm relative transition-colors `}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <Image
             src={`/sidebar/logo.png`}
@@ -99,7 +99,7 @@ export default function NewSidebar({ children, name, image }) {
           </div>
         </div>
         <div className={`triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2 `}></div>
-        <div className="border-t dark:border-gray-700 flex p-3 z-10">
+        <div className="border-t  flex p-3 z-10">
           <Image
             src={image}
             width={400}

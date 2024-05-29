@@ -13,7 +13,7 @@ export default async function RootLayout({ children }) {
         <SidebarItem icon={<Trophy size={20} />} text="Leagues" link="/hub/leagues" />
         <SidebarItem icon={<Shield size={20} />} text="Teams" link="/hub/teams" />
       </NewSidebar>
-      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll">
+      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll bg-white dark:bg-background-dark">
         {children}
       </div>
     </div>

@@ -58,33 +58,33 @@ const Profile = async () => {
           </div>  
           ) : (
           <FaUserCircle style={{width:"90px", height:"90px", color: "gray"}} />)}
-        <h1 className="text-2xl pt-4">{checkName()}{"'s Profile"}</h1>
+        <h1 className="text-2xl pt-4 dark:text-white">{checkName()}{"'s Profile"}</h1>
       </div>
       <div>
         <form className="flex flex-col items-center" action="">
             <label htmlFor="email" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-              <span className="text-lg ms-4" >
+              <span className="text-lg ms-4 dark:text-white" >
                 Email
               </span>
               <input id="email" name="email" type="email" defaultValue={checkEmail()} disabled
-              className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
+              className="bg-background-light  rounded-full w-full ps-4 py-3 text-sm" />
             </label>
             <label htmlFor="name" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-              <span className="text-lg ms-4" >
+              <span className="text-lg ms-4 dark:text-white" >
                 Name
               </span>
               <input id="name" name="name" type="text" defaultValue={checkName()}
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
             <label htmlFor="surname" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-              <span className="text-lg ms-4" >
+              <span className="text-lg ms-4 dark:text-white" >
                 Surname
               </span>
               <input id="surname" name="surname" type="text" defaultValue={checkSurname()} placeholder="Your Surname"
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
             <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-              <span className="text-lg ms-4" >
+              <span className="text-lg ms-4 dark:text-white" >
                 Description
               </span>
               <textarea id="description" name="description" type="text" defaultValue={checkDescription()} placeholder="Describe Yourself"
@@ -93,21 +93,21 @@ const Profile = async () => {
             {token && 
             <div>
               <label htmlFor="password" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-                <span className="text-lg ms-4" >
+                <span className="text-lg ms-4 dark:text-white" >
                   Change Password
                 </span>
                 <input id="password" name="password" type="text" placeholder="New Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
-              <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-                <span className="text-lg ms-4" >
+              <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5 ">
+                <span className="text-lg ms-4 dark:text-white" >
                   Confirm Password
                 </span>
                 <input id="confirm" name="confirm" type="text" placeholder="Confirm Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
             </div>}
-            <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3 xl:w-2/6 mt-4">
+            <button type="submit" className="bg-sidebar-light dark:bg-sidebar-dark rounded-full border-2 w-2/5 py-3 xl:w-2/6 mt-4">
               Save
             </button>
         </form>
