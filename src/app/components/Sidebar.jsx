@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./sidebar.css";
 import Link from "next/link";
 
-export default function Sidebar({}) {
+const Sidebar = (props) => {
   const [open, setOpen] = useState(true);
   const Menus = [
     { title: "My profile", src: "user-light", url: "profile" },
@@ -16,22 +16,23 @@ export default function Sidebar({}) {
     <div
       className={`${
         open ? "w-48 sm:w-48 md:w-72" : "w-20"
-      } duration-100  bg-sidebar-light relative p-5 pt-6`}
+      } duration-100 bg-sidebar-light relative p-5 pt-6`}
     >
       <div className="flex gap-x-4 items-center">
         <Image
-          src="/sidebar/logo.png"
-          width={40}
-          height={40}
-          className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}
-          alt=""
+          src={props.image}
+         // src={"/sidebar/logo.png"}
+          width={50}
+          height={50}
+          className={` rounded-full duration-500 ${open && "rotate-[360deg]"}`}
+          alt="User Profile Image"
         />
         <h1
           className={`text-white origin-left font-medium text-xl duration-300 ${
             !open && "scale-0"
           }`}
         >
-          Nombre
+          {props.name}
         </h1>
       </div>
       <div className="triangle-container">
@@ -42,7 +43,7 @@ export default function Sidebar({}) {
           className={`absolute cursor-pointer -right-3 top-9 w-6 h-100 bg-white rounded-full border-2 border-sidebar-light ${
             !open && "rotate-180"
           }`}
-          alt=""
+          alt="Control Icon"
           onClick={() => setOpen(!open)}
         />
         <ul className="pt-7 mt-10 p-3 ">
@@ -55,7 +56,7 @@ export default function Sidebar({}) {
                   src={`/sidebar/${menu.src}.png`}
                   width={35}
                   height={35}
-                  alt=""
+                  alt={menu.title}
                   className={`${!open ? "ms-1 p-0.5" : ""}`}
                 />
                 <span
@@ -73,4 +74,6 @@ export default function Sidebar({}) {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;
