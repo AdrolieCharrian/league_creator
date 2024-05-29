@@ -9,9 +9,9 @@ const Leagues = () => {
   const [newLeague, setNewLeague] = useState({ name: "", description: "" });
 
   const getLeagues = async () => {
+    console.log("leagues:", leagues)
     const leaguesData = await getLeaguesFromUser();
     setLeagues(leaguesData);
-    sessionStorage.setItem("leagues", JSON.stringify(leaguesData));
   };
 
   const openModal = () => {
@@ -47,6 +47,10 @@ const Leagues = () => {
     }
   };
 
+  useEffect(() => {
+    getLeagues()
+  }, [])
+  
   return (
     <div className="h-100 w-100">
       <div className="mb-3">
