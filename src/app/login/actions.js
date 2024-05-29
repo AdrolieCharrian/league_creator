@@ -38,9 +38,13 @@ export const login = async (formData) => {
   // Generate JWT token
   const token = jwt.sign(
     {
-      id_user: user.id_user,
+      id: user.id,
       name: user.name,
       email: user.email,
+      surname: user.surname,
+      username: user.username,
+      image: user.image,
+      description: user.description
     },
     "1234"
   );
@@ -58,6 +62,8 @@ export const register = async (formData) => {
   const username = formData.get("username");
   const password = formData.get("password");
   const confirm = formData.get("confirm-password");
+  const name = formData.get("name");
+  const surname = formData.get("surname");
 
   if (password == confirm) {
     try {
@@ -73,6 +79,8 @@ export const register = async (formData) => {
           email: email,
           username: username,
           password: passwordString,
+          name: name,
+          surname: surname,
         },
       });
       console.log(NextResponse.json({user}));
@@ -87,7 +95,6 @@ export const register = async (formData) => {
   }
 };
 
-export const logout = () => {
-  const cookies = cookies().get("access-token");
-  cookies().delete(cookies);
+export const logout = (token) => {
+  cookies().delete(token);
 };

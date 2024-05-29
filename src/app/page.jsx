@@ -1,5 +1,4 @@
 import {PrismaClient} from "@prisma/client";
-import Link from "next/link";
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import HomeComponent from "./components/homeComponent";
