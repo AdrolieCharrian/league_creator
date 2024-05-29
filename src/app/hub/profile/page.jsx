@@ -58,7 +58,7 @@ const Profile = async () => {
           </div>  
           ) : (
           <FaUserCircle style={{width:"90px", height:"90px", color: "gray"}} />)}
-        <h1 className="text-2xl pt-4">{checkName()}'s Profile</h1>
+        <h1 className="text-2xl pt-4">{checkName()}{"'s Profile"}</h1>
       </div>
       <div className="">
         <form action="">
