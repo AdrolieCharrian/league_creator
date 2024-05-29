@@ -60,30 +60,30 @@ const Profile = async () => {
           <FaUserCircle style={{width:"90px", height:"90px", color: "gray"}} />)}
         <h1 className="text-2xl pt-4">{checkName()}{"'s Profile"}</h1>
       </div>
-      <div className="">
-        <form action="">
-            <label htmlFor="email" className="flex flex-col mt-4">
+      <div>
+        <form className="flex flex-col items-center" action="">
+            <label htmlFor="email" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
               <span className="text-lg ms-4" >
                 Email
               </span>
               <input id="email" name="email" type="email" defaultValue={checkEmail()} disabled
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
-            <label htmlFor="name" className="flex flex-col mt-4">
+            <label htmlFor="name" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
               <span className="text-lg ms-4" >
                 Name
               </span>
               <input id="name" name="name" type="text" defaultValue={checkName()}
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
-            <label htmlFor="surname" className="flex flex-col mt-4">
+            <label htmlFor="surname" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
               <span className="text-lg ms-4" >
                 Surname
               </span>
               <input id="surname" name="surname" type="text" defaultValue={checkSurname()} placeholder="Your Surname"
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
-            <label htmlFor="description" className="flex flex-col mt-4">
+            <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
               <span className="text-lg ms-4" >
                 Description
               </span>
@@ -92,14 +92,14 @@ const Profile = async () => {
             </label>
             {token && 
             <div>
-              <label htmlFor="password" className="flex flex-col mt-4">
+              <label htmlFor="password" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
                 <span className="text-lg ms-4" >
                   Change Password
                 </span>
                 <input id="password" name="password" type="text" placeholder="New Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
-              <label htmlFor="description" className="flex flex-col mt-4">
+              <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
                 <span className="text-lg ms-4" >
                   Confirm Password
                 </span>

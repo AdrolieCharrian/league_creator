@@ -34,8 +34,7 @@ const HomeComponent = (props) => {
       {/* LEFT SIDE */}
       <div
         ref={left}
-        className="bg-sidebar-dark2 text-white h-screen w-screen absolute leading-none side z-10"
-      >
+        className="bg-sidebar-dark2 text-white h-screen w-screen absolute leading-none side z-10">
         <nav className="bg-transparent w-full text-xl flex items-center justify-between px-6 pt-4 sm:text-3xl sm:pt-12">
           <ul className="flex">
             <li className="mr-6">
@@ -45,14 +44,11 @@ const HomeComponent = (props) => {
               <a href="#">About</a>
             </li>
           </ul>
-          <div className="flex">
-            {props.session ? (
+          <div className="flex items-center">
+            {props.session && 
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
-              </Link>
-            ) : (
-              ""
-            )}
+              </Link>}
             {props.session ? (
               <Image
                 src={props.image}
@@ -91,22 +87,18 @@ const HomeComponent = (props) => {
               <a href="#">About</a>
             </li>
           </ul>
-          <div className="flex">
-            {props.session ? (
+          <div className="flex items-center">
+            {props.session &&
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
-              </Link>
-            ) : (
-              ""
-            )}
+              </Link>}
             {props.session ? (
-               <Image
-               src={props.image}
-               width={50}
-               height={50}
-               className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
-               alt="User Profile Image"
-             />
+              <Image
+              src={props.image}
+              width={50}
+              height={50}
+              className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+              alt="User Profile Image"/>
             ) : (
               <button className="">
                 <Link className="" href="/login">
