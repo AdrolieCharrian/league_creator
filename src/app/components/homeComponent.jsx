@@ -53,7 +53,6 @@ const HomeComponent = (props) => {
             ) : (
               ""
             )}
-
             {props.session ? (
               <Image
                 src={props.image}

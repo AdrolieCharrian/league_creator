@@ -1,16 +1,13 @@
 "use server";
 import prisma from "@/app/lib/prisma";
 import { auth } from "auth";
-
-export const justIdentifyIdUser = async () => {
-  const session = await auth();
-  const userId = session.user.id;
-  return userId;
-};
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 export const identifyUser = async (league) => {
   const session = await auth();
-  const userId = session.user.id;
+  const userId = !session ? user?.id : session.user.id;
+
   await createNewLeague(userId, league);
 };
 
@@ -18,13 +15,18 @@ export const identifyUser = async (league) => {
 
 export const getLeaguesFromUser = async () => {
   const session = await auth();
-  const emailuser = session.user.email;
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value)
+
+  const emailuser = !session ? localUser?.email : session.user.email;
 
   const user = await prisma.user.findUnique({
     where: {
       email: emailuser,
     },
   });
+
+  console.log(user)
 
   const leagues_player = await prisma.league_players.findMany({
     where: {
