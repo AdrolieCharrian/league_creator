@@ -1,22 +1,24 @@
 "use server";
 import prisma from "@/app/lib/prisma";
 import { auth } from "auth";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
-export const justIdentifyIdUser = async () => {
-  const session = await auth();
-  const userId = session.user.id;
-  return userId;
-};
+const token = cookies().get("access-token");
+const user = token && jwt.decode(token.value)
 
 export const identifyUser = async (league) => {
   const session = await auth();
-  const userId = session.user.id;
+  const userId = !session ? user?.id : session.user.id;
+
   await createNewLeague(userId, league);
 };
 
+// ---- Leagues
+
 export const getLeaguesFromUser = async () => {
   const session = await auth();
-  const emailuser = session.user.email;
+  const emailuser = !session ? user?.email : session.user.email;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -44,7 +46,7 @@ export const getLeaguesFromUser = async () => {
     id_league: league.id_league,
     name: league.name,
     description: league.description || "No description available",
-    admin: league.adminId === user.id
+    admin: league.adminId === user.id,
   }));
 };
 
@@ -79,6 +81,67 @@ export const deleteLeague = async (idLeague) => {
   });
 };
 
-// ---- Teams 
+// ---- General Teams
 
+export const getTeamsFromUser = async (userId) => {
+  const teams = await prisma.teams.findMany({
+    where: {
+      players_team: {
+        some: {
+          league_players: {
+            id_player: userId,
+          },
+        },
+      },
+    },
+    include: {
+      leagues: true, // This will include the league details for each team
+      players_team: {
+        include: {
+          league_players: true, // This will include the details of league_players
+        },
+      },
+    },
+  });
 
+  return teams;
+}
+
+export const createNewTeam = async (formData) => {
+  const name = formData.get("name")
+  const description = formData.get("description")
+  const session = await auth();
+  const userId = session.user.id;
+
+  const createdTeam = await prisma.leagues.create({
+    data: {
+      name: name,
+      description: description,
+      adminId: userId,
+    },
+  });
+
+  await prisma.players_team.create({
+    data: {
+      id_player: userId,
+      id_team: createdTeam.id_team,
+    },
+  });
+};
+
+// ---- Teams inside league
+
+export const getTeamsFromLeague = async (idLeague) => {
+
+  const teams = await prisma.teams.findMany({
+    where: {
+      id_league: parseInt(idLeague)
+    },
+  })
+  // El then sustituye el valor de la respuesta de la promesa
+  return teams.map((team) => ({
+    id_team: team.id_team,
+    name: team.name,
+    description: team.description || "No description available",
+  }));
+};
