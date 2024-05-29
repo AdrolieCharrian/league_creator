@@ -14,15 +14,6 @@ const Leagues = () => {
     sessionStorage.setItem("leagues", JSON.stringify(leaguesData));
   };
 
-  useEffect(() => {
-    const storedLeagues = sessionStorage.getItem("leagues");
-    if (storedLeagues) {
-      setLeagues(JSON.parse(storedLeagues));
-    } else {
-      getLeagues();
-    }
-  }, []);
-
   const openModal = () => {
     setIsModalOpen(true);
   };

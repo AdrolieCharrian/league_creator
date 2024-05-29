@@ -1,11 +1,15 @@
 import TeamCard from "@/app/components/TeamCard";
 import { getTeamsFromUser } from "../actions";
 import { auth } from "auth";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 const Teams = async () => {
   const session = await auth()
-  console.log(session)
-  const teamsData = await getTeamsFromUser(session.id)
+  const token = cookies().get("access-token");
+  const user = token && jwt.decode(token.value)
+
+  const teamsData = await getTeamsFromUser(!session ? user?.id : session.user.id)
 
   return (
     <div className="h-100 w-100">

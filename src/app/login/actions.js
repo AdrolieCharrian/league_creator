@@ -38,9 +38,13 @@ export const login = async (formData) => {
   // Generate JWT token
   const token = jwt.sign(
     {
-      id_user: user.id_user,
+      id: user.id,
       name: user.name,
       email: user.email,
+      surname: user.surname,
+      username: user.username,
+      image: user.image,
+      description: user.description
     },
     "1234"
   );
@@ -87,7 +91,6 @@ export const register = async (formData) => {
   }
 };
 
-export const logout = () => {
-  const cookies = cookies().get("access-token");
-  cookies().delete(cookies);
+export const logout = (token) => {
+  cookies().delete(token);
 };

@@ -1,16 +1,16 @@
 "use server";
 import prisma from "@/app/lib/prisma";
 import { auth } from "auth";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
-export const justIdentifyIdUser = async () => {
-  const session = await auth();
-  const userId = session.user.id;
-  return userId;
-};
+const token = cookies().get("access-token");
+const user = token && jwt.decode(token.value)
 
 export const identifyUser = async (league) => {
   const session = await auth();
-  const userId = session.user.id;
+  const userId = !session ? user?.id : session.user.id;
+
   await createNewLeague(userId, league);
 };
 
@@ -18,7 +18,7 @@ export const identifyUser = async (league) => {
 
 export const getLeaguesFromUser = async () => {
   const session = await auth();
-  const emailuser = session.user.email;
+  const emailuser = !session ? user?.email : session.user.email;
 
   const user = await prisma.user.findUnique({
     where: {

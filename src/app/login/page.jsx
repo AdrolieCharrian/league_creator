@@ -4,19 +4,14 @@ import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import {MdOutlineArrowBackIos} from "react-icons/md";
 import "./login.css";
-import { login } from "./actions";
+import { login, logout } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";
-import google from "next-auth/providers/google";
-import NextAuth from "next-auth";
 
 
 const Login = async () => {
   const token = cookies().get("access-token");
-  if (token) {
-    const user = jwt.decode(token.value);
-    console.log(user);
-  }
+  const user = token && jwt.decode(token.value)
 
   const session = await auth()
 
@@ -35,7 +30,6 @@ const Login = async () => {
           action={async() => {
             "use server" 
             await signIn("google")
-            await Login()
         }}>
           <button type="submit" className="bg-background-light flex items-center justify-center gap-3 rounded-full
           h-full w-full px-8 md:px-12">
@@ -56,7 +50,8 @@ const Login = async () => {
             type="text"
             id="email"
             name="email"
-            placeholder="Username"
+            placeholder="Email"
+            required
             className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
           ></input>
           <input
@@ -64,6 +59,7 @@ const Login = async () => {
             type="password"
             name="password"
             placeholder="Password"
+            required
             className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
           ></input>
           <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3 xl:w-2/6">
@@ -71,19 +67,28 @@ const Login = async () => {
           </button>
         </form>
         </div>
-        <div>
-          {session && session.user &&
-            <div>
-              <p>{session.user.name}</p>
+        {(session || user) && <div>
+          {session ?
+            (<div>
+              <p>{session?.user.name}</p>
               <form action={async() => {
                 "use server"
-                await signOut()
+                await signOut("google")
               }}>
                 <button type="submit">Sign Out</button>
               </form>
-            </div>
+            </div>)
+            :
+            (<div>
+              <p>{user?.name}</p>
+              <form action={async() => {
+                "use server"
+                logout(token)}}>
+                <button type="submit">Sign Out</button>
+              </form>
+            </div>)
           }
-        </div>
+        </div>}
       </div>
       {/* RIGHT/TOP SIDE */}
       <div className="relative bg-sidebar-light flex items-center md:absolute right-0 md:h-screen md:w-2/5 xl:w-1/3 z-10">
