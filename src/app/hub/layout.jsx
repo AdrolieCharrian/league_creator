@@ -1,4 +1,3 @@
-import Sidebar from "../components/Sidebar";
 import NewSidebar, { SidebarItem } from "../components/NewSidebar";
 import { Home, Trophy, Shield, User } from "lucide-react";
 import "../globals.css";
