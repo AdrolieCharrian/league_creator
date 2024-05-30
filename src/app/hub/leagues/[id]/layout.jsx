@@ -8,7 +8,7 @@ export default async function RootLayout({ children, params }) {
   return (
     <div>
       <TabNav id={id} />
-      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll bg-white dark:bg-background-dark">
+      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll scrollbar-hide bg-white dark:bg-background-dark">
         {children}
       </div>
     </div>
