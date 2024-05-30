@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Crown, Shield, Swords } from "lucide-react";
+import { Crown, Shield, Swords, Bolt } from "lucide-react";
 
-export function TabNav({ id }) {
+export function TabNav({ id, isAdmin }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -16,7 +16,7 @@ export function TabNav({ id }) {
   };
 
   return (
-    <div className="flex bg-sidebar-light dark:bg-sidebar-dark p-2 rounded-lg">
+    <div className="flex sm:flex-row bg-sidebar-light dark:bg-sidebar-dark p-2 rounded-lg">
       <button
         className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded ${
           isActive("teams")
@@ -25,19 +25,8 @@ export function TabNav({ id }) {
         }`}
         onClick={() => handleTabClick("teams")}
       >
-        <Swords />
-        <span>Teams</span>
-      </button>
-      <button
-        className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded ${
-          isActive("matches")
-            ? "bg-sidebar-light2 dark:bg-sidebar-dark2 text-white"
-            : "text-white"
-        }`}
-        onClick={() => handleTabClick("matches")}
-      >
         <Shield />
-        <span>Matches</span>
+        <span className="hidden sm:inline">Teams</span>
       </button>
       <button
         className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded ${
@@ -48,8 +37,32 @@ export function TabNav({ id }) {
         onClick={() => handleTabClick("leaderboard")}
       >
         <Crown />
-        <span>Leaderboard</span>
+        <span className="hidden sm:inline">Leaderboard</span>
       </button>
+      <button
+        className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded ${
+          isActive("matches")
+            ? "bg-sidebar-light2 dark:bg-sidebar-dark2 text-white"
+            : "text-white"
+        }`}
+        onClick={() => handleTabClick("matches")}
+      >
+        <Swords />
+        <span className="hidden sm:inline">Matches</span>
+      </button>
+      {isAdmin && (
+        <button
+          className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded ${
+            isActive("admin")
+              ? "bg-sidebar-light2 dark:bg-sidebar-dark2 text-white"
+              : "text-white"
+          }`}
+          onClick={() => handleTabClick("admin")}
+        >
+          <Bolt />
+          <span className="hidden sm:inline">Configuration</span>
+        </button>
+      )}
     </div>
   );
 }

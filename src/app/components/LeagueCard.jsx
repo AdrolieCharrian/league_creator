@@ -3,9 +3,11 @@ import Image from "next/image";
 import { useState } from "react";
 import "./sidebar.css";
 import { useRouter } from "next/navigation";
+import { getAdminFromLeague } from "../hub/actions";
 
 export default function LeagueCard({ league, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [adminId, setAdminId] = useState(null);
   const router = useRouter();
 
   const openConfirmModal = (event) => {
@@ -22,7 +24,9 @@ export default function LeagueCard({ league, onDelete }) {
     closeConfirmModal();
   };
 
-  const handleNavigate = (id) => {
+  const handleNavigate = async (id) => {
+    const adminId = await getAdminFromLeague(id);
+    setAdminId(adminId);
     router.push(`/hub/leagues/${id}/teams`);
   };
 

@@ -16,7 +16,7 @@ export const identifyUser = async (league) => {
 export const getLeaguesFromUser = async () => {
   const session = await auth();
   const token = cookies().get("access-token");
-  const localUser = token && jwt.decode(token.value)
+  const localUser = token && jwt.decode(token.value);
 
   const emailuser = !session ? localUser?.email : session.user.email;
 
@@ -26,7 +26,7 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  console.log(user)
+  console.log(user);
 
   const leagues_player = await prisma.league_players.findMany({
     where: {
@@ -83,6 +83,16 @@ export const deleteLeague = async (idLeague) => {
   });
 };
 
+export const getAdminFromLeague = async (idLeague) => {
+  const adminFromLeague = await prisma.leagues.findUnique({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+  console.log("admin ID: ",adminFromLeague.adminId);
+  return adminFromLeague.adminId;
+};
+
 // ---- General Teams
 
 export const getTeamsFromUser = async (userId) => {
@@ -107,11 +117,11 @@ export const getTeamsFromUser = async (userId) => {
   });
 
   return teams;
-}
+};
 
 export const createNewTeam = async (formData) => {
-  const name = formData.get("name")
-  const description = formData.get("description")
+  const name = formData.get("name");
+  const description = formData.get("description");
   const session = await auth();
   const userId = session.user.id;
 
@@ -134,12 +144,11 @@ export const createNewTeam = async (formData) => {
 // ---- Teams inside league
 
 export const getTeamsFromLeague = async (idLeague) => {
-
   const teams = await prisma.teams.findMany({
     where: {
-      id_league: parseInt(idLeague)
+      id_league: parseInt(idLeague),
     },
-  })
+  });
   // El then sustituye el valor de la respuesta de la promesa
   return teams.map((team) => ({
     id_team: team.id_team,
