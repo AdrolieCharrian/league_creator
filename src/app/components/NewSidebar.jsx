@@ -43,6 +43,20 @@ export default function NewSidebar({ children, name, image }) {
     }
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setExpanded(false);
+      }
+    };
+
+    // Set initial state based on window size
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleSetActive = (text) => {
     setActiveItem(text);
   };
@@ -61,8 +75,8 @@ export default function NewSidebar({ children, name, image }) {
 
   return (
     <SidebarContext.Provider value={{ expanded, activeItem, handleSetActive }}>
-      <div className={`h-screen flex flex-col bg-sidebar-light dark:bg-sidebar-dark  shadow-sm relative transition-colors `}>
-        <div className="p-4 pb-2 flex justify-between items-center">
+      <div className={`h-screen flex flex-col bg-sidebar-light dark:bg-sidebar-dark shadow-sm relative transition-colors`}>
+        <div className={`p-4 pb-2 justify-between items-center hidden sm:flex`}>
           <Image
             src={`/sidebar/logo.png`}
             width={500}
@@ -81,14 +95,26 @@ export default function NewSidebar({ children, name, image }) {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
-        <ul className="flex-1 px-3">{children}</ul>
+
+        <ul className="flex-1 px-3">
+          <div className="sm:hidden flex justify-center mt-3 mb-2">
+            <button
+              onClick={toggleDarkMode}
+              className="px-1 py-1 text-sm bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
+            >
+              {isDarkMode ? "Light" : "Dark"}
+            </button>
+          </div>
+          {children}
+        </ul>
+
         <div className="triangle-container absolute bottom-0 w-full h-24">
           <div className="border-t dark:border-gray-700 flex p-3">
             <Image
               src={"/sidebar/logo.png"}
               width={400}
               height={400}
-              className={"w-10 h-10 rounded-md"}
+              className="w-10 h-10 rounded-md"
               alt="logo"
             />
             <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
@@ -98,20 +124,21 @@ export default function NewSidebar({ children, name, image }) {
             </div>
           </div>
         </div>
-        <div className={`triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2 `}></div>
-        <div className="border-t  flex p-3 z-10">
+        <div className={`triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2`}></div>
+
+        <div className="border-t flex p-3 z-10 relative">
           <Image
             src={image}
             width={400}
             height={400}
-            className={"w-10 h-10 rounded-full border"}
+            className="w-10 h-10 rounded-full border"
             alt="logo"
           />
           <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
             <div className="leading-4">
               <h4 className="font-semibold ms-2 text-white">{name}</h4>
             </div>
-            <div>
+            <div className="hidden sm:flex">
               <button
                 onClick={toggleDarkMode}
                 className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
@@ -132,7 +159,9 @@ export function SidebarItem({ icon, text, link }) {
 
   return (
     <li
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${isActive ? "bg-sidebar-light2 dark:bg-sidebar-dark2" : "hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-gray-600 dark:text-gray-300"}`}
+      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+        isActive ? "bg-sidebar-light2 dark:bg-sidebar-dark2" : "hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-gray-600 dark:text-gray-300"
+      }`}
       onClick={() => handleSetActive(text)}
     >
       <Link href={link} passHref className="flex items-center w-full">

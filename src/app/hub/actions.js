@@ -26,7 +26,7 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  console.log(user);
+  // console.log(user);
 
   const leagues_player = await prisma.league_players.findMany({
     where: {
@@ -89,7 +89,7 @@ export const getAdminFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  console.log("admin ID: ",adminFromLeague.adminId);
+  // console.log("admin ID: ",adminFromLeague.adminId);
   return adminFromLeague.adminId;
 };
 
@@ -149,7 +149,7 @@ export const getTeamsFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  // El then sustituye el valor de la respuesta de la promesa
+  
   return teams.map((team) => ({
     id_team: team.id_team,
     name: team.name,
