@@ -149,7 +149,7 @@ export const getTeamsFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  
+
   return teams.map((team) => ({
     id_team: team.id_team,
     name: team.name,
@@ -157,9 +157,33 @@ export const getTeamsFromLeague = async (idLeague) => {
   }));
 };
 
-
 // ---- Player inside team
+export const getPlayersFromTeam = async (idTeam) => {
+  const players = await prisma.players_team.findMany({
+    where: {
+      id_team: parseInt(idTeam),
+    },
+  });
+  return players.map((player) => ({
+    id_player_team: player.id_player_team,
+    id_player: player.id_player,
+  }));
+};
 
-export const getPlayersFromTeam = async () =>{
-    
-} 
+// ---- Player info
+export const getPlayerInfo = async (id) => {
+  const playerInfoLeague = await prisma.league_players.findUnique({
+    where: {
+      id_participation_league: id,
+    },
+  });
+
+  const playerInfo = await prisma.user.findUnique({
+    where: {
+      id: playerInfoLeague.id_player,
+    },
+  });
+
+  return playerInfo;
+};
+

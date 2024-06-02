@@ -1,39 +1,26 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { getAdminFromLeague } from "../hub/actions";
+import { useState, useEffect } from "react";
+import { getPlayerInfo } from "../hub/actions";
 
-export default function PlayerCard({ team, onDelete }) {
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [adminId, setAdminId] = useState(null);
-  const router = useRouter();
+export default function PlayerCard({ id }) {
+  const [playerInfo, setPlayerInfo] = useState(null);
 
-  const openConfirmModal = (event) => {
-    event.stopPropagation(); // Detener la propagación del evento
-    setIsConfirmModalOpen(true);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPlayerInfo(id);
+      setPlayerInfo(data);
+    };
 
-  const closeConfirmModal = () => {
-    setIsConfirmModalOpen(false);
-  };
+    fetchData();
+  }, [id]);
 
-  const handleDelete = () => {
-    onDelete(league.id_league);
-    closeConfirmModal();
-  };
-
-  const handleNavigate = async (id) => {
-    const adminId = await getAdminFromLeague(id);
-    setAdminId(adminId);
-    router.push(`/hub/leagues/${id}/teams`);
-  };
+  if (!playerInfo) {
+    return <div className="dark:text-white">Loading...</div>;
+  }
 
   return (
-    <div
-      className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
-      onClick={() => handleNavigate(league.id_league)}
-    >
+    <div className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative">
       <Image
         src="/sidebar/logo.png"
         width={300}
@@ -42,20 +29,8 @@ export default function PlayerCard({ team, onDelete }) {
         alt=""
       />
       <div className="py-4">
-        <div className="font-bold text-xl mb-2">{league.name}</div>
+        <div className="font-bold text-xl mb-2">{playerInfo.name}</div>
       </div>
-
-      {league.admin && (
-        <>
-          <button
-            onClick={openConfirmModal}
-            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2"
-          >
-            Delete
-          </button>
-          
-        </>
-      )}
     </div>
   );
 }
