@@ -156,3 +156,10 @@ export const getTeamsFromLeague = async (idLeague) => {
     description: team.description || "No description available",
   }));
 };
+
+
+// ---- Player inside team
+
+export const getPlayersFromTeam = async () =>{
+    
+} 

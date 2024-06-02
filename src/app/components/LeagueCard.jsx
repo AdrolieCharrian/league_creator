@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import "./sidebar.css";
 import { useRouter } from "next/navigation";
 import { getAdminFromLeague } from "../hub/actions";
 

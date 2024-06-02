@@ -2,8 +2,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getAdminFromLeague } from "../hub/actions";
 
-export default function TeamLeagueCard({ leagueId, team }) {
+export default function PlayerCard({ team, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [adminId, setAdminId] = useState(null);
   const router = useRouter();
@@ -17,18 +18,21 @@ export default function TeamLeagueCard({ leagueId, team }) {
     setIsConfirmModalOpen(false);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    onDelete(league.id_league);
+    closeConfirmModal();
+  };
 
-  const handleNavigate = async (id, teamId) => {
-    // const adminId = await getAdminFromLeague(id);
-    // setAdminId(adminId);
-    router.push(`/hub/leagues/${id}/teams/${teamId}/players`);
+  const handleNavigate = async (id) => {
+    const adminId = await getAdminFromLeague(id);
+    setAdminId(adminId);
+    router.push(`/hub/leagues/${id}/teams`);
   };
 
   return (
     <div
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
-      onClick={() => handleNavigate(leagueId, team.id_team)}
+      onClick={() => handleNavigate(league.id_league)}
     >
       <Image
         src="/sidebar/logo.png"
@@ -38,8 +42,20 @@ export default function TeamLeagueCard({ leagueId, team }) {
         alt=""
       />
       <div className="py-4">
-        <div className="font-bold text-xl mb-2">{team.name}</div>
+        <div className="font-bold text-xl mb-2">{league.name}</div>
       </div>
+
+      {league.admin && (
+        <>
+          <button
+            onClick={openConfirmModal}
+            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2"
+          >
+            Delete
+          </button>
+          
+        </>
+      )}
     </div>
   );
 }

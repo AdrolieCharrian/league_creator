@@ -49,7 +49,7 @@ const LeaguesTeams =  ({ params: { id } }) => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {teamsData.map((team, index) => (
-          <TeamLeagueCard key={index} team={team} />
+          <TeamLeagueCard key={index} team={team} leagueId={id} />
         ))}
       </div>
       {isModalOpen && (
