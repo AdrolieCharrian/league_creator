@@ -185,7 +185,13 @@ export const getInvitationsFromUser = async () => {
 };
 
 export const getInfoLeague = async(id)=>{
-
+  const league = await prisma.leagues.findUnique({
+    where: {
+      id_league: id
+    }
+  })
+  console.log("info league:" ,league)
+  return league
 };
 
 // ---- Player inside team
