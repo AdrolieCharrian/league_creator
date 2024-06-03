@@ -19,7 +19,7 @@ export const identifyUser = async (league) => {
 export const getLeaguesFromUser = async () => {
   const session = await auth();
   const token = cookies().get("access-token");
-  const localUser = token && jwt.decode(token.value)
+  const localUser = token && jwt.decode(token.value);
 
   const emailuser = !session ? localUser?.email : session.user.email;
 
@@ -29,7 +29,7 @@ export const getLeaguesFromUser = async () => {
     },
   });
 
-  console.log(user)
+  // console.log(user);
 
   const leagues_player = await prisma.league_players.findMany({
     where: {
@@ -86,6 +86,16 @@ export const deleteLeague = async (idLeague) => {
   });
 };
 
+export const getAdminFromLeague = async (idLeague) => {
+  const adminFromLeague = await prisma.leagues.findUnique({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+  // console.log("admin ID: ",adminFromLeague.adminId);
+  return adminFromLeague.adminId;
+};
+
 // ---- General Teams
 
 export const getTeamsFromUser = async (userId) => {
@@ -110,11 +120,11 @@ export const getTeamsFromUser = async (userId) => {
   });
 
   return teams;
-}
+};
 
 export const createNewTeam = async (formData) => {
-  const name = formData.get("name")
-  const description = formData.get("description")
+  const name = formData.get("name");
+  const description = formData.get("description");
   const session = await auth();
   const userId = session.user.id;
 
@@ -137,16 +147,131 @@ export const createNewTeam = async (formData) => {
 // ---- Teams inside league
 
 export const getTeamsFromLeague = async (idLeague) => {
-
   const teams = await prisma.teams.findMany({
     where: {
-      id_league: parseInt(idLeague)
+      id_league: parseInt(idLeague),
     },
-  })
-  // El then sustituye el valor de la respuesta de la promesa
+  });
+
   return teams.map((team) => ({
     id_team: team.id_team,
     name: team.name,
     description: team.description || "No description available",
+  }));
+};
+
+// ---- Invitations
+
+export const getInvitationsFromUser = async () => {
+  const session = await auth();
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value);
+
+  const emailuser = !session ? localUser?.email : session.user.email;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: emailuser,
+    },
+  });
+
+  const invitations = await prisma.invitations.findMany({
+    where: {
+      id_user: user.id,
+    },
+  });
+
+  return invitations.map((invi) => ({
+    idInvitation: invi.id_invitation,
+    idUser: invi.id_user,
+    idLeague: invi.id_league,
+  }));
+};
+
+export const getInfoLeague = async (id) => {
+  const league = await prisma.leagues.findUnique({
+    where: {
+      id_league: id,
+    },
+  });
+  return league;
+};
+
+export const declineInvitation = async (id) => {
+  await prisma.invitations.delete({
+    where: {
+      id_invitation: id,
+    },
+  });
+};
+
+export const acceptInvitation = async (idInvi,idLea,idUser) => {
+  await prisma.league_players.create({
+    data:{
+      id_player:idUser,
+      id_league:idLea
+    }
+  });
+
+  await prisma.invitations.delete({
+    where: {
+      id_invitation: idInvi,
+    },
+  });
+};
+
+// ---- Player inside team
+export const getPlayersFromTeam = async (idTeam) => {
+  const players = await prisma.players_team.findMany({
+    where: {
+      id_team: parseInt(idTeam),
+    },
+  });
+  return players.map((player) => ({
+    id_player_team: player.id_player_team,
+    id_player: player.id_player,
+  }));
+};
+
+// ---- Player info
+export const getPlayerInfo = async (id) => {
+  const playerInfoLeague = await prisma.league_players.findUnique({
+    where: {
+      id_participation_league: id,
+    },
+  });
+
+  const playerInfo = await prisma.user.findUnique({
+    where: {
+      id: playerInfoLeague.id_player,
+    },
+  });
+
+  return playerInfo;
+};
+
+// ---- Leaderboard
+
+export const getLeaderboardData = async (leagueId) => {
+  const scores = await prisma.score.findMany({
+    where: {
+      id_league: parseInt(leagueId),
+    },
+    include: {
+      teams: true,
+    },
+    orderBy: {
+      points: 'desc',
+    }
+  });
+
+  return scores.map((score, index) => ({
+    rank: index + 1,
+    teamName: score.teams.name,
+    matchesPlayed: score.matches,
+    wins: score.wins,
+    draws: score.draws,
+    loses: score.loses,
+    points: score.points,
   }));
 };

@@ -50,6 +50,7 @@ model User {
   images         images[]         @relation("UserImages")
   league_players league_players[]
   adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
+  invitations    Invitations[]
 }
 
 model leagues {
@@ -66,6 +67,7 @@ model leagues {
   sports_custom  sports_custom[]
   sports_league  sports_league[]
   teams          teams[]
+  invitations    Invitations[]
 }
 
 model league_players {
@@ -209,4 +211,12 @@ model Authenticator {
   user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Invitations {
+  id_invitation Int     @id @default(autoincrement())
+  id_league     Int
+  id_user       String
+  leagues       leagues @relation(fields: [id_league], references: [id_league])
+  user          User    @relation(fields: [id_user], references: [id])
 }

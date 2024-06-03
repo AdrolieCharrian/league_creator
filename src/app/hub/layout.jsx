@@ -1,6 +1,6 @@
-import Sidebar from "../components/Sidebar";
 import NewSidebar, { SidebarItem } from "../components/NewSidebar";
-import { Home, Trophy, Shield, User } from "lucide-react";
+import { Home, Trophy, Shield, User, Mail } from "lucide-react";
+import "../globals.css";
 import { auth } from "auth";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
@@ -19,8 +19,9 @@ export default async function RootLayout({ children }) {
         <SidebarItem icon={<User size={20} />} text="Profile" link="/hub/profile" />
         <SidebarItem icon={<Trophy size={20} />} text="Leagues" link="/hub/leagues" />
         <SidebarItem icon={<Shield size={20} />} text="Teams" link="/hub/teams" />
+        <SidebarItem icon={<Mail size={20} />} text="Invitations" link="/hub/invitations"/>
       </NewSidebar>
-      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll">
+      <div className="p-7 text-2x1 font-semibold flex-1 h-screen overflow-y-scroll bg-white dark:bg-background-dark">
         {children}
       </div>
     </div>
