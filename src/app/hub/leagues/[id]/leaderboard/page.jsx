@@ -16,7 +16,7 @@ const Leaderboard = ({ params: { id } }) => {
   }, [id]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-100 h-100 ">
       <LeaderboardTable data={data} />
     </div>
   );
