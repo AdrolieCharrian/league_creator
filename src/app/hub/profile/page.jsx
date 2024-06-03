@@ -4,6 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { saveProfile, saveProfileGoogle } from "./actions";
 
 //use CustomProvider to add non-google users to session
 
@@ -40,6 +41,13 @@ const Profile = async () => {
       return user.email
     }
   }
+  function checkUsername() {
+    if(session) {
+      return session.user.username
+    } else if (user) {
+      return user.username
+    }
+  }
   function checkDescription() {
     if(session) {
       return session.user.description
@@ -47,7 +55,6 @@ const Profile = async () => {
       return user.description
     }
   }
-
 
   return (
     <div className="container">
@@ -61,12 +68,19 @@ const Profile = async () => {
         <h1 className="text-2xl pt-4">{checkName()}{"'s Profile"}</h1>
       </div>
       <div>
-        <form className="flex flex-col items-center" action="">
+        <form className="flex flex-col items-center" action={!session ? saveProfile : saveProfileGoogle}>
             <label htmlFor="email" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
               <span className="text-lg ms-4" >
                 Email
               </span>
-              <input id="email" name="email" type="email" defaultValue={checkEmail()} disabled
+              <input id="email" name="email" type="email" defaultValue={checkEmail()}
+              className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
+            </label>
+            <label htmlFor="username" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
+              <span className="text-lg ms-4" >
+                Username
+              </span>
+              <input id="username" name="username" type="text" defaultValue={checkUsername()}
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
             <label htmlFor="name" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
@@ -91,19 +105,19 @@ const Profile = async () => {
               className="bg-background-light rounded-xl h-full w-full ps-4 py-3 text-sm" />
             </label>
             {token && 
-            <div>
-              <label htmlFor="password" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
+            <div className="w-full md:w-4/5 xl:w-3/5">
+              <label htmlFor="password" className="flex flex-col mt-4">
                 <span className="text-lg ms-4" >
                   Change Password
                 </span>
-                <input id="password" name="password" type="text" placeholder="New Password"
+                <input id="password" name="password" type="password" placeholder="New Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
-              <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
+              <label htmlFor="description" className="flex flex-col mt-4">
                 <span className="text-lg ms-4" >
                   Confirm Password
                 </span>
-                <input id="confirm" name="confirm" type="text" placeholder="Confirm Password"
+                <input id="confirm" name="confirm" type="password" placeholder="Confirm Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
             </div>}

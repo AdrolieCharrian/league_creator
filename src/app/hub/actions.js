@@ -6,7 +6,10 @@ import jwt from "jsonwebtoken";
 
 export const identifyUser = async (league) => {
   const session = await auth();
-  const userId = !session ? user?.id : session.user.id;
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value)
+
+  const userId = !session ? localUser?.id : session.user.id;
 
   await createNewLeague(userId, league);
 };

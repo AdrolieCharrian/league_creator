@@ -87,7 +87,7 @@ export const register = async (formData) => {
       console.log("Created User");
     } catch (error) {
       console.error(error);
-      return NextResponse.error("Error al crear el usuario");
+      return NextResponse.error("Error al creating user");
     }
     redirect("/login");
   } else {
