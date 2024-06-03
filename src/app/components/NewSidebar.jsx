@@ -5,10 +5,13 @@ import Image from "next/image";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Merienda } from "next/font/google";
+import { FaUserCircle } from "react-icons/fa";
+
 
 const SidebarContext = createContext();
 
-export default function NewSidebar({ children, name, image }) {
+export default function NewSidebar({ children, name, image, session, user }) {
   const [expanded, setExpanded] = useState(true);
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState("");
@@ -140,18 +143,18 @@ export default function NewSidebar({ children, name, image }) {
             </div>
           </div>
         </div>
-        <div
-          className={`triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2`}
-        ></div>
-
+        <div className="triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2"></div>
         <div className="border-t flex p-3 z-10 relative">
+          {session && (user ? <FaUserCircle className={"w-10 h-10 rounded-full border"}
+          style={{color: "white"}}/> 
+          : 
           <Image
             src={image}
             width={400}
             height={400}
             className="w-10 h-10 rounded-full border"
-            alt="logo"
-          />
+            alt="user"
+          />)}
           <div
             className={`flex justify-between items-center overflow-hidden transition-all ${
               expanded ? "w-52 ml-3" : "w-0"

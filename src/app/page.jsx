@@ -4,16 +4,19 @@ import jwt from "jsonwebtoken";
 import HomeComponent from "./components/homeComponent";
 import { auth } from "auth";
 
+
 const prisma = new PrismaClient();
 
 export default async function Home() {
   const token = cookies().get("access-token");
-  const user = token ? jwt.decode(token.value) : null;
+  const user = token && jwt.decode(token.value);
   const session = await auth();
+
+  console.log(session)
 
   return (
     <main className="min-h-screen">
-      <HomeComponent session={session} name={session.user.name} image={session.user.image}/>
+      <HomeComponent session={session || user} image={session?.user.image} user={user}/>
     </main>
   );
 }

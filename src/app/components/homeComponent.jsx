@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { Merienda } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
+import { FaUserCircle } from "react-icons/fa"; //<FaUserCircle />
 
 const merienda = Merienda({ subsets: ["latin"] });
 
@@ -49,7 +50,7 @@ const HomeComponent = (props) => {
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (
+            {props.session ? (props.user ? <FaUserCircle style={{width:"50px", height:"50px", color: "white"}} /> :
               <Image
                 src={props.image}
                 width={50}
@@ -92,7 +93,7 @@ const HomeComponent = (props) => {
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (
+            {props.session ? (props.user ? <FaUserCircle style={{width:"50px", height:"50px", color: "black"}} /> :
               <Image
               src={props.image}
               width={50}
