@@ -157,6 +157,37 @@ export const getTeamsFromLeague = async (idLeague) => {
   }));
 };
 
+// ---- Invitations
+
+export const getInvitationsFromUser = async () => {
+  const session = await auth();
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value);
+
+  const emailuser = !session ? localUser?.email : session.user.email;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: emailuser,
+    },
+  });
+
+  const invitations = await prisma.invitations.findMany({
+    where:{
+      id_user: user.id
+    }
+  });
+  
+  return invitations.map((invi)=>({
+    idUser: invi.id_user,
+    idLeague: invi.id_league
+  }));
+};
+
+export const getInfoLeague = async(id)=>{
+
+};
+
 // ---- Player inside team
 export const getPlayersFromTeam = async (idTeam) => {
   const players = await prisma.players_team.findMany({
@@ -186,4 +217,3 @@ export const getPlayerInfo = async (id) => {
 
   return playerInfo;
 };
-
