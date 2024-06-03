@@ -77,7 +77,7 @@ const Profile = async () => {
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
             </label>
             <label htmlFor="username" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
-              <span className="text-lg ms-4" >
+              <span className="text-lg ms-4 dark:text-white" >
                 Username
               </span>
               <input id="username" name="username" type="text" defaultValue={checkUsername()}
@@ -105,15 +105,15 @@ const Profile = async () => {
               className="bg-background-light rounded-xl h-full w-full ps-4 py-3 text-sm" />
             </label>
             {token && 
-            <div>
-              <label htmlFor="password" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
+            <div className="md:w-4/5 xl:w-3/5">
+              <label htmlFor="password" className="flex flex-col mt-4 w-full">
                 <span className="text-lg ms-4 dark:text-white" >
                   Change Password
                 </span>
                 <input id="password" name="password" type="password" placeholder="New Password"
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
-              <label htmlFor="description" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5 ">
+              <label htmlFor="description" className="flex flex-col mt-4 w-full ">
                 <span className="text-lg ms-4 dark:text-white" >
                   Confirm Password
                 </span>
@@ -121,7 +121,7 @@ const Profile = async () => {
                 className="bg-background-light rounded-full h-full w-full ps-4 py-3 text-sm" />
               </label>
             </div>}
-            <button type="submit" className="bg-sidebar-light dark:bg-sidebar-dark rounded-full border-2 w-2/5 py-3 xl:w-2/6 mt-4">
+            <button type="submit" className="bg-sidebar-light dark:bg-sidebar-dark dark:text-white rounded-full border-2 w-2/5 py-3 xl:w-2/6 mt-5">
               Save
             </button>
         </form>

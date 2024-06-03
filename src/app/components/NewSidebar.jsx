@@ -5,9 +5,7 @@ import Image from "next/image";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Merienda } from "next/font/google";
 import { FaUserCircle } from "react-icons/fa";
-
 
 const SidebarContext = createContext();
 
