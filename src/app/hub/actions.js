@@ -173,25 +173,48 @@ export const getInvitationsFromUser = async () => {
   });
 
   const invitations = await prisma.invitations.findMany({
-    where:{
-      id_user: user.id
-    }
+    where: {
+      id_user: user.id,
+    },
   });
-  
-  return invitations.map((invi)=>({
+
+  return invitations.map((invi) => ({
+    idInvitation: invi.id_invitation,
     idUser: invi.id_user,
-    idLeague: invi.id_league
+    idLeague: invi.id_league,
   }));
 };
 
-export const getInfoLeague = async(id)=>{
+export const getInfoLeague = async (id) => {
   const league = await prisma.leagues.findUnique({
     where: {
-      id_league: id
+      id_league: id,
+    },
+  });
+  return league;
+};
+
+export const declineInvitation = async (id) => {
+  await prisma.invitations.delete({
+    where: {
+      id_invitation: id,
+    },
+  });
+};
+
+export const acceptInvitation = async (idInvi,idLea,idUser) => {
+  await prisma.league_players.create({
+    data:{
+      id_player:idUser,
+      id_league:idLea
     }
-  })
-  console.log("info league:" ,league)
-  return league
+  });
+
+  await prisma.invitations.delete({
+    where: {
+      id_invitation: idInvi,
+    },
+  });
 };
 
 // ---- Player inside team
