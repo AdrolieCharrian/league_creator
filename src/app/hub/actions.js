@@ -246,3 +246,29 @@ export const getPlayerInfo = async (id) => {
 
   return playerInfo;
 };
+
+// ---- Leaderboard
+
+export const getLeaderboardData = async (leagueId) => {
+  const scores = await prisma.score.findMany({
+    where: {
+      id_league: parseInt(leagueId),
+    },
+    include: {
+      teams: true,
+    },
+    orderBy: {
+      points: 'desc',
+    }
+  });
+
+  return scores.map((score, index) => ({
+    rank: index + 1,
+    teamName: score.teams.name,
+    matchesPlayed: score.matches,
+    wins: score.wins,
+    draws: score.draws,
+    loses: score.loses,
+    points: score.points,
+  }));
+};
