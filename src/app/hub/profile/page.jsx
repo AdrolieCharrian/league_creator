@@ -1,12 +1,11 @@
 import React from "react";
-import { auth } from "auth";
 import { FaUserCircle } from "react-icons/fa";
-import Image from "next/image";
+import { auth } from "auth";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import ImageForm from "@/app/components/profile/imageForm";
+import Image from "next/image";
 import { saveProfile, saveProfileGoogle } from "./actions";
-
-//use CustomProvider to add non-google users to session
 
 const Profile = async () => {
   const session = await auth()
@@ -59,12 +58,13 @@ const Profile = async () => {
   return (
     <div className="container">
       <div className="flex flex-col justify-center items-center">
-        {session || user.image ? (
+        {user ? (
+          <ImageForm image={checkImage()} />
+        ) : (
           <div className="rounded-full overflow-hidden">
             <Image width={90} height={90} quality={100} className="object-contain" src={checkImage()} alt="user-image" />
-          </div>  
-          ) : (
-          <FaUserCircle style={{width:"90px", height:"90px", color: "gray"}} />)}
+          </div> 
+        )}
         <h1 className="text-2xl pt-4 dark:text-white">{checkName()}{"'s Profile"}</h1>
       </div>
       <div>
@@ -105,7 +105,7 @@ const Profile = async () => {
               className="bg-background-light rounded-xl h-full w-full ps-4 py-3 text-sm" />
             </label>
             {token && 
-            <div className="md:w-4/5 xl:w-3/5">
+            <div className="w-full md:w-4/5 xl:w-3/5">
               <label htmlFor="password" className="flex flex-col mt-4 w-full">
                 <span className="text-lg ms-4 dark:text-white" >
                   Change Password

@@ -3,7 +3,7 @@ import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
 import {FcGoogle} from "react-icons/fc";
 import {MdOutlineArrowBackIos} from "react-icons/md";
-
+import { logout } from "./actions";
 import { login } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";

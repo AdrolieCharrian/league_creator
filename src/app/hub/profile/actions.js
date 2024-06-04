@@ -1,6 +1,7 @@
 "use server"
+import { auth } from "auth";
+import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import prisma from "@/app/lib/prisma";
 import bcrypt from "bcrypt";
@@ -125,4 +126,69 @@ export const saveProfileGoogle = async (formData) => {
             console.error(error);
             return NextResponse.error("Error updating user");
         }
+}
+
+export const saveImage = async (img) => {
+    const session = await auth();
+    const token = cookies().get("access-token");
+    const localUser = token && jwt.decode(token.value)
+    const email = !session ? localUser?.email : session.user.email;
+
+    try {
+        const updatedUserImage = await prisma.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                image: img
+            }
+        })
+        const newToken = jwt.sign(
+            {
+                id: localUser.id,
+                name: localUser.name,
+                email: localUser.email,
+                surname: localUser.surname,
+                username: localUser.username,
+                image: updatedUserImage.image,
+                description: localUser.description
+            },
+            "1234"
+        );
+        console.log(newToken);
+        
+        // Set token in cookie
+        cookies().set("access-token", newToken);
+        console.log(NextResponse.json({updatedUserImage}));
+        console.log("Updated User");
+        } catch(error) {
+            console.error(error);
+            return NextResponse.error("Error updating user");
+        }
+}
+
+export const getImage = async () => {
+    const session = await auth();
+    const token = cookies().get("access-token");
+    const localUser = token && jwt.decode(token.value)
+    const email = !session ? localUser?.email : session.user.email;
+
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                email: email
+            }
+        })
+        if (user) {
+            const imageId = user.image;
+            console.log("User image URL:", imageId);
+            return imageId
+        } else {
+            console.log("User with email", email, "not found or has no image");
+        }
+
+    } catch(error) {
+        console.error(error);
+        return NextResponse.error("Error updating user");
+    }
 }
