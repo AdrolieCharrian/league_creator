@@ -8,28 +8,10 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model images {
-  id_image  Int      @id @default(autoincrement())
-  format    String
-  version   String
-  createdAt DateTime @default(now())
-  id_user   String?
-  id_league Int?
-  id_team   Int?
-  league    leagues? @relation("LeagueImages", fields: [id_league], references: [id_league])
-  team      teams?   @relation("TeamImages", fields: [id_team], references: [id_team])
-  user      User?    @relation("UserImages", fields: [id_user], references: [id])
-
-  @@index([id_user])
-  @@index([id_league])
-  @@index([id_team])
-}
-
 model default_images {
   id_default_image Int      @id @default(autoincrement())
-  format           String
-  version          String
   createdAt        DateTime @default(now())
+  image            String?
 }
 
 model User {
@@ -47,7 +29,6 @@ model User {
   accounts       Account[]
   Authenticator  Authenticator[]
   sessions       Session[]
-  images         images[]         @relation("UserImages")
   league_players league_players[]
   adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
   invitations    Invitations[]
@@ -60,7 +41,7 @@ model leagues {
   type           String?
   maxteams       Int              @default(16)
   adminId        String
-  images         images[]         @relation("LeagueImages")
+  image          String?
   league_players league_players[]
   admin          User             @relation("UserLeaguesAdmin", fields: [adminId], references: [id])
   score          score[]
@@ -84,7 +65,8 @@ model teams {
   name             String
   description      String?
   id_league        Int
-  images           images[]       @relation("TeamImages")
+  image            String?
+  acronym          String
   matchesAsTeamOne matches[]      @relation("TeamOneRelation")
   matchesAsTeamTwo matches[]      @relation("TeamTwoRelation")
   players_team     players_team[]
@@ -118,7 +100,7 @@ model matches {
 
 model score {
   id_score  Int     @id @default(autoincrement())
-  type      String
+  type      String?
   id_league Int
   id_team   Int
   matches   Int?

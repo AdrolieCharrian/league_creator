@@ -167,28 +167,28 @@ export const saveImage = async (img) => {
         }
 }
 
-export const getImage = async () => {
-    const session = await auth();
-    const token = cookies().get("access-token");
-    const localUser = token && jwt.decode(token.value)
-    const email = !session ? localUser?.email : session.user.email;
+// export const getImage = async () => {
+//     const session = await auth();
+//     const token = cookies().get("access-token");
+//     const localUser = token && jwt.decode(token.value)
+//     const email = !session ? localUser?.email : session.user.email;
 
-    try {
-        const user = await prisma.user.findFirst({
-            where: {
-                email: email
-            }
-        })
-        if (user) {
-            const imageId = user.image;
-            console.log("User image URL:", imageId);
-            return imageId
-        } else {
-            console.log("User with email", email, "not found or has no image");
-        }
+//     try {
+//         const user = await prisma.user.findFirst({
+//             where: {
+//                 email: email
+//             }
+//         })
+//         if (user) {
+//             const imageId = user.image;
+//             console.log("User image URL:", imageId);
+//             return imageId
+//         } else {
+//             console.log("User with email", email, "not found or has no image");
+//         }
 
-    } catch(error) {
-        console.error(error);
-        return NextResponse.error("Error updating user");
-    }
-}
+//     } catch(error) {
+//         console.error(error);
+//         return NextResponse.error("Error updating user");
+//     }
+// }
