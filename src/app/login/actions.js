@@ -1,10 +1,11 @@
 "use server";
 import jwt from "jsonwebtoken";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 import prisma from "@/app/lib/prisma";
-import {cookies} from "next/headers";
+import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
-import {NextResponse} from "next/server";
+import { NextResponse } from "next/server";
+import { auth, signOut } from "auth";
 
 export const login = async (formData) => {
   const email = formData.get("email");
@@ -23,7 +24,7 @@ export const login = async (formData) => {
   console.log("User found", user);
 
   //if user exists desctructure password in DB
-  const {salt, hash} = JSON.parse(user.password);
+  const { salt, hash } = JSON.parse(user.password);
 
   //assign to a new hash variable the result
   const computedHash = bcrypt.hashSync(password, salt);
@@ -44,7 +45,7 @@ export const login = async (formData) => {
       surname: user.surname,
       username: user.username,
       image: user.image,
-      description: user.description
+      description: user.description,
     },
     "1234"
   );
@@ -72,7 +73,7 @@ export const register = async (formData) => {
       //create new hash with the password feom request (pass+salt)
       const hash = bcrypt.hashSync(password, salt);
       //convert to string
-      const passwordString = JSON.stringify({hash, salt});
+      const passwordString = JSON.stringify({ hash, salt });
 
       const user = await prisma.user.create({
         data: {
@@ -83,7 +84,7 @@ export const register = async (formData) => {
           surname: surname,
         },
       });
-      console.log(NextResponse.json({user}));
+      console.log(NextResponse.json({ user }));
       console.log("Created User");
     } catch (error) {
       console.error(error);
@@ -97,4 +98,20 @@ export const register = async (formData) => {
 
 export const logout = (token) => {
   cookies().delete(token);
+};
+
+export const accountSignOut = async () => {
+  try {
+    const session = await auth();
+    const token = cookies().get("access-token");
+
+    if (session) {
+      await signOut("google");
+    } else if (token) {
+      logout(token);
+    }
+    redirect("/");
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
 };

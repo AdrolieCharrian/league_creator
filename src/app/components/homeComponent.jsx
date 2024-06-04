@@ -61,7 +61,7 @@ const HomeComponent = (props) => {
             ) : (
               <button className="">
                 <Link className="" href="/login">
-                  LogIn
+                  LogIn/Signin
                 </Link>
               </button>
             )}
@@ -103,7 +103,7 @@ const HomeComponent = (props) => {
             ) : (
               <button className="">
                 <Link className="" href="/login">
-                  LogIn
+                  LogIn/Signin
                 </Link>
               </button>
             )}

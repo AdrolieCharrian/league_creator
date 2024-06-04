@@ -14,7 +14,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <div className="flex">
-      <NewSidebar name={session?.user.name || user.name} session={session || user} user={user} image={session?.user.image}>
+      <NewSidebar name={session?.user.name || user?.name} session={session || user} user={user} image={session?.user.image}>
         <SidebarItem icon={<Home size={20} />} text="Home" link="/" />
         <SidebarItem icon={<User size={20} />} text="Profile" link="/hub/profile" />
         <SidebarItem icon={<Trophy size={20} />} text="Leagues" link="/hub/leagues" />

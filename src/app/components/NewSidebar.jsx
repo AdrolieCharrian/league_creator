@@ -2,10 +2,11 @@
 import Link from "next/link";
 import "./sidebar.css";
 import Image from "next/image";
-import { ChevronFirst, ChevronLast } from "lucide-react";
+import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
+import { logout, accountSignOut } from "../login/actions";
 
 const SidebarContext = createContext();
 
@@ -108,7 +109,6 @@ export default function NewSidebar({ children, name, image, session, user }) {
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
-
         <ul className="flex-1 px-3">
           <div className="sm:hidden flex justify-center mt-3 mb-2">
             <button
@@ -120,7 +120,6 @@ export default function NewSidebar({ children, name, image, session, user }) {
           </div>
           {children}
         </ul>
-
         <div className="triangle-container absolute bottom-0 w-full h-24">
           <div className="border-t dark:border-gray-700 flex p-3">
             <Image
@@ -142,29 +141,51 @@ export default function NewSidebar({ children, name, image, session, user }) {
           </div>
         </div>
         <div className="triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2"></div>
+
+        {expanded ? (
+          <div className="container z-10 flex justify-center py-2">
+            <h3 className="text-white px-2">Logout</h3>
+            <button className="ms-1 dark:text-white" onClick={accountSignOut}>
+              <LogOut />
+            </button>
+          </div>
+        ) : (
+          <div className="container z-10 flex justify-center py-2">
+            <button className="ms-1 dark:text-white" onClick={accountSignOut}>
+              <LogOut />
+            </button>
+          </div>
+        )}
+
         <div className="border-t flex p-3 z-10 relative">
-          {session && (user ? <FaUserCircle className={"w-10 h-10 rounded-full border"}
-          style={{color: "white"}}/> 
-          : 
-          <Image
-            src={image}
-            width={400}
-            height={400}
-            className="w-10 h-10 rounded-full border"
-            alt="user"
-          />)}
+          {session &&
+            (user ? (
+              <FaUserCircle
+                className={"w-10 h-10 rounded-full border"}
+                style={{ color: "white" }}
+              />
+            ) : (
+              <Image
+                src={image}
+                width={400}
+                height={400}
+                className="w-10 h-10 rounded-full border"
+                alt="user"
+              />
+            ))}
+
           <div
             className={`flex justify-between items-center overflow-hidden transition-all ${
               expanded ? "w-52 ml-3" : "w-0"
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold ms-2 text-white">{name}</h4>
+              <h4 className="font-semibold  text-sm text-white">{name}</h4>
             </div>
             <div className="hidden sm:flex">
               <button
                 onClick={toggleDarkMode}
-                className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
+                className="px-2 py-1 bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
               >
                 {isDarkMode ? "Light" : "Dark"}
               </button>
