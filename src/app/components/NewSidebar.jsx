@@ -8,6 +8,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
 import { accountSignOut } from "../login/actions";
+import { CldImage } from "next-cloudinary";
 
 const SidebarContext = createContext();
 
@@ -113,7 +114,7 @@ export default function NewSidebar({ children, name, image, session, user }) {
           </button>
         </div>
         <ul className="flex-1 px-3">
-          <div className="sm:hidden flex justify-center mt-3 mb-2">
+          <div className={`${expanded && "sm:hidden"} flex justify-center mt-3 mb-2`}>
             <button
               onClick={toggleDarkMode}
               className="px-1 py-1 text-sm bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
@@ -146,14 +147,14 @@ export default function NewSidebar({ children, name, image, session, user }) {
 
         {expanded ? (
           <div className="container z-10 flex p-3">
-            <button className="flex gap-2 p-2.5 w-full rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-gray-600 dark:text-gray-300" onClick={handleSignOut}>
+            <button className="flex gap-2 p-2.5 w-full rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-white dark:text-gray-300" onClick={handleSignOut}>
               <LogOut />
               <h3 className="text-white self-start">LogOut</h3>
             </button>
           </div>
         ) : (
           <div className="container z-10 flex justify-center p-3">
-            <button className="p-2.5 w-full  rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-gray-600 dark:text-gray-300" onClick={handleSignOut}>
+            <button className="p-2.5 w-full rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-white dark:text-gray-300" onClick={handleSignOut}>
               <LogOut />
             </button>
           </div>
@@ -162,15 +163,19 @@ export default function NewSidebar({ children, name, image, session, user }) {
         <div className="border-t flex p-3 z-10 relative">
           {session &&
             (user ? (
-              <FaUserCircle
-                className={"ms-0.5 w-10 h-10 rounded-full border flex justify-center items-center"}
-                style={{ color: "white" }}
+              <CldImage
+                className="ms-0.5 rounded-full border"
+                width="40"
+                height="40"
+                crop={"fill"}
+                src={image}
+                alt="user"
               />
             ) : (
               <Image
                 src={image}
-                width={400}
-                height={400}
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full border"
                 alt="user"
               />
