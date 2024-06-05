@@ -1,5 +1,6 @@
 "use client";
 import "./home.css";
+import "../globals.css"
 import React, { useRef, useEffect } from "react";
 import { Merienda } from "next/font/google";
 import Link from "next/link";
@@ -46,11 +47,11 @@ const HomeComponent = (props) => {
             </li>
           </ul>
           <div className="flex items-center">
-            {props.session && 
+            {props.session &&
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (props.user ? <FaUserCircle style={{width:"50px", height:"50px", color: "white"}} /> :
+            {props.session ? (props.user ? <FaUserCircle style={{ width: "50px", height: "50px", color: "white" }} /> :
               <Image
                 src={props.image}
                 width={50}
@@ -61,7 +62,7 @@ const HomeComponent = (props) => {
             ) : (
               <button className="">
                 <Link className="" href="/login">
-                  LogIn/Signin
+                  LogIn / SignIn
                 </Link>
               </button>
             )}
@@ -93,17 +94,17 @@ const HomeComponent = (props) => {
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (props.user ? <FaUserCircle style={{width:"50px", height:"50px", color: "black"}} /> :
+            {props.session ? (props.user ? <FaUserCircle style={{ width: "50px", height: "50px", color: "black" }} /> :
               <Image
-              src={props.image}
-              width={50}
-              height={50}
-              className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
-              alt="User Profile Image"/>
+                src={props.image}
+                width={50}
+                height={50}
+                className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+                alt="User Profile Image" />
             ) : (
               <button className="">
                 <Link className="" href="/login">
-                  LogIn/Signin
+                  LogIn / SignIn
                 </Link>
               </button>
             )}

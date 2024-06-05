@@ -1,13 +1,14 @@
 import Link from "next/link";
-import {cookies} from "next/headers";
+import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import {FcGoogle} from "react-icons/fc";
-import {MdOutlineArrowBackIos} from "react-icons/md";
+import { FcGoogle } from "react-icons/fc";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 import { logout } from "./actions";
 import { login } from "./actions";
 import { auth, signOut, signIn } from "auth";
 import React from "react";
 import "./login.css";
+import "../globals.css"
 
 const Login = async () => {
   const token = cookies().get("access-token");
@@ -26,11 +27,11 @@ const Login = async () => {
         <p className="text-center mb-6 text-4xl w-4/5 pt-8 md:text-7xl md:w-3/5 xl:text-6xl 2xl:text-7xl">
           Login to League Creator
         </p>
-        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3" 
-          action={async() => {
-            "use server" 
-            await signIn("google")
-        }}>
+        <form className="flex items-center justify-center rounded-full bg-background-light border-2 py-3"
+          action={async () => {
+            "use server"
+            await signIn("google", { redirectTo: "/hub/leagues" })
+          }}>
           <button type="submit" className="bg-background-light flex items-center justify-center gap-3 rounded-full
           h-full w-full px-8 md:px-12">
             Log in With Google{" "}
@@ -45,33 +46,33 @@ const Login = async () => {
           <div className="border rounded-full h-0 border-gray-400 w-1/4"></div>
         </div>
         <div className="container">
-        <form action={login} className="flex flex-col items-center gap-3">
-          <input
-            type="text"
-            id="email"
-            name="email"
-            placeholder="Email"
-            required
-            className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
-          ></input>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
-          ></input>
-          <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3 xl:w-2/6">
-            Sign In
-          </button>
-        </form>
+          <form action={login} className="flex flex-col items-center gap-3">
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Email"
+              required
+              className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
+            ></input>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+              className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
+            ></input>
+            <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3 xl:w-2/6">
+              Sign In
+            </button>
+          </form>
         </div>
         {(session || user) && <div>
           {session ?
             (<div>
               <p>{session?.user.name}</p>
-              <form action={async() => {
+              <form action={async () => {
                 "use server"
                 await signOut("google")
               }}>
@@ -81,9 +82,10 @@ const Login = async () => {
             :
             (<div>
               <p>{user?.name}</p>
-              <form action={async() => {
+              <form action={async () => {
                 "use server"
-                logout(token)}}>
+                logout(token)
+              }}>
                 <button type="submit">Sign Out</button>
               </form>
             </div>)
@@ -100,11 +102,11 @@ const Login = async () => {
             Sign up to start and your leagues and tournaments
           </p>
           <div className="flex justify-center">
-          <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login/register"}>
-            <button className="">
-              Sign Up
-            </button>
-          </Link>  
+            <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login/register"}>
+              <button className="">
+                Sign Up
+              </button>
+            </Link>
           </div>
         </div>
         <div className="triangle -z-10"></div>

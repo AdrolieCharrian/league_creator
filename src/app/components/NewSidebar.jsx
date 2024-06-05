@@ -1,12 +1,13 @@
 "use client";
-import Link from "next/link";
 import "./sidebar.css";
+import "../globals.css"
+import Link from "next/link";
 import Image from "next/image";
 import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
-import { logout, accountSignOut } from "../login/actions";
+import { accountSignOut } from "../login/actions";
 
 const SidebarContext = createContext();
 
@@ -79,6 +80,10 @@ export default function NewSidebar({ children, name, image, session, user }) {
     }
   };
 
+  const handleSignOut = async () => {
+    await accountSignOut()
+  }
+
   return (
     <SidebarContext.Provider value={{ expanded, activeItem, handleSetActive }}>
       <div
@@ -89,15 +94,13 @@ export default function NewSidebar({ children, name, image, session, user }) {
             src={`/sidebar/logo.png`}
             width={500}
             height={500}
-            className={`overflow-hidden transition-all ${
-              expanded ? "w-12 h-12" : "w-0"
-            }`}
+            className={`overflow-hidden transition-all ${expanded ? "w-12 h-12" : "w-0"
+              }`}
             alt="logo"
           />
           <h2
-            className={`overflow-hidden transition-all ${
-              expanded ? "me-6 text-white font-bold font-merienda" : "w-0"
-            }`}
+            className={`overflow-hidden transition-all ${expanded ? "me-6 text-white font-bold font-merienda" : "w-0"
+              }`}
           >
             League Manager
           </h2>
@@ -130,9 +133,8 @@ export default function NewSidebar({ children, name, image, session, user }) {
               alt="logo"
             />
             <div
-              className={`flex justify-between items-center overflow-hidden transition-all ${
-                expanded ? "w-52 ml-3" : "w-0"
-              }`}
+              className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
+                }`}
             >
               <div className="leading-4">
                 <h4 className="font-semibold ms-2 text-white">{name}</h4>
@@ -143,15 +145,15 @@ export default function NewSidebar({ children, name, image, session, user }) {
         <div className="triangle w-full h-full bg-sidebar-light2 dark:bg-sidebar-dark2"></div>
 
         {expanded ? (
-          <div className="container z-10 flex justify-center py-2">
-            <h3 className="text-white px-2">Logout</h3>
-            <button className="ms-1 dark:text-white" onClick={accountSignOut}>
+          <div className="container z-10 flex p-3">
+            <button className="flex gap-2 p-2.5 w-full rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-gray-600 dark:text-gray-300" onClick={handleSignOut}>
               <LogOut />
+              <h3 className="text-white self-start">LogOut</h3>
             </button>
           </div>
         ) : (
-          <div className="container z-10 flex justify-center py-2">
-            <button className="ms-1 dark:text-white" onClick={accountSignOut}>
+          <div className="container z-10 flex justify-center p-3">
+            <button className="p-2.5 w-full  rounded-lg hover:bg-sidebar-light dark:hover:bg-sidebar-dark text-gray-600 dark:text-gray-300" onClick={handleSignOut}>
               <LogOut />
             </button>
           </div>
@@ -161,7 +163,7 @@ export default function NewSidebar({ children, name, image, session, user }) {
           {session &&
             (user ? (
               <FaUserCircle
-                className={"w-10 h-10 rounded-full border"}
+                className={"ms-0.5 w-10 h-10 rounded-full border flex justify-center items-center"}
                 style={{ color: "white" }}
               />
             ) : (
@@ -175,9 +177,8 @@ export default function NewSidebar({ children, name, image, session, user }) {
             ))}
 
           <div
-            className={`flex justify-between items-center overflow-hidden transition-all ${
-              expanded ? "w-52 ml-3" : "w-0"
-            }`}
+            className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
+              }`}
           >
             <div className="leading-4">
               <h4 className="font-semibold  text-sm text-white">{name}</h4>
@@ -203,21 +204,19 @@ export function SidebarItem({ icon, text, link }) {
 
   return (
     <li
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
-        isActive
-          ? "bg-sidebar-light2 dark:bg-sidebar-dark2"
-          : "hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-gray-600 dark:text-gray-300"
-      }`}
+      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${isActive
+        ? "bg-sidebar-light2 dark:bg-sidebar-dark2"
+        : "hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-gray-600 dark:text-gray-300"
+        }`}
       onClick={() => handleSetActive(text)}
     >
       <Link href={link} passHref className="flex items-center w-full">
         <p className="text-white">{icon}</p>
         <span
-          className={`overflow-hidden transition-all ${
-            expanded ? "w-52 ml-3" : "w-0"
-          }`}
+          className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"
+            }`}
         >
-          <p className="text-white">{text}</p>
+          <p className="text-white mt-0.5">{text}</p>
         </span>
       </Link>
     </li>

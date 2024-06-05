@@ -55,7 +55,7 @@ export const login = async (formData) => {
   cookies().set("access-token", token);
   console.log("Token Set: ", token);
 
-  redirect("/");
+  redirect("/hub/leagues");
 };
 
 export const register = async (formData) => {
@@ -101,17 +101,13 @@ export const logout = (token) => {
 };
 
 export const accountSignOut = async () => {
-  try {
     const session = await auth();
     const token = cookies().get("access-token");
 
     if (session) {
-      await signOut("google");
+      await signOut({ redirectTo: "/" });
     } else if (token) {
       logout(token);
+      redirect("/")
     }
-    redirect("/");
-  } catch (error) {
-    console.error("Error during logout:", error);
-  }
 };
