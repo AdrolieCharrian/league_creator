@@ -52,6 +52,7 @@ export const getLeaguesFromUser = async () => {
     name: league.name,
     description: league.description || "No description available",
     admin: league.adminId === user.id,
+    image: league.image
   }));
 };
 
@@ -61,6 +62,7 @@ export const createNewLeague = async (idAdmin, newLeague) => {
       name: newLeague.name,
       description: newLeague.description,
       adminId: idAdmin,
+      image: newLeague.image
     },
   });
 
@@ -275,3 +277,52 @@ export const getLeaderboardData = async (leagueId) => {
     points: score.points,
   }));
 };
+
+//PUT method change image league (to Implement)
+
+export const saveImageLeague = async (img) => {
+  const session = await auth();
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value)
+  const email = !session ? localUser?.email : session.user.email;
+
+  try {
+      const updatedUserImage = await prisma.user.update({
+          where: {
+              email: email
+          },
+          data: {
+              image: img
+          }
+      })
+      const newToken = jwt.sign(
+          {
+              id: localUser.id,
+              name: localUser.name,
+              email: localUser.email,
+              surname: localUser.surname,
+              username: localUser.username,
+              image: updatedUserImage.image,
+              description: localUser.description
+          },
+          "1234"
+      );
+      console.log(newToken);
+      
+      // Set token in cookie
+      cookies().set("access-token", newToken);
+      console.log(NextResponse.json({updatedUserImage}));
+      console.log("Updated User");
+      } catch(error) {
+          console.error(error);
+          return NextResponse.error("Error updating user");
+      }
+}
+
+export const getDefaultImages = async () => {
+  const imagesArr = await prisma.default_images.findMany()
+  const imagesId = imagesArr.map(image => image.image)
+
+  console.log(imagesId)
+  return imagesId
+}
