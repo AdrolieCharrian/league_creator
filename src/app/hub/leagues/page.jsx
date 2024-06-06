@@ -1,27 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import LeagueCard from "@/app/components/LeagueCard";
-import { identifyUser, getLeaguesFromUser, deleteLeague, saveImageLeague, getDefaultImages } from "../actions";
-import { CldImage } from 'next-cloudinary';
-import { CldUploadButton } from 'next-cloudinary';
-import { MdDriveFolderUpload } from "react-icons/md";
-import SelectImage from "@/app/components/leagues/selectImage";
+import { identifyUser, getLeaguesFromUser, deleteLeague } from "../actions";
 
 
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newLeague, setNewLeague] = useState({ name: "", description: "", image: "" });
-  const [imageId, setImageId] = useState("")
-  const [openDefaultImage, setOpenDefaultImage] = useState(false)
-  const [defaultImages, setDefaultImages] = useState("")
-
-  const getDefault = async () => {
-    const defaultImg = await getDefaultImages()
-    setDefaultImages(defaultImg)
-  }
+  const [newLeague, setNewLeague] = useState({ name: "", description: "" });
 
   const getLeagues = async () => {
+    //console.log("leagues:", leagues)
     const leaguesData = await getLeaguesFromUser();
     setLeagues(leaguesData);
   };
@@ -34,14 +23,6 @@ const Leagues = () => {
     setIsModalOpen(false);
   };
 
-  const openDefaultImages = () => {
-    setOpenDefaultImage(true)
-  }
-
-  const closeDefaultImages = () => {
-    setOpenDefaultImage(false)
-  }
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewLeague({ ...newLeague, [name]: value });
@@ -53,7 +34,6 @@ const Leagues = () => {
       await identifyUser(newLeague);
       await getLeagues();
       closeModal();
-      setNewLeague({ name: "", description: "", image: "" })
     } catch (error) {
       console.error("Error creating league:", error);
     }
@@ -68,26 +48,14 @@ const Leagues = () => {
     }
   };
 
-  const handleUploadSuccess = (result) => {
-    const imgId = result.info.public_id;
-    setImageId(imgId);
-    setNewLeague((prevLeague) => ({ ...prevLeague, image: imgId }));
-  }
-
-  const handleImageClick = (imageId) => {
-    setImageId(imageId)
-    closeDefaultImages()
-  }
-
   useEffect(() => {
     getLeagues()
-    getDefault()
   }, [])
 
   return (
-    <div className="h-100 w-100 flex flex-col">
+    <div className="h-100 w-100">
       <div className="mb-3">
-        <button type="button"
+        <button
           className="bg-sidebar-light dark:bg-sidebar-dark hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-white font-bold py-2 px-4 rounded"
           onClick={openModal}
         >
@@ -104,48 +72,8 @@ const Leagues = () => {
           id="authentication-modal"
           tabIndex="-1"
           aria-hidden="true"
-          className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
         >
-          {openDefaultImage &&
-            <div className="z-50 w-full h-full absolute bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="relative w-2/3 h-3/4  bg-white rounded-lg shadow dark:bg-gray-700">
-                <div className="flex justify-between items-center p-4 border-b border-gray-600">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Select An Image
-                  </h3>
-                  <button
-                    type="button"
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    onClick={closeDefaultImages}
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="w-full h-4/5">
-                  <div className="p-3 w-full h-full overflow-y-scroll">
-                    {defaultImages.map((image, index) => (
-                      <div key={index} className="flex justify-center gap-4 flex-wrap">
-                        <SelectImage onclick={handleImageClick} image={image} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>}
           <div className="relative w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -209,34 +137,8 @@ const Leagues = () => {
                       onChange={handleInputChange}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                       placeholder="Enter description"
+
                     />
-                  </div>
-                  <div className="flex items-center justify-center gap-10">
-                    {imageId && <CldImage
-                      className="rounded"
-                      width="125"
-                      height="125"
-                      crop="fill"
-                      src={imageId}
-                      alt="Description of my image"
-                    />}
-                    <div className={`${imageId ? "flex-col" : "gap-5"} flex justify-end items-end`}>
-                      <div className="flex items-center justify-center max-h-10 
-                      border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg 
-                      focus:ring-blue-500 focus:border-blue-500 p-5 dark:bg-gray-600 
-                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1">
-                        <MdDriveFolderUpload style={{ width: "25px", height: "25px" }} />
-                        <CldUploadButton onSuccess={handleUploadSuccess}
-                          uploadPreset="adrolie" />
-                      </div>
-                      <div className="flex items-center justify-center max-h-10 
-                      border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg 
-                      focus:ring-blue-500 focus:border-blue-500 p-5 dark:bg-gray-600 
-                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1">
-                        <MdDriveFolderUpload style={{ width: "25px", height: "25px" }} />
-                        <button type="button" onClick={openDefaultImages}>Default</button>
-                      </div>
-                    </div>
                   </div>
                   <button
                     type="submit"
