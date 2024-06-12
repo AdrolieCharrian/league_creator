@@ -6,6 +6,7 @@ import { Merienda } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa"; //<FaUserCircle />
+import { CldImage } from "next-cloudinary";
 
 const merienda = Merienda({ subsets: ["latin"] });
 
@@ -15,11 +16,13 @@ const HomeComponent = (props) => {
 
   useEffect(() => {
     const handleOnMove = (e) => {
-      const leftWidth = (e.clientX / window.innerWidth) * 100;
-      left.current.style.width = `${leftWidth}%`;
-      const h1Left = leftWidth > 50 ? `${leftWidth}%` : "50%";
-      h1Ref.current.style.left = h1Left;
-    };
+      if (left.current && h1Ref.current) {
+        const leftWidth = (e.clientX / window.innerWidth) * 100;
+        left.current.style.width = `${leftWidth}%`;
+        const h1Left = leftWidth > 50 ? `${leftWidth}%` : "50%";
+        h1Ref.current.style.left = h1Left;
+      };
+    }
 
     window.addEventListener("mousemove", handleOnMove);
     window.addEventListener("touchmove", handleOnMove);
@@ -51,7 +54,16 @@ const HomeComponent = (props) => {
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (props.user ? <FaUserCircle style={{ width: "50px", height: "50px", color: "white" }} /> :
+            {props.session ? (props.user ?
+              <CldImage
+                src={props.image}
+                className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+                width={50}
+                height={50}
+                crop={"fill"}
+                alt="User Profile Image"
+              />
+              :
               <Image
                 src={props.image}
                 width={50}
@@ -94,7 +106,15 @@ const HomeComponent = (props) => {
               <Link className="mr-6 mt-1.5" href="/hub/leagues">
                 Hub
               </Link>}
-            {props.session ? (props.user ? <FaUserCircle style={{ width: "50px", height: "50px", color: "black" }} /> :
+            {props.session ? (props.user ?
+              <CldImage
+                src={props.image}
+                className={`h-9 w-9 sm:h-14 sm:w-14 border rounded-full`}
+                width={50}
+                height={50}
+                crop={"fill"}
+                alt="User Profile Image"
+              /> :
               <Image
                 src={props.image}
                 width={50}
