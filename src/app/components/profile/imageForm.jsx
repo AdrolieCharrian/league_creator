@@ -17,7 +17,7 @@ const ImageForm = ({ image }) => {
                 src={image ? image : "tf46yhpxmqf7ewxhvfmu"}
                 alt="Description of my image"
             />
-            <button className="float-end flex items-center justify-center max-h-10 
+            <div className="float-end flex items-center justify-center max-h-10 
             border border-black dark:border-white rounded p-4 mt-3 gap-1">
                 <MdDriveFolderUpload style={{ width: "25px", height: "25px" }} />
                 <CldUploadButton onSuccess={(result) => {
@@ -27,7 +27,7 @@ const ImageForm = ({ image }) => {
                     }
                     handleSaveImage();
                 }} uploadPreset="adrolie" />
-            </button>
+            </div>
         </div>
     )
 }
