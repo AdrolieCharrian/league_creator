@@ -94,9 +94,32 @@ export const getAdminFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  // console.log("admin ID: ",adminFromLeague.adminId);
   return adminFromLeague.adminId;
 };
+
+export const getPlayersFromLeague = async (idLeague) => {
+  const players = await prisma.league_players.findMany({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+
+  const playerIds = players.map(player => player.id_player);
+
+  const infoPlayers = await prisma.user.findMany({
+    where: {
+      id: { in: playerIds },
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  return infoPlayers;
+};
+
+
 
 // ---- General Teams
 
@@ -280,7 +303,6 @@ export const getLeaderboardData = async (leagueId) => {
 // ---- Matches
 
 // ---- Configuration
-
 
 //PUT method change image league (to Implement)
 export const saveImageLeague = async (img) => {
