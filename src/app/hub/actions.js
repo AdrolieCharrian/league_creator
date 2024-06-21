@@ -401,6 +401,36 @@ export const acceptInvitation = async (idInvi, idLea, idUser) => {
   });
 };
 
+export const getUsersNotInLeague = async (idLeague) => {
+  const usersInLeague = await prisma.league_players.findMany({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+    select: {
+      id_player: true,
+    },
+  });
+  const userIdsInLeague = usersInLeague.map((player) => player.id_player);
+  const usersNotInLeague = await prisma.user.findMany({
+    where: {
+      id: {
+        notIn: userIdsInLeague,
+      },
+    },
+  });
+  return usersNotInLeague;
+};
+
+export const createInvitation = async (idUser, idLeague) => {
+  const invitation = await prisma.invitations.create({
+    data: {
+      id_user: idUser,
+      id_league: parseInt(idLeague),
+    },
+  });
+  return invitation;
+};
+
 // ---- Player inside team
 export const getPlayersFromTeam = async (idTeam) => {
   const players = await prisma.players_team.findMany({

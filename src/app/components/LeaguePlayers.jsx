@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague, getTeamsFromLeague, assignPlayerToTeam, removePlayerFromTeamAssigned } from '@/app/hub/actions';
+import {
+  getPlayersFromLeague,
+  removePlayerFromLeagueAndTeam,
+  isPlayerInAnyTeamInLeague,
+  getTeamsFromLeague,
+  assignPlayerToTeam,
+  removePlayerFromTeamAssigned,
+  getUsersNotInLeague,
+  createInvitation
+} from '@/app/hub/actions';
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
@@ -7,6 +16,9 @@ const LeaguePlayers = ({ leagueId }) => {
   const [playerToAssign, setPlayerToAssign] = useState(null);
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -37,6 +49,18 @@ const LeaguePlayers = ({ leagueId }) => {
       }
     };
     fetchTeams();
+  }, [leagueId]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersNotInLeague = await getUsersNotInLeague(leagueId);
+        setUsers(usersNotInLeague);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
   }, [leagueId]);
 
   const handleDeletePlayer = async (idPlayer) => {
@@ -81,11 +105,34 @@ const LeaguePlayers = ({ leagueId }) => {
     }
   };
 
+  const handleInvite = async () => {
+    if (selectedUser) {
+      try {
+        await createInvitation(selectedUser, leagueId);
+        alert("Invitation sent successfully!");
+        setShowInviteModal(false);
+      } catch (error) {
+        console.error("Error creating invitation:", error);
+        alert("Failed to send invitation.");
+      }
+    } else {
+      alert("Please select a user to invite.");
+    }
+  };
+
   return (
     <div className="w-full md:flex-grow p-4 mt-4 md:mt-0">
-      <h2 className="text-xl mb-4 text-gray-700 dark:text-white py-2">
-        Players in league
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl text-gray-700 dark:text-white py-2">
+          Players in league
+        </h2>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          onClick={() => setShowInviteModal(true)}
+        >
+          Invite Players
+        </button>
+      </div>
       <div className="overflow-y-auto">
         <ul className="space-y-2">
           {leaguePlayers.map((player) => (
@@ -155,6 +202,45 @@ const LeaguePlayers = ({ leagueId }) => {
             >
               Cancel
             </button>
+          </div>
+        </div>
+      )}
+
+      {showInviteModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white dark:bg-background-dark p-4 rounded-md">
+            <h2 className="text-xl mb-4 text-gray-700 dark:text-white">
+              Invite Player
+            </h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Select User</label>
+              <select
+                className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                onChange={(e) => setSelectedUser(e.target.value)}
+                value={selectedUser || ''}
+              >
+                <option value="">Select a user</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                onClick={handleInvite}
+              >
+                Invite
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                onClick={() => setShowInviteModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
