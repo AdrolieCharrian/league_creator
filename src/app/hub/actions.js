@@ -119,7 +119,36 @@ export const getPlayersFromLeague = async (idLeague) => {
   return infoPlayers;
 };
 
+export const getSportsFromLeague = async (idLeague) => {
+  const sportsLeague = await prisma.sports_league.findMany({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
 
+  const sportsInfo = await Promise.all(
+    sportsLeague.map(async (sportLeague) => {
+      if (sportLeague.id_sport) {
+        const sport = await prisma.sports.findUnique({
+          where: {
+            id_sport: sportLeague.id_sport,
+          },
+        });
+        return { ...sport, type: 'standard' };
+      } else if (sportLeague.id_sport_custom) {
+        const customSport = await prisma.sports_custom.findUnique({
+          where: {
+            id_sport_custom: sportLeague.id_sport_custom,
+          },
+        });
+        return { ...customSport, type: 'custom' };
+      }
+      return null;
+    })
+  );
+
+  return sportsInfo.filter((sport) => sport !== null);
+};
 
 // ---- General Teams
 
