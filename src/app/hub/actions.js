@@ -129,6 +129,22 @@ export const removePlayerFromTeam = async (idParticipationLeague) => {
   });
 };
 
+export const removePlayerFromTeamAssigned = async (leagueId, playerId) => {
+  try {
+    await prisma.players_team.deleteMany({
+      where: {
+        league_players: {
+          id_league: parseInt(leagueId, 10),
+          id_player: playerId,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error removing player from team:', error);
+    throw error;
+  }
+};
+
 export const removePlayerFromLeague = async (idLeague, idPlayer) => {
   await prisma.league_players.deleteMany({
     where: {
@@ -434,6 +450,8 @@ export const assignPlayerToTeam = async (leagueId, playerId, teamName) => {
     throw error;
   }
 };
+
+
 // ---- Leaderboard
 
 export const getLeaderboardData = async (leagueId) => {

@@ -1,13 +1,12 @@
-"use client";
 import React, { useState, useEffect } from "react";
-import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague, getTeamsFromLeague, assignPlayerToTeam } from '@/app/hub/actions';
+import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague, getTeamsFromLeague, assignPlayerToTeam, removePlayerFromTeamAssigned } from '@/app/hub/actions';
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
-  const [teams, setTeams] = useState([]);
   const [showAssignTeamModal, setShowAssignTeamModal] = useState(false);
   const [playerToAssign, setPlayerToAssign] = useState(null);
-  const [selectedTeam, setSelectedTeam] = useState("");
+  const [teams, setTeams] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState('');
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -25,7 +24,10 @@ const LeaguePlayers = ({ leagueId }) => {
         console.error("Error fetching players:", error);
       }
     };
+    fetchPlayers();
+  }, [leagueId]);
 
+  useEffect(() => {
     const fetchTeams = async () => {
       try {
         const teams = await getTeamsFromLeague(leagueId);
@@ -34,8 +36,6 @@ const LeaguePlayers = ({ leagueId }) => {
         console.error("Error fetching teams:", error);
       }
     };
-
-    fetchPlayers();
     fetchTeams();
   }, [leagueId]);
 
@@ -48,24 +48,36 @@ const LeaguePlayers = ({ leagueId }) => {
     }
   };
 
+  const handleRemovePlayerFromTeam = async (idPlayer) => {
+    try {
+      await removePlayerFromTeamAssigned(leagueId, idPlayer);
+      setLeaguePlayers((prevPlayers) => 
+        prevPlayers.map((player) => 
+          player.id === idPlayer ? { ...player, teamName: null } : player
+        )
+      );
+    } catch (error) {
+      console.error("Error removing player from team:", error);
+    }
+  };
+
   const handleAssignTeam = (player) => {
     setPlayerToAssign(player);
     setShowAssignTeamModal(true);
   };
 
-  const handleAssignTeamToPlayer = async () => {
+  const handleConfirmAssignTeam = async () => {
     try {
       await assignPlayerToTeam(leagueId, playerToAssign.id, selectedTeam);
       setLeaguePlayers((prevPlayers) =>
-        prevPlayers.map(player =>
+        prevPlayers.map((player) =>
           player.id === playerToAssign.id ? { ...player, teamName: selectedTeam } : player
         )
       );
       setShowAssignTeamModal(false);
-      setPlayerToAssign(null);
-      setSelectedTeam("");
+      setSelectedTeam('');
     } catch (error) {
-      console.error("Error assigning team to player:", error);
+      console.error("Error assigning team:", error);
     }
   };
 
@@ -84,7 +96,15 @@ const LeaguePlayers = ({ leagueId }) => {
               <span>{player.name}</span>
               <div className="flex items-center">
                 {player.teamName ? (
-                  <span className="mr-2">Team: {player.teamName}</span>
+                  <>
+                    <span className="mr-2">Team: {player.teamName}</span>
+                    <button
+                      className="bg-yellow-500 text-white px-2 py-1 rounded-md mr-2"
+                      onClick={() => handleRemovePlayerFromTeam(player.id)}
+                    >
+                      Remove from Team
+                    </button>
+                  </>
                 ) : (
                   <button
                     className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
@@ -116,7 +136,7 @@ const LeaguePlayers = ({ leagueId }) => {
               onChange={(e) => setSelectedTeam(e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             >
-              <option value="" disabled>Select a team</option>
+              <option value="">Select a team</option>
               {teams.map((team) => (
                 <option key={team.id_team} value={team.name}>
                   {team.name}
@@ -125,7 +145,7 @@ const LeaguePlayers = ({ leagueId }) => {
             </select>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-              onClick={handleAssignTeamToPlayer}
+              onClick={handleConfirmAssignTeam}
             >
               Assign Team
             </button>
