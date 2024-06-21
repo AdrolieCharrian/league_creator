@@ -119,6 +119,8 @@ export const getPlayersFromLeague = async (idLeague) => {
   return infoPlayers;
 };
 
+// --- Tema sports in league
+
 export const getSportsFromLeague = async (idLeague) => {
   const sportsLeague = await prisma.sports_league.findMany({
     where: {
@@ -149,6 +151,39 @@ export const deleteSportFromLeague = async (idSportLeague) => {
     },
   });
 };
+
+export const addPredefinedSportToLeague = async (idLeague, idSport) => {
+  await prisma.sports_league.create({
+    data: {
+      id_league: parseInt(idLeague),
+      id_sport: parseInt(idSport)
+    }
+  });
+};
+
+export const addCustomSportToLeague = async (idLeague, customSport) => {
+  const newSport = await prisma.sports_custom.create({
+    data: {
+      name: customSport.name,
+      description: customSport.description,
+      rules: customSport.rules,
+      num_players: customSport.num_players,
+      id_league: parseInt(idLeague)
+    }
+  });
+
+  await prisma.sports_league.create({
+    data: {
+      id_league: parseInt(idLeague),
+      id_sport_custom: newSport.id_sport_custom
+    }
+  });
+};
+
+export const getPredefinedSports = async () => {
+  return await prisma.sports.findMany();
+};
+
 
 // ---- General Teams
 

@@ -29,7 +29,7 @@ const LeaguePlayers = ({ leagueId }) => {
           {leaguePlayers.map((player) => (
             <li
               key={player.id}
-              className="p-2 rounded flex justify-between items-center bg-white dark:bg-sidebar-dark text-gray-900 dark:text-gray-100"
+              className="p-2 rounded flex justify-between items-center bg-sidebar-light dark:bg-sidebar-dark text-white dark:text-gray-100"
             >
               {player.name}
               <div className="flex items-center">
