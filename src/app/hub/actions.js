@@ -277,9 +277,12 @@ export const getLeaderboardData = async (leagueId) => {
     points: score.points,
   }));
 };
+// ---- Matches
+
+// ---- Configuration
+
 
 //PUT method change image league (to Implement)
-
 export const saveImageLeague = async (img) => {
   const session = await auth();
   const token = cookies().get("access-token");

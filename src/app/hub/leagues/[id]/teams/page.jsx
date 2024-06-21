@@ -38,7 +38,7 @@ const LeaguesTeams =  ({ params: { id } }) => {
   };
 
   return (
-    <div className="h-100 w-100">
+    <div className="h-100 w-100 pt-3">
       <div className="mb-3">
         <button
           className="bg-sidebar-light dark:bg-sidebar-dark hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-white font-bold py-2 px-4 rounded"
