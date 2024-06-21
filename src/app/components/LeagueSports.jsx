@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getSportsFromLeague } from '@/app/hub/actions';
+import { getSportsFromLeague, deleteSportFromLeague } from '@/app/hub/actions';
 
 const LeagueSports = ({ leagueId }) => {
   const [leagueSports, setLeagueSports] = useState([]);
@@ -18,6 +18,15 @@ const LeagueSports = ({ leagueId }) => {
     fetchSports();
   }, [leagueId]);
 
+  const handleDeleteSport = async (idSportLeague) => {
+    try {
+      await deleteSportFromLeague(idSportLeague);
+      setLeagueSports((prevSports) => prevSports.filter(sport => sport.id_sport_league !== idSportLeague));
+    } catch (error) {
+      console.error("Error deleting sport:", error);
+    }
+  };
+
   return (
     <div className="w-full md:w-1/3 p-4">
       <div className="flex justify-between items-center mb-4">
@@ -33,13 +42,16 @@ const LeagueSports = ({ leagueId }) => {
       </div>
       <div className="overflow-y-auto">
         <ul className="space-y-2">
-          {leagueSports.map((sport) => (
+          {leagueSports.map((sport, index) => (
             <li
-              key={sport.id_sport_league}
+              key={index}
               className="p-2 rounded flex justify-between items-center bg-white dark:bg-sidebar-dark text-gray-900 dark:text-gray-100"
             >
               {sport.name}
-              <button className="bg-red-500 text-white px-2 py-1 rounded-md">
+              <button
+                className="bg-red-500 text-white px-2 py-1 rounded-md"
+                onClick={() => handleDeleteSport(sport.id_sport_league)}
+              >
                 Delete
               </button>
             </li>
