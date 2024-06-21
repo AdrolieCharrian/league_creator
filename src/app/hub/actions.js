@@ -28,17 +28,12 @@ export const getLeaguesFromUser = async () => {
       email: emailuser,
     },
   });
-
-  // console.log(user);
-
   const leagues_player = await prisma.league_players.findMany({
     where: {
       id_player: user.id,
     },
   });
-
   const leagueIds = leagues_player.map((lp) => lp.id_league);
-
   const leagues = await prisma.leagues.findMany({
     where: {
       id_league: {
@@ -97,6 +92,27 @@ export const getAdminFromLeague = async (idLeague) => {
   return adminFromLeague.adminId;
 };
 
+export const updateLeague = async (idLeague, updatedLeague) => {
+  const updated = await prisma.leagues.update({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+    data: {
+      name: updatedLeague.name,
+      description: updatedLeague.description,
+    },
+  });
+  return updated;
+};
+
+export const getLeagueById = async (idLeague) => {
+  const league = await prisma.leagues.findUnique({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+  return league;
+};
 // ---- Jugadores en liga
 
 export const getPlayersFromLeague = async (idLeague) => {
