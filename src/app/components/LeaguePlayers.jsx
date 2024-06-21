@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getPlayersFromLeague, removePlayerFromLeagueAndTeam } from '@/app/hub/actions';
+import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague } from '@/app/hub/actions';
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
@@ -11,7 +11,14 @@ const LeaguePlayers = ({ leagueId }) => {
     const fetchPlayers = async () => {
       try {
         const players = await getPlayersFromLeague(leagueId);
-        setLeaguePlayers(players);
+        const playersWithTeamStatus = await Promise.all(players.map(async (player) => {
+          const teamName = await isPlayerInAnyTeamInLeague(leagueId, player.id);
+          return {
+            ...player,
+            teamName,
+          };
+        }));
+        setLeaguePlayers(playersWithTeamStatus);
       } catch (error) {
         console.error("Error fetching players:", error);
       }
@@ -45,14 +52,18 @@ const LeaguePlayers = ({ leagueId }) => {
               key={player.id}
               className="p-2 rounded flex justify-between items-center bg-sidebar-light dark:bg-sidebar-dark text-white dark:text-gray-100"
             >
-              {player.name}
+              <span>{player.name}</span>
               <div className="flex items-center">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                  onClick={() => handleAssignTeam(player)}
-                >
-                  Assign Team
-                </button>
+                {player.teamName ? (
+                  <span className="mr-2">Team: {player.teamName}</span>
+                ) : (
+                  <button
+                    className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                    onClick={() => handleAssignTeam(player)}
+                  >
+                    Assign Team
+                  </button>
+                )}
                 <button
                   className="bg-red-500 text-white px-2 py-1 rounded-md"
                   onClick={() => handleDeletePlayer(player.id)}

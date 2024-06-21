@@ -139,7 +139,6 @@ export const removePlayerFromLeague = async (idLeague, idPlayer) => {
 };
 
 export const removePlayerFromLeagueAndTeam = async (idLeague, idPlayer) => {
-  // Obtener la participación de la liga
   const participation = await prisma.league_players.findFirst({
     where: {
       id_league: parseInt(idLeague),
@@ -148,12 +147,28 @@ export const removePlayerFromLeagueAndTeam = async (idLeague, idPlayer) => {
   });
 
   if (participation) {
-    // Eliminar jugador del equipo, si está asignado a alguno
     await removePlayerFromTeam(participation.id_participation_league);
 
-    // Eliminar jugador de la liga
     await removePlayerFromLeague(idLeague, idPlayer);
   }
+};
+
+export const isPlayerInAnyTeamInLeague = async (idLeague, idPlayer) => {
+  const participation = await prisma.league_players.findFirst({
+    where: {
+      id_league: parseInt(idLeague),
+      id_player: idPlayer,
+    },
+    include: {
+      players_team: {
+        include: {
+          teams: true,
+        },
+      },
+    },
+  });
+
+  return participation?.players_team.length > 0 ? participation.players_team[0].teams.name : null;
 };
 
 
