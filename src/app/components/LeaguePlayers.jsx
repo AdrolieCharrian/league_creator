@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getPlayersFromLeague } from '@/app/hub/actions';
-
+import { getPlayersFromLeague, removePlayerFromLeagueAndTeam } from '@/app/hub/actions';
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const [showAssignTeamModal, setShowAssignTeamModal] = useState(false);
+  const [playerToAssign, setPlayerToAssign] = useState(null);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -18,6 +18,20 @@ const LeaguePlayers = ({ leagueId }) => {
     };
     fetchPlayers();
   }, [leagueId]);
+
+  const handleDeletePlayer = async (idPlayer) => {
+    try {
+      await removePlayerFromLeagueAndTeam(leagueId, idPlayer);
+      setLeaguePlayers((prevPlayers) => prevPlayers.filter(player => player.id !== idPlayer));
+    } catch (error) {
+      console.error("Error deleting player:", error);
+    }
+  };
+
+  const handleAssignTeam = (player) => {
+    setPlayerToAssign(player);
+    setShowAssignTeamModal(true);
+  };
 
   return (
     <div className="w-full md:flex-grow p-4 mt-4 md:mt-0">
@@ -35,11 +49,14 @@ const LeaguePlayers = ({ leagueId }) => {
               <div className="flex items-center">
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
-                  onClick={() => setShowAssignTeamModal(true)}
+                  onClick={() => handleAssignTeam(player)}
                 >
                   Assign Team
                 </button>
-                <button className="bg-red-500 text-white px-2 py-1 rounded-md">
+                <button
+                  className="bg-red-500 text-white px-2 py-1 rounded-md"
+                  onClick={() => handleDeletePlayer(player.id)}
+                >
                   Delete
                 </button>
               </div>
@@ -52,7 +69,7 @@ const LeaguePlayers = ({ leagueId }) => {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white dark:bg-background-dark p-4 rounded-md">
             <h2 className="text-xl mb-4 text-gray-700 dark:text-white">
-              Assign Team
+              Assign Team to {playerToAssign.name}
             </h2>
             <input
               type="text"

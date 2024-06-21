@@ -97,6 +97,8 @@ export const getAdminFromLeague = async (idLeague) => {
   return adminFromLeague.adminId;
 };
 
+// ---- Jugadores en liga
+
 export const getPlayersFromLeague = async (idLeague) => {
   const players = await prisma.league_players.findMany({
     where: {
@@ -119,6 +121,42 @@ export const getPlayersFromLeague = async (idLeague) => {
   return infoPlayers;
 };
 
+export const removePlayerFromTeam = async (idParticipationLeague) => {
+  await prisma.players_team.deleteMany({
+    where: {
+      id_player: idParticipationLeague,
+    },
+  });
+};
+
+export const removePlayerFromLeague = async (idLeague, idPlayer) => {
+  await prisma.league_players.deleteMany({
+    where: {
+      id_league: parseInt(idLeague),
+      id_player: idPlayer,
+    },
+  });
+};
+
+export const removePlayerFromLeagueAndTeam = async (idLeague, idPlayer) => {
+  // Obtener la participación de la liga
+  const participation = await prisma.league_players.findFirst({
+    where: {
+      id_league: parseInt(idLeague),
+      id_player: idPlayer,
+    },
+  });
+
+  if (participation) {
+    // Eliminar jugador del equipo, si está asignado a alguno
+    await removePlayerFromTeam(participation.id_participation_league);
+
+    // Eliminar jugador de la liga
+    await removePlayerFromLeague(idLeague, idPlayer);
+  }
+};
+
+
 // --- Tema sports in league
 
 export const getSportsFromLeague = async (idLeague) => {
@@ -128,15 +166,23 @@ export const getSportsFromLeague = async (idLeague) => {
     },
     include: {
       sports: true,
-      sports_custom: true
-    }
+      sports_custom: true,
+    },
   });
 
   const sportsInfo = sportsLeague.map((sportLeague) => {
     if (sportLeague.id_sport) {
-      return { ...sportLeague.sports, id_sport_league: sportLeague.id_sport_league, type: "standard" };
+      return {
+        ...sportLeague.sports,
+        id_sport_league: sportLeague.id_sport_league,
+        type: "standard",
+      };
     } else if (sportLeague.id_sport_custom) {
-      return { ...sportLeague.sports_custom, id_sport_league: sportLeague.id_sport_league, type: "custom" };
+      return {
+        ...sportLeague.sports_custom,
+        id_sport_league: sportLeague.id_sport_league,
+        type: "custom",
+      };
     }
     return null;
   });
@@ -156,8 +202,8 @@ export const addPredefinedSportToLeague = async (idLeague, idSport) => {
   await prisma.sports_league.create({
     data: {
       id_league: parseInt(idLeague),
-      id_sport: parseInt(idSport)
-    }
+      id_sport: parseInt(idSport),
+    },
   });
 };
 
@@ -168,22 +214,21 @@ export const addCustomSportToLeague = async (idLeague, customSport) => {
       description: customSport.description,
       rules: customSport.rules,
       num_players: customSport.num_players,
-      id_league: parseInt(idLeague)
-    }
+      id_league: parseInt(idLeague),
+    },
   });
 
   await prisma.sports_league.create({
     data: {
       id_league: parseInt(idLeague),
-      id_sport_custom: newSport.id_sport_custom
-    }
+      id_sport_custom: newSport.id_sport_custom,
+    },
   });
 };
 
 export const getPredefinedSports = async () => {
   return await prisma.sports.findMany();
 };
-
 
 // ---- General Teams
 
