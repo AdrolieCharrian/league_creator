@@ -399,6 +399,41 @@ export const getPlayerInfo = async (id) => {
   return playerInfo;
 };
 
+export const assignPlayerToTeam = async (leagueId, playerId, teamName) => {
+  try {
+    const team = await prisma.teams.findFirst({
+      where: {
+        name: teamName,
+        id_league: parseInt(leagueId),
+      },
+    });
+
+    if (!team) {
+      throw new Error(`Team ${teamName} not found in league ${leagueId}`);
+    }
+
+    const leaguePlayer = await prisma.league_players.findFirst({
+      where: {
+        id_player: playerId,
+        id_league: parseInt(leagueId),
+      },
+    });
+
+    if (!leaguePlayer) {
+      throw new Error(`Player ${playerId} not found in league ${leagueId}`);
+    }
+
+    await prisma.players_team.create({
+      data: {
+        id_team: team.id_team,
+        id_player: leaguePlayer.id_participation_league,
+      },
+    });
+  } catch (error) {
+    console.error('Error assigning player to team:', error);
+    throw error;
+  }
+};
 // ---- Leaderboard
 
 export const getLeaderboardData = async (leagueId) => {

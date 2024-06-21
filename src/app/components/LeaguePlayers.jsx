@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague } from '@/app/hub/actions';
+import { getPlayersFromLeague, removePlayerFromLeagueAndTeam, isPlayerInAnyTeamInLeague, getTeamsFromLeague, assignPlayerToTeam } from '@/app/hub/actions';
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [showAssignTeamModal, setShowAssignTeamModal] = useState(false);
   const [playerToAssign, setPlayerToAssign] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState("");
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -23,7 +25,18 @@ const LeaguePlayers = ({ leagueId }) => {
         console.error("Error fetching players:", error);
       }
     };
+
+    const fetchTeams = async () => {
+      try {
+        const teams = await getTeamsFromLeague(leagueId);
+        setTeams(teams);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+
     fetchPlayers();
+    fetchTeams();
   }, [leagueId]);
 
   const handleDeletePlayer = async (idPlayer) => {
@@ -38,6 +51,22 @@ const LeaguePlayers = ({ leagueId }) => {
   const handleAssignTeam = (player) => {
     setPlayerToAssign(player);
     setShowAssignTeamModal(true);
+  };
+
+  const handleAssignTeamToPlayer = async () => {
+    try {
+      await assignPlayerToTeam(leagueId, playerToAssign.id, selectedTeam);
+      setLeaguePlayers((prevPlayers) =>
+        prevPlayers.map(player =>
+          player.id === playerToAssign.id ? { ...player, teamName: selectedTeam } : player
+        )
+      );
+      setShowAssignTeamModal(false);
+      setPlayerToAssign(null);
+      setSelectedTeam("");
+    } catch (error) {
+      console.error("Error assigning team to player:", error);
+    }
   };
 
   return (
@@ -82,14 +111,21 @@ const LeaguePlayers = ({ leagueId }) => {
             <h2 className="text-xl mb-4 text-gray-700 dark:text-white">
               Assign Team to {playerToAssign.name}
             </h2>
-            <input
-              type="text"
-              placeholder="Team Name"
+            <select
+              value={selectedTeam}
+              onChange={(e) => setSelectedTeam(e.target.value)}
               className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-            />
+            >
+              <option value="" disabled>Select a team</option>
+              {teams.map((team) => (
+                <option key={team.id_team} value={team.name}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-              onClick={() => setShowAssignTeamModal(false)}
+              onClick={handleAssignTeamToPlayer}
             >
               Assign Team
             </button>
