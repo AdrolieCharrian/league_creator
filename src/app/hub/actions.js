@@ -124,24 +124,46 @@ export const getTeamsFromUser = async (userId) => {
   return teams;
 };
 
-export const createNewTeam = async (formData) => {
+export const createNewTeam = async (formData, leagueId, image) => {
   const name = formData.get("name");
   const description = formData.get("description");
+  const acronym = formData.get("acronym");
   const session = await auth();
-  const userId = session.user.id;
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value)
 
-  const createdTeam = await prisma.leagues.create({
+  const userId = !session ? localUser?.id : session.user.id;
+
+  const createdTeam = await prisma.teams.create({
     data: {
       name: name,
       description: description,
-      adminId: userId,
+      // adminId: userId,
+      image: image,
+      acronym: acronym,
+      id_league: parseInt(leagueId)
+    },
+  });
+  
+  if (!createdTeam || !createdTeam.id_team) {
+    throw new Error('Failed to create team or fetch team ID.');
+  }
+  
+  const leaguePlayer = await prisma.league_players.create({
+    data: {
+      id_player: userId,
+      id_league: parseInt(leagueId),
     },
   });
 
+  if (!leaguePlayer || !leaguePlayer.id_participation_league) {
+    throw new Error('Failed to create league player or fetch participation league ID.');
+  }
+  
   await prisma.players_team.create({
     data: {
-      id_player: userId,
-      id_team: createdTeam.id_team,
+      id_player: leaguePlayer.id_participation_league,
+      id_team: createdTeam.id_team
     },
   });
 };
@@ -159,6 +181,8 @@ export const getTeamsFromLeague = async (idLeague) => {
     id_team: team.id_team,
     name: team.name,
     description: team.description || "No description available",
+    image: team.image,
+    acronym: team.acronym
   }));
 };
 
