@@ -1,9 +1,10 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CldImage } from "next-cloudinary";
+import Image from "next/image";
 
-export default function TeamLeagueCard({ leagueId, team }) {
+const TeamLeagueCard = ({ leagueId, team }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [adminId, setAdminId] = useState(null);
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function TeamLeagueCard({ leagueId, team }) {
     setIsConfirmModalOpen(false);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => { };
 
   const handleNavigate = async (id, teamId) => {
     // const adminId = await getAdminFromLeague(id);
@@ -30,16 +31,30 @@ export default function TeamLeagueCard({ leagueId, team }) {
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
       onClick={() => handleNavigate(leagueId, team.id_team)}
     >
-      <Image
-        src="/sidebar/logo.png"
-        width={300}
-        height={300}
-        className="cursor-pointer duration-500 w-full p-3"
-        alt=""
-      />
-      <div className="py-4">
+      {team.image ?
+        <CldImage
+          className="cursor-pointer duration-500 w-full p-3"
+          width="300"
+          height="300"
+          alt="team-img"
+          crop="fill"
+          src={team.image}
+        /> :
+        <Image
+          src="/sidebar/logo.png"
+          width={300}
+          height={300}
+          className="cursor-pointer duration-500 w-full p-3"
+          alt=""
+        />}
+      <div className="py-3">
         <div className="font-bold text-xl mb-2">{team.name}</div>
+      </div>
+      <div className="">
+        <div className="font-bold text-xl mb-2">{team.acronym}</div>
       </div>
     </div>
   );
 }
+
+export default TeamLeagueCard

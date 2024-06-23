@@ -1,9 +1,9 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAdminFromLeague } from "../hub/actions";
 import { CldImage } from "next-cloudinary";
+import Image from "next/image";
 
 export default function LeagueCard({ league, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -35,14 +35,22 @@ export default function LeagueCard({ league, onDelete }) {
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
       onClick={() => handleNavigate(league.id_league)}
     >
-      <CldImage
-        className="cursor-pointer duration-500 p-3"
-        width="300"
-        height="300"
-        alt="league-img"
-        crop="fill"
-        src={league.image}
-      />
+      {league.image ?
+        <CldImage
+          className="cursor-pointer duration-500 p-3"
+          width="300"
+          height="300"
+          alt="league-img"
+          crop="fill"
+          src={league.image}
+        /> :
+        <Image
+          src="/sidebar/logo.png"
+          width={300}
+          height={300}
+          className="cursor-pointer duration-500 w-full p-3"
+          alt=""
+        />}
       <div className="py-4">
         <div className="font-bold text-xl mb-2">{league.name}</div>
       </div>

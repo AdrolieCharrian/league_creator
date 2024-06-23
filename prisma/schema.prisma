@@ -32,6 +32,7 @@ model User {
   league_players league_players[]
   adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
   invitations    Invitations[]
+  //teams          teams[]          @relation("UserTeamsAdmin")
 }
 
 model leagues {
@@ -67,11 +68,15 @@ model teams {
   id_league        Int
   image            String?
   acronym          String
+  // adminId          String
   matchesAsTeamOne matches[]      @relation("TeamOneRelation")
   matchesAsTeamTwo matches[]      @relation("TeamTwoRelation")
+  // admin            User           @relation("UserTeamsAdmin", fields: [adminId], references: [id])
   players_team     players_team[]
   score            score[]
   leagues          leagues        @relation(fields: [id_league], references: [id_league])
+
+  //@@index([id_league]) // Add index if needed, but not unique
 }
 
 model players_team {

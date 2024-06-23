@@ -1,6 +1,6 @@
 import Link from "next/link";
-import {register} from "../actions";
-import {MdOutlineArrowBackIos} from "react-icons/md";
+import { register } from "../actions";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 import "./register.css"
 
 const Register = async () => {
@@ -74,11 +74,11 @@ const Register = async () => {
             Already Have an Account?
           </p>
           <div className="flex justify-center">
-          <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login"}>
-            <button className="">
-              Log In
-            </button>
-          </Link>  
+            <Link className="bg-background-light text-center rounded-full border-2 w-1/3 py-3 md:w-2/3 xl:w-3/5" href={"/login"}>
+              <button className="">
+                Log In
+              </button>
+            </Link>
           </div>
         </div>
         <div className="triangle -z-10"></div>
