@@ -61,6 +61,13 @@ const Register = async () => {
               placeholder="Surname"
               className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
             ></input>
+            <input
+              type="text"
+              id="favnumber"
+              name="favnumber"
+              placeholder="Favorite number"
+              className="bg-background-light rounded-full border-2 w-3/5 ps-6 py-3 xl:w-2/6"
+            ></input>
             <button type="submit" className="bg-sidebar-light rounded-full border-2 w-2/5 py-3 xl:w-2/6">
               Sign Up
             </button>

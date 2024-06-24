@@ -11,6 +11,7 @@ export default function PlayerCard({ id }) {
     const fetchData = async () => {
       const data = await getPlayerInfo(id);
       setPlayerInfo(data);
+      console.log(data);
     };
 
     fetchData();
@@ -37,12 +38,10 @@ export default function PlayerCard({ id }) {
             </div>
           </div>
         </div>
-        <div className="flip-card-back bg-gradient-to-b from-sidebar-light to-sidebar-light2 dark:from-sidebar-dark dark:to-sidebar-dark2">
-          <div className="p-2">
-            <div className="font-bold text-xl mb-2 text-white">
-              Name: {playerInfo.name}
-            </div>
-          </div>
+        <div className="flip-card-back bg-gradient-to-b from-sidebar-light to-sidebar-light2 dark:from-sidebar-dark dark:to-sidebar-dark2 flex items-center justify-center">
+          <h1 className="text-white text-9xl">
+            {playerInfo.favnumber}
+          </h1>
         </div>
       </div>
     </div>
