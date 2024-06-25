@@ -1,25 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
 import LeagueCard from "@/app/components/LeagueCard";
-import { identifyUser, getLeaguesFromUser, deleteLeague, saveImageLeague, getDefaultImages } from "../actions";
-import { CldImage } from 'next-cloudinary';
-import { CldUploadButton } from 'next-cloudinary';
+import {
+  identifyUser,
+  getLeaguesFromUser,
+  deleteLeague,
+  saveImageLeague,
+  getDefaultImages,
+} from "../actions";
+import { CldImage } from "next-cloudinary";
+import { CldUploadButton } from "next-cloudinary";
 import { MdDriveFolderUpload } from "react-icons/md";
 import SelectImage from "@/app/components/leagues/selectImage";
-
 
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newLeague, setNewLeague] = useState({ name: "", description: "", image: "" });
-  const [imageId, setImageId] = useState("")
-  const [openDefaultImage, setOpenDefaultImage] = useState(false)
-  const [defaultImages, setDefaultImages] = useState("")
+  const [newLeague, setNewLeague] = useState({
+    name: "",
+    description: "",
+    image: "",
+  });
+  const [imageId, setImageId] = useState("");
+  const [openDefaultImage, setOpenDefaultImage] = useState(false);
+  const [defaultImages, setDefaultImages] = useState("");
 
   const getDefault = async () => {
-    const defaultImg = await getDefaultImages()
-    setDefaultImages(defaultImg)
-  }
+    const defaultImg = await getDefaultImages();
+    setDefaultImages(defaultImg);
+  };
 
   const getLeagues = async () => {
     const leaguesData = await getLeaguesFromUser();
@@ -35,12 +44,12 @@ const Leagues = () => {
   };
 
   const openDefaultImages = () => {
-    setOpenDefaultImage(true)
-  }
+    setOpenDefaultImage(true);
+  };
 
   const closeDefaultImages = () => {
-    setOpenDefaultImage(false)
-  }
+    setOpenDefaultImage(false);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +62,7 @@ const Leagues = () => {
       await identifyUser(newLeague);
       await getLeagues();
       closeModal();
-      setNewLeague({ name: "", description: "", image: "" })
+      setNewLeague({ name: "", description: "", image: "" });
     } catch (error) {
       console.error("Error creating league:", error);
     }
@@ -72,22 +81,23 @@ const Leagues = () => {
     const imgId = result.info.public_id;
     setImageId(imgId);
     setNewLeague((prevLeague) => ({ ...prevLeague, image: imgId }));
-  }
+  };
 
   const handleImageClick = (imageId) => {
-    setImageId(imageId)
-    closeDefaultImages()
-  }
+    setImageId(imageId);
+    closeDefaultImages();
+  };
 
   useEffect(() => {
-    getLeagues()
-    getDefault()
-  }, [])
+    getLeagues();
+    getDefault();
+  }, []);
 
   return (
     <div className="h-100 w-100 flex flex-col">
       <div className="mb-3">
-        <button type="button"
+        <button
+          type="button"
           className="bg-sidebar-light dark:bg-sidebar-dark hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 text-white font-bold py-2 px-4 rounded"
           onClick={openModal}
         >
@@ -106,7 +116,7 @@ const Leagues = () => {
           aria-hidden="true"
           className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black bg-opacity-50"
         >
-          {openDefaultImage &&
+          {openDefaultImage && (
             <div className="z-50 w-full h-full absolute bg-black bg-opacity-50 flex justify-center items-center">
               <div className="relative w-2/3 h-3/4  bg-white rounded-lg shadow dark:bg-gray-700">
                 <div className="flex justify-between items-center p-4 border-b border-gray-600">
@@ -138,14 +148,18 @@ const Leagues = () => {
                 <div className="w-full h-4/5">
                   <div className="p-3 w-full h-full overflow-y-scroll">
                     {defaultImages.map((image, index) => (
-                      <div key={index} className="flex justify-center gap-4 flex-wrap">
+                      <div
+                        key={index}
+                        className="flex justify-center gap-4 flex-wrap"
+                      >
                         <SelectImage onclick={handleImageClick} image={image} />
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>}
+            </div>
+          )}
           <div className="relative w-full max-w-md max-h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -212,29 +226,47 @@ const Leagues = () => {
                     />
                   </div>
                   <div className="flex items-center justify-center gap-10">
-                    {imageId && <CldImage
-                      className="rounded"
-                      width="125"
-                      height="125"
-                      crop="fill"
-                      src={imageId}
-                      alt="Description of my image"
-                    />}
-                    <div className={`${imageId ? "flex-col" : "gap-5"} flex justify-end items-end`}>
-                      <div className="flex items-center justify-center max-h-10 
+                    {imageId && (
+                      <CldImage
+                        className="rounded"
+                        width="125"
+                        height="125"
+                        crop="fill"
+                        src={imageId}
+                        alt="Description of my image"
+                      />
+                    )}
+                    <div
+                      className={`${
+                        imageId ? "flex-col" : "gap-5"
+                      } flex justify-end items-end`}
+                    >
+                      <div
+                        className="flex items-center justify-center max-h-10 
                       border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg 
                       focus:ring-blue-500 focus:border-blue-500 p-5 dark:bg-gray-600 
-                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1">
-                        <MdDriveFolderUpload style={{ width: "25px", height: "25px" }} />
-                        <CldUploadButton onSuccess={handleUploadSuccess}
-                          uploadPreset="adrolie" />
+                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1"
+                      >
+                        <MdDriveFolderUpload
+                          style={{ width: "25px", height: "25px" }}
+                        />
+                        <CldUploadButton
+                          onSuccess={handleUploadSuccess}
+                          uploadPreset="adrolie"
+                        />
                       </div>
-                      <div className="flex items-center justify-center max-h-10 
+                      <div
+                        className="flex items-center justify-center max-h-10 
                       border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg 
                       focus:ring-blue-500 focus:border-blue-500 p-5 dark:bg-gray-600 
-                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1">
-                        <MdDriveFolderUpload style={{ width: "25px", height: "25px" }} />
-                        <button type="button" onClick={openDefaultImages}>Default</button>
+                      dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mt-3 gap-1"
+                      >
+                        <MdDriveFolderUpload
+                          style={{ width: "25px", height: "25px" }}
+                        />
+                        <button type="button" onClick={openDefaultImages}>
+                          Default
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -22,7 +22,7 @@ export default function PlayerCard({ id }) {
   }
 
   return (
-    <div className="flip-card w-full sm:w-64 md:w-72 lg:w-80 xl:w-96 max-w-md rounded-lg text-center mt-1 relative">
+    <div className="flip-card w-full max-w-xs mx-auto rounded-lg text-center mt-4 md:mb-5 relative">
       <div className="flip-card-inner aspect-[3/4]">
         <div className="flip-card-front bg-gradient-to-b from-sidebar-light to-sidebar-light2 dark:from-sidebar-dark dark:to-sidebar-dark2">
           <Image
