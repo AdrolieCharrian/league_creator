@@ -4,6 +4,29 @@ import { auth } from "auth";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
+export const isAdmin = async (idLeague, idUser) => {
+  const adminFromLeague = await prisma.leagues.findUnique({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+  const leagueAdmin = adminFromLeague.adminId;
+  if (leagueAdmin === idUser) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const getUserInfo = async () => {
+  const session = await auth();
+  const token = cookies().get("access-token");
+  const localUser = token && jwt.decode(token.value);
+
+  const userId = !session ? localUser?.id : session.user.id;
+  return userId;
+};
+
 export const identifyUser = async (league) => {
   const session = await auth();
   const token = cookies().get("access-token");
@@ -156,7 +179,7 @@ export const removePlayerFromTeamAssigned = async (leagueId, playerId) => {
       },
     });
   } catch (error) {
-    console.error('Error removing player from team:', error);
+    console.error("Error removing player from team:", error);
     throw error;
   }
 };
@@ -200,9 +223,10 @@ export const isPlayerInAnyTeamInLeague = async (idLeague, idPlayer) => {
     },
   });
 
-  return participation?.players_team.length > 0 ? participation.players_team[0].teams.name : null;
+  return participation?.players_team.length > 0
+    ? participation.players_team[0].teams.name
+    : null;
 };
-
 
 // --- Tema sports in league
 
@@ -309,7 +333,7 @@ export const createNewTeam = async (formData, leagueId, image) => {
   const acronym = formData.get("acronym");
   const session = await auth();
   const token = cookies().get("access-token");
-  const localUser = token && jwt.decode(token.value)
+  const localUser = token && jwt.decode(token.value);
 
   const userId = !session ? localUser?.id : session.user.id;
 
@@ -320,14 +344,14 @@ export const createNewTeam = async (formData, leagueId, image) => {
       // adminId: userId,
       image: image,
       acronym: acronym,
-      id_league: parseInt(leagueId)
+      id_league: parseInt(leagueId),
     },
   });
-  
+
   if (!createdTeam || !createdTeam.id_team) {
-    throw new Error('Failed to create team or fetch team ID.');
+    throw new Error("Failed to create team or fetch team ID.");
   }
-  
+
   const leaguePlayer = await prisma.league_players.create({
     data: {
       id_player: userId,
@@ -336,13 +360,15 @@ export const createNewTeam = async (formData, leagueId, image) => {
   });
 
   if (!leaguePlayer || !leaguePlayer.id_participation_league) {
-    throw new Error('Failed to create league player or fetch participation league ID.');
+    throw new Error(
+      "Failed to create league player or fetch participation league ID."
+    );
   }
-  
+
   await prisma.players_team.create({
     data: {
       id_player: leaguePlayer.id_participation_league,
-      id_team: createdTeam.id_team
+      id_team: createdTeam.id_team,
     },
   });
 };
@@ -361,7 +387,7 @@ export const getTeamsFromLeague = async (idLeague) => {
     name: team.name,
     description: team.description || "No description available",
     image: team.image,
-    acronym: team.acronym
+    acronym: team.acronym,
   }));
 };
 
@@ -516,11 +542,10 @@ export const assignPlayerToTeam = async (leagueId, playerId, teamName) => {
       },
     });
   } catch (error) {
-    console.error('Error assigning player to team:', error);
+    console.error("Error assigning player to team:", error);
     throw error;
   }
 };
-
 
 // ---- Leaderboard
 
@@ -622,7 +647,8 @@ export const generateMatchesForLeague = async (idLeague) => {
   // Generar enfrentamientos
   let matches = [];
   for (const sportLeague of sports) {
-    const sportName = sportLeague.sports?.name || sportLeague.sports_custom?.name;
+    const sportName =
+      sportLeague.sports?.name || sportLeague.sports_custom?.name;
 
     for (let i = 0; i < teams.length; i++) {
       for (let j = i + 1; j < teams.length; j++) {

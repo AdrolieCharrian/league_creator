@@ -6,11 +6,6 @@ export default function MatchCard({ match, teams }) {
   const teamOne = teams.find(team => team.name === match.teamOne.name);
   const teamTwo = teams.find(team => team.name === match.teamTwo.name);
 
-  console.log("Match: ", match);
-  console.log("Teams: ", teams);
-  console.log("Team One: ", teamOne);
-  console.log("Team Two: ", teamTwo);
-
   if (!teamOne || !teamTwo) {
     return (
       <div className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg">
