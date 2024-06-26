@@ -598,3 +598,74 @@ export const getDefaultImages = async () => {
   console.log(imagesId);
   return imagesId;
 };
+
+// ---- Matches
+export const generateMatchesForLeague = async (idLeague) => {
+  // Obtén todos los equipos de la liga
+  const teams = await prisma.teams.findMany({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+  });
+
+  // Obtén todos los deportes de la liga
+  const sports = await prisma.sports_league.findMany({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+    include: {
+      sports: true,
+      sports_custom: true,
+    },
+  });
+
+  // Generar enfrentamientos
+  let matches = [];
+  for (const sportLeague of sports) {
+    const sportName = sportLeague.sports?.name || sportLeague.sports_custom?.name;
+
+    for (let i = 0; i < teams.length; i++) {
+      for (let j = i + 1; j < teams.length; j++) {
+        matches.push({
+          id_team_one: teams[i].id_team,
+          id_team_two: teams[j].id_team,
+          match_date: new Date(), // Puedes ajustar la fecha del partido según sea necesario
+          sport: sportName,
+        });
+      }
+    }
+  }
+
+  // Inserta los partidos en la base de datos
+  for (const match of matches) {
+    await prisma.matches.create({
+      data: match,
+    });
+  }
+};
+
+export const getMatchesFromLeague = async (idLeague) => {
+  const matches = await prisma.matches.findMany({
+    where: {
+      teamOne: {
+        id_league: parseInt(idLeague),
+      },
+    },
+    include: {
+      teamOne: true,
+      teamTwo: true,
+    },
+  });
+
+  return matches.map((match) => ({
+    id_match: match.id_match,
+    sport: match.sport,
+    teamOne: {
+      name: match.teamOne.name,
+    },
+    teamTwo: {
+      name: match.teamTwo.name,
+    },
+    match_date: match.match_date,
+  }));
+};
