@@ -743,13 +743,13 @@ export const declareWinner = async (matchId, winnerId, loserId) => {
       data: {
         winner: winnerId,
         loser: loserId,
-        draw: false
-      }
+        draw: false,
+      },
     });
 
     // Obtener el registro de score para el ganador
     const winnerScore = await prisma.score.findFirst({
-      where: { id_team: winnerId }
+      where: { id_team: winnerId },
     });
 
     // Actualizar la tabla de score para el ganador
@@ -758,13 +758,13 @@ export const declareWinner = async (matchId, winnerId, loserId) => {
       data: {
         wins: { increment: 1 },
         points: { increment: 3 },
-        matches: { increment: 1 }
-      }
+        matches: { increment: 1 },
+      },
     });
 
     // Obtener el registro de score para el perdedor
     const loserScore = await prisma.score.findFirst({
-      where: { id_team: loserId }
+      where: { id_team: loserId },
     });
 
     // Actualizar la tabla de score para el perdedor
@@ -772,12 +772,29 @@ export const declareWinner = async (matchId, winnerId, loserId) => {
       where: { id_score: loserScore.id_score },
       data: {
         loses: { increment: 1 },
-        matches: { increment: 1 }
-      }
+        matches: { increment: 1 },
+      },
     });
 
-    return { message: 'Winner declared successfully' };
+    return { message: "Winner declared successfully" };
   } catch (error) {
     console.error("Error declaring winner", error);
+  }
+};
+
+export const identifyWinner = async (idMatch) => {
+  const match = await prisma.matches.findUnique({
+    where: { id_match: idMatch },
+    include: {
+      teamOne: true,
+      teamTwo: true
+    }
+  });
+
+  if (match.winner !== null) {
+    const winnerTeam = match.winner === match.id_team_one ? match.teamOne : match.teamTwo;
+    return { status: false, winner: winnerTeam.name };
+  } else {
+    return { status: true, winner: null };
   }
 };

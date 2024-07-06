@@ -19,8 +19,6 @@ const Matches = ({ params: { id } }) => {
     const fetchMatchesAndTeams = async () => {
       const initialMatches = await getMatchesFromLeague(id);
       const initialTeams = await getTeamsFromLeague(id);
-      console.log("Initial Matches: ", initialMatches);
-      console.log("Initial Teams: ", initialTeams);
       setMatches(initialMatches);
       setTeams(initialTeams);
     };
@@ -33,7 +31,6 @@ const Matches = ({ params: { id } }) => {
       const userId = await getUserInfo();
       const admin = await isAdmin(id, userId);
       setIsItAdmin(admin);
-      console.log(admin);
     };
 
     fetchUserInfo();
@@ -45,7 +42,6 @@ const Matches = ({ params: { id } }) => {
     ) {
       await generateMatchesForLeague(id);
       const updatedMatches = await getMatchesFromLeague(id);
-      console.log("Updated Matches: ", updatedMatches);
       setMatches(updatedMatches);
     }
   };
