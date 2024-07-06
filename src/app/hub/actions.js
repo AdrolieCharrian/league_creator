@@ -735,3 +735,49 @@ export const getMatchesFromLeague = async (idLeague) => {
   }));
 };
 
+export const declareWinner = async (matchId, winnerId, loserId) => {
+  try {
+    // Actualizar la tabla de matches
+    await prisma.matches.update({
+      where: { id_match: matchId },
+      data: {
+        winner: winnerId,
+        loser: loserId,
+        draw: false
+      }
+    });
+
+    // Obtener el registro de score para el ganador
+    const winnerScore = await prisma.score.findFirst({
+      where: { id_team: winnerId }
+    });
+
+    // Actualizar la tabla de score para el ganador
+    await prisma.score.update({
+      where: { id_score: winnerScore.id_score },
+      data: {
+        wins: { increment: 1 },
+        points: { increment: 3 },
+        matches: { increment: 1 }
+      }
+    });
+
+    // Obtener el registro de score para el perdedor
+    const loserScore = await prisma.score.findFirst({
+      where: { id_team: loserId }
+    });
+
+    // Actualizar la tabla de score para el perdedor
+    await prisma.score.update({
+      where: { id_score: loserScore.id_score },
+      data: {
+        loses: { increment: 1 },
+        matches: { increment: 1 }
+      }
+    });
+
+    return { message: 'Winner declared successfully' };
+  } catch (error) {
+    console.error("Error declaring winner", error);
+  }
+};

@@ -62,7 +62,7 @@ const Matches = ({ params: { id } }) => {
       )}
       <div className="grid grid-cols-1 gap-4">
         {matches.map((match) => (
-          <MatchCard key={match.id_match} match={match} teams={teams} />
+          <MatchCard key={match.id_match} match={match} teams={teams} admin={isitadmin}/>
         ))}
       </div>
     </div>
