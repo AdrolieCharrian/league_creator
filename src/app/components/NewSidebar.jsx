@@ -3,7 +3,7 @@ import "./sidebar.css";
 import "../globals.css"
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { accountSignOut } from "../login/actions";
@@ -109,7 +109,7 @@ export default function NewSidebar({ children, name, image, session, user }) {
             className="p-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
             onClick={() => setExpanded((current) => !current)}
           >
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
+            {expanded ? <ChevronLeft /> : <ChevronRight />}
           </button>
         </div>
         <ul className="flex-1 px-3">

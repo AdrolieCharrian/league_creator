@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   getPlayersFromLeague,
   removePlayerFromLeagueAndTeam,
-  isPlayerInAnyTeamInLeague,
   getTeamsFromLeague,
   assignPlayerToTeam,
   removePlayerFromTeamAssigned,
@@ -20,17 +19,17 @@ const LeaguePlayers = ({ leagueId }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
-useEffect(() => {
-  const fetchPlayers = async () => {
-    try {
-      const playersWithTeamStatus = await getPlayersFromLeague(leagueId);
-      setLeaguePlayers(playersWithTeamStatus);
-    } catch (error) {
-      console.error("Error fetching players:", error);
-    }
-  };
-  fetchPlayers();
-}, [leagueId]);
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const playersWithTeamStatus = await getPlayersFromLeague(leagueId);
+        setLeaguePlayers(playersWithTeamStatus);
+      } catch (error) {
+        console.error("Error fetching players:", error);
+      }
+    };
+    fetchPlayers();
+  }, [leagueId]);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -114,7 +113,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="w-full md:flex-grow p-4 mt-4 md:mt-0">
+    <div className="w-full p-4 mt-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl text-gray-700 dark:text-white py-2">
           Players in league
@@ -126,20 +125,20 @@ useEffect(() => {
           Invite Players
         </button>
       </div>
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto max-h-96">
         <ul className="space-y-2">
           {leaguePlayers.map((player) => (
             <li
               key={player.id}
-              className="p-2 rounded flex justify-between items-center bg-sidebar-light dark:bg-sidebar-dark text-white dark:text-gray-100"
+              className="p-2 rounded flex flex-col sm:flex-row justify-between items-center bg-sidebar-light dark:bg-sidebar-dark text-white dark:text-gray-100"
             >
-              <span>{player.name}</span>
-              <div className="flex items-center">
+              <span className="mb-2 sm:mb-0">{player.name}</span>
+              <div className="flex flex-col sm:flex-row items-center">
                 {player.teamName ? (
                   <>
                     <span className="mr-2">Team: {player.teamName}</span>
                     <button
-                      className="bg-yellow-500 text-white px-2 py-1 rounded-md mr-2"
+                      className="bg-yellow-500 text-white px-2 py-1 rounded-md mb-2 sm:mb-0 sm:mr-2"
                       onClick={() => handleRemovePlayerFromTeam(player.id)}
                     >
                       Remove from Team
@@ -147,7 +146,7 @@ useEffect(() => {
                   </>
                 ) : (
                   <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                    className="bg-blue-500 text-white px-2 py-1 rounded-md mb-2 sm:mb-0 sm:mr-2"
                     onClick={() => handleAssignTeam(player)}
                   >
                     Assign Team
@@ -167,7 +166,7 @@ useEffect(() => {
 
       {showAssignTeamModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white dark:bg-background-dark p-4 rounded-md">
+          <div className="bg-white dark:bg-background-dark p-4 rounded-md max-w-sm w-full">
             <h2 className="text-xl mb-4 text-gray-700 dark:text-white">
               Assign Team to {playerToAssign.name}
             </h2>
@@ -183,25 +182,27 @@ useEffect(() => {
                 </option>
               ))}
             </select>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-              onClick={handleConfirmAssignTeam}
-            >
-              Assign Team
-            </button>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded-md mt-4 ml-2"
-              onClick={() => setShowAssignTeamModal(false)}
-            >
-              Cancel
-            </button>
+            <div className="mt-4 flex justify-end">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                onClick={handleConfirmAssignTeam}
+              >
+                Assign Team
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                onClick={() => setShowAssignTeamModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {showInviteModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white dark:bg-background-dark p-4 rounded-md">
+          <div className="bg-white dark:bg-background-dark p-4 rounded-md max-w-sm w-full">
             <h2 className="text-xl mb-4 text-gray-700 dark:text-white">
               Invite Player
             </h2>
