@@ -10,7 +10,7 @@ const TeamLeagueCard = ({ leagueId, team }) => {
   const router = useRouter();
 
   const openConfirmModal = (event) => {
-    event.stopPropagation(); // Detener la propagación del evento
+    event.stopPropagation();
     setIsConfirmModalOpen(true);
   };
 
@@ -21,8 +21,6 @@ const TeamLeagueCard = ({ leagueId, team }) => {
   const handleDelete = () => { };
 
   const handleNavigate = async (id, teamId) => {
-    // const adminId = await getAdminFromLeague(id);
-    // setAdminId(adminId);
     router.push(`/hub/leagues/${id}/teams/${teamId}/players`);
   };
 

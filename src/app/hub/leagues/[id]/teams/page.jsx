@@ -8,8 +8,6 @@ const LeaguesTeams = ({ params: { id } }) => {
   const [teamsData, setTeamsData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(teamsData)
-
   useEffect(() => {
     const fetchData = async () => {
       const data = await getTeamsFromLeague(id);

@@ -87,11 +87,9 @@ const ModalCreateTeam = ({ onClickClose, param, afterSubmit }) => {
                             </button>
                         </div>
                         <div className="w-full h-4/5">
-                            <div className="p-3 w-full h-full overflow-y-scroll">
+                            <div className="p-3 w-full h-full overflow-y-scroll flex justify-center gap-4 flex-wrap">
                                 {defaultImages.map((image, index) => (
-                                    <div key={index} className="flex justify-center gap-4 flex-wrap">
-                                        <SelectImage onclick={handleImageClick} image={image} />
-                                    </div>
+                                    <SelectImage key={index} onclick={handleImageClick} image={image} />
                                 ))}
                             </div>
                         </div>
@@ -101,7 +99,7 @@ const ModalCreateTeam = ({ onClickClose, param, afterSubmit }) => {
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            Create New League
+                            Create New Team
                         </h3>
                         <button
                             type="button"

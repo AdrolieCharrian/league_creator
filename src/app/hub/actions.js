@@ -112,7 +112,7 @@ export const getAdminFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  return adminFromLeague.adminId;
+  return adminFromLeague?.adminId;
 };
 
 export const updateLeague = async (idLeague, updatedLeague) => {
@@ -123,6 +123,18 @@ export const updateLeague = async (idLeague, updatedLeague) => {
     data: {
       name: updatedLeague.name,
       description: updatedLeague.description,
+    },
+  });
+  return updated;
+};
+
+export const updateLeagueImage = async (idLeague, updatedImage) => {
+  const updated = await prisma.leagues.update({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+    data: {
+      image: updatedImage,
     },
   });
   return updated;
