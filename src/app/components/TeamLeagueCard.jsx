@@ -1,11 +1,9 @@
 "use client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
 import Image from "next/image";
 
-const TeamLeagueCard = ({ team }) => {
-  const [adminId, setAdminId] = useState(null);
+const TeamLeagueCard = ({ team, leagueId }) => {
   const router = useRouter();
 
   const handleNavigate = async (id, teamId) => {
@@ -15,7 +13,7 @@ const TeamLeagueCard = ({ team }) => {
   return (
     <div
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
-      onClick={() => handleNavigate(team.id_league, team.id_team)}
+      onClick={() => handleNavigate(leagueId, team.id_team)}
     >
       {team.image ?
         <CldImage
