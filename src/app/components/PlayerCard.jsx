@@ -41,7 +41,7 @@ export default function PlayerCard({ id }) {
               width={300}
               height={300}
               quality={100}
-              className="object-scale-down"
+              className="cursor-pointer duration-500 w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 object-cover p-3"
             />)}
           <div className="py-4">
             <div className="font-bold text-xl mb-2 text-white">
