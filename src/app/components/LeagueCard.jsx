@@ -19,7 +19,8 @@ export default function LeagueCard({ league, onDelete }) {
     setIsConfirmModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.stopPropagation()
     onDelete(league.id_league);
     closeConfirmModal();
   };

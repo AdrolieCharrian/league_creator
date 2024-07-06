@@ -46,6 +46,7 @@ export const login = async (formData) => {
       username: user.username,
       image: user.image,
       description: user.description,
+      favnumber: user.favnumber
     },
     "1234"
   );

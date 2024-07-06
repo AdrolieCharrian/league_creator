@@ -112,7 +112,38 @@ export const getAdminFromLeague = async (idLeague) => {
       id_league: parseInt(idLeague),
     },
   });
-  return adminFromLeague.adminId;
+  return adminFromLeague?.adminId;
+  
+};
+
+export const findLeagueAdminFromTeam = async (teamId) => {
+  const foundTeam = await prisma.teams.findUnique({
+    where: {
+      id_team: parseInt(teamId),
+    },
+    select: {
+      id_league: true,
+    },
+  });
+
+  if (!foundTeam) {
+    throw new Error('Team not found');
+  }
+
+  const foundLeague = await prisma.leagues.findUnique({
+    where: {
+      id_league: foundTeam.id_league,
+    },
+    select: {
+      adminId: true,
+    },
+  });
+
+  if (!foundLeague) {
+    throw new Error('League not found');
+  }
+
+  return foundLeague.adminId;
 };
 
 export const updateLeague = async (idLeague, updatedLeague) => {
@@ -123,6 +154,18 @@ export const updateLeague = async (idLeague, updatedLeague) => {
     data: {
       name: updatedLeague.name,
       description: updatedLeague.description,
+    },
+  });
+  return updated;
+};
+
+export const updateLeagueImage = async (idLeague, updatedImage) => {
+  const updated = await prisma.leagues.update({
+    where: {
+      id_league: parseInt(idLeague),
+    },
+    data: {
+      image: updatedImage,
     },
   });
   return updated;
@@ -335,10 +378,10 @@ export const getTeamsFromUser = async (userId) => {
       },
     },
     include: {
-      leagues: true, // This will include the league details for each team
+      leagues: true,
       players_team: {
         include: {
-          league_players: true, // This will include the details of league_players
+          league_players: true,
         },
       },
     },
@@ -640,7 +683,6 @@ export const getDefaultImages = async () => {
   const imagesArr = await prisma.default_images.findMany();
   const imagesId = imagesArr.map((image) => image.image);
 
-  console.log(imagesId);
   return imagesId;
 };
 

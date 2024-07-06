@@ -1,6 +1,6 @@
 import { auth } from "auth";
 import { TabNav } from "@/app/components/TabNav";
-import { getAdminFromLeague } from "../../actions";
+import { findLeagueAdminFromTeam, getAdminFromLeague } from "../../actions";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
@@ -10,7 +10,7 @@ export default async function RootLayout({ children, params }) {
   const token = cookies().get("access-token");
   const user = token && jwt.decode(token.value)
 
-  const adminId = await getAdminFromLeague(id);
+  const adminId = await getAdminFromLeague(id)
   const isAdmin = session ? session.user.id === adminId : user.id === adminId
 
   return (

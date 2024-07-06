@@ -85,6 +85,7 @@ const Leagues = () => {
 
   const handleImageClick = (imageId) => {
     setImageId(imageId);
+    setNewLeague({ ...newLeague, image: imageId })
     closeDefaultImages();
   };
 
@@ -92,6 +93,7 @@ const Leagues = () => {
     getLeagues();
     getDefault();
   }, []);
+
 
   return (
     <div className="h-100 w-100 flex flex-col">
@@ -146,14 +148,9 @@ const Leagues = () => {
                   </button>
                 </div>
                 <div className="w-full h-4/5">
-                  <div className="p-3 w-full h-full overflow-y-scroll">
+                  <div className="p-3 h-full overflow-y-scroll flex justify-center gap-4 flex-wrap">
                     {defaultImages.map((image, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-center gap-4 flex-wrap"
-                      >
-                        <SelectImage onclick={handleImageClick} image={image} />
-                      </div>
+                      <SelectImage key={index} onclick={handleImageClick} image={image} />
                     ))}
                   </div>
                 </div>
@@ -237,9 +234,8 @@ const Leagues = () => {
                       />
                     )}
                     <div
-                      className={`${
-                        imageId ? "flex-col" : "gap-5"
-                      } flex justify-end items-end`}
+                      className={`${imageId ? "flex-col" : "gap-5"
+                        } flex justify-end items-end`}
                     >
                       <div
                         className="flex items-center justify-center max-h-10 

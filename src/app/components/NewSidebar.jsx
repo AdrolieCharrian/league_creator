@@ -6,7 +6,6 @@ import Image from "next/image";
 import { ChevronFirst, ChevronLast, LogOut } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { FaUserCircle } from "react-icons/fa";
 import { accountSignOut } from "../login/actions";
 import { CldImage } from "next-cloudinary";
 
