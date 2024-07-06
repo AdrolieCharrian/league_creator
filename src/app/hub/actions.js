@@ -688,6 +688,25 @@ export const generateMatchesForLeague = async (idLeague) => {
       data: match,
     });
   }
+
+  // Inicializar la tabla de puntuaciones manualmente
+  const initialScoreData = {
+    matches: 0,
+    wins: 0,
+    loses: 0,
+    points: 0,
+    draws: 0,
+  };
+
+  for (const team of teams) {
+    await prisma.score.create({
+      data: {
+        id_league: parseInt(idLeague),
+        id_team: team.id_team,
+        ...initialScoreData,
+      },
+    });
+  }
 };
 
 export const getMatchesFromLeague = async (idLeague) => {

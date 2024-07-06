@@ -109,11 +109,11 @@ model score {
   type      String?
   id_league Int
   id_team   Int
-  matches   Int?
+  matches   Int? 
   wins      Int?
   loses     Int?
   points    Int?
-  draws     Int?
+  draws     Int?    
   leagues   leagues @relation(fields: [id_league], references: [id_league])
   teams     teams   @relation(fields: [id_team], references: [id_team])
 }

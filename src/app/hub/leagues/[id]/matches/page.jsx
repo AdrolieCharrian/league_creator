@@ -31,7 +31,7 @@ const Matches = ({ params: { id } }) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       const userId = await getUserInfo();
-      const admin = await isAdmin(id,userId);
+      const admin = await isAdmin(id, userId);
       setIsItAdmin(admin);
       console.log(admin);
     };
