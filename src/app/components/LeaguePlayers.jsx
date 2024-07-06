@@ -20,24 +20,17 @@ const LeaguePlayers = ({ leagueId }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        const players = await getPlayersFromLeague(leagueId);
-        const playersWithTeamStatus = await Promise.all(players.map(async (player) => {
-          const teamName = await isPlayerInAnyTeamInLeague(leagueId, player.id);
-          return {
-            ...player,
-            teamName,
-          };
-        }));
-        setLeaguePlayers(playersWithTeamStatus);
-      } catch (error) {
-        console.error("Error fetching players:", error);
-      }
-    };
-    fetchPlayers();
-  }, [leagueId]);
+useEffect(() => {
+  const fetchPlayers = async () => {
+    try {
+      const playersWithTeamStatus = await getPlayersFromLeague(leagueId);
+      setLeaguePlayers(playersWithTeamStatus);
+    } catch (error) {
+      console.error("Error fetching players:", error);
+    }
+  };
+  fetchPlayers();
+}, [leagueId]);
 
   useEffect(() => {
     const fetchTeams = async () => {

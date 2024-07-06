@@ -139,25 +139,45 @@ export const getLeagueById = async (idLeague) => {
 // ---- Jugadores en liga
 
 export const getPlayersFromLeague = async (idLeague) => {
-  const players = await prisma.league_players.findMany({
+  // Consulta todos los jugadores y sus equipos en una sola consulta
+  const players = await prisma.user.findMany({
     where: {
-      id_league: parseInt(idLeague),
-    },
-  });
-
-  const playerIds = players.map((player) => player.id_player);
-
-  const infoPlayers = await prisma.user.findMany({
-    where: {
-      id: { in: playerIds },
+      league_players: {
+        some: {
+          id_league: parseInt(idLeague),
+        },
+      },
     },
     select: {
       id: true,
       name: true,
+      league_players: {
+        where: {
+          id_league: parseInt(idLeague),
+        },
+        include: {
+          players_team: {
+            include: {
+              teams: true,
+            },
+          },
+        },
+      },
     },
   });
 
-  return infoPlayers;
+  // Mapea los jugadores para incluir el nombre del equipo
+  const playersWithTeamStatus = players.map((player) => {
+    const teamName =
+      player.league_players[0]?.players_team[0]?.teams?.name || null;
+    return {
+      id: player.id,
+      name: player.name,
+      teamName: teamName,
+    };
+  });
+
+  return playersWithTeamStatus;
 };
 
 export const removePlayerFromTeam = async (idParticipationLeague) => {
@@ -695,3 +715,4 @@ export const getMatchesFromLeague = async (idLeague) => {
     match_date: match.match_date,
   }));
 };
+

@@ -28,8 +28,8 @@ export default function MatchCard({ match, teams }) {
       <div className="w-1/6">
         <CldImage
           className="w-full h-auto rounded-lg"
-          width="50"
-          height="50"
+          width="1000"
+          height="1000"
           alt={`${teamOne.name} logo`}
           crop="fill"
           src={teamOne.image}
@@ -42,8 +42,8 @@ export default function MatchCard({ match, teams }) {
       <div className="w-1/6">
         <CldImage
           className="w-full h-auto rounded-lg"
-          width="50"
-          height="50"
+          width="1000"
+          height="1000"
           alt={`${teamTwo.name} logo`}
           crop="fill"
           src={teamTwo.image}
