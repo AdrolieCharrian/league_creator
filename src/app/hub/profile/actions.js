@@ -15,6 +15,7 @@ export const saveProfile = async (formData) => {
     const description = formData.get("description")
     const password = formData.get("password")
     const confirm = formData.get("confirm")
+    const favnumber = formData.get("favnumber")
 
     if (password && password == confirm) {
         try {
@@ -34,7 +35,8 @@ export const saveProfile = async (formData) => {
                     password: passwordString,
                     name: name,
                     surname: surname,
-                    description: description
+                    description: description,
+                    favnumber: favnumber
                 }
             })
             const token = jwt.sign(
@@ -45,11 +47,11 @@ export const saveProfile = async (formData) => {
                     surname: updatedUser.surname,
                     username: updatedUser.username,
                     image: updatedUser.image,
-                    description: updatedUser.description
+                    description: updatedUser.description,
+                    favnumber: updatedUser.favnumber
                 },
                 "1234"
             );
-            console.log(token);
             
             // Set token in cookie
             cookies().set("access-token", token);
@@ -70,7 +72,8 @@ export const saveProfile = async (formData) => {
                     username: username,
                     name: name,
                     surname: surname,
-                    description: description
+                    description: description,
+                    favnumber: favnumber
                 }
             })
             const token = jwt.sign(
@@ -81,7 +84,8 @@ export const saveProfile = async (formData) => {
                     surname: updatedUser.surname,
                     username: updatedUser.username,
                     image: updatedUser.image,
-                    description: updatedUser.description
+                    description: updatedUser.description,
+                    favnumber: updatedUser.favnumber
                 },
                 "1234"
             );
@@ -107,6 +111,8 @@ export const saveProfileGoogle = async (formData) => {
     const name = formData.get("name")
     const surname = formData.get("surname")
     const description = formData.get("description")
+    const favnumber = formData.get("favnumber")
+
         try {
             console.log(email)
             const updatedUser = await prisma.user.update({
@@ -117,7 +123,8 @@ export const saveProfileGoogle = async (formData) => {
                     name: name,
                     surname: surname,
                     username: username,
-                    description: description
+                    description: description,
+                    favnumber: favnumber
                 }
             })
             console.log(NextResponse.json({updatedUser}));
@@ -166,29 +173,3 @@ export const saveImage = async (img) => {
             return NextResponse.error("Error updating user");
         }
 }
-
-// export const getImage = async () => {
-//     const session = await auth();
-//     const token = cookies().get("access-token");
-//     const localUser = token && jwt.decode(token.value)
-//     const email = !session ? localUser?.email : session.user.email;
-
-//     try {
-//         const user = await prisma.user.findFirst({
-//             where: {
-//                 email: email
-//             }
-//         })
-//         if (user) {
-//             const imageId = user.image;
-//             console.log("User image URL:", imageId);
-//             return imageId
-//         } else {
-//             console.log("User with email", email, "not found or has no image");
-//         }
-
-//     } catch(error) {
-//         console.error(error);
-//         return NextResponse.error("Error updating user");
-//     }
-// }

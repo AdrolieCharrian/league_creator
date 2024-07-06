@@ -46,6 +46,13 @@ const Profile = async () => {
       return user.username
     }
   }
+  function checkFavnumber() {
+    if (session) {
+      return session.user.favnumber
+    } else if (user) {
+      return user.favnumber
+    }
+  }
   function checkDescription() {
     if (session) {
       return session.user.description
@@ -80,6 +87,13 @@ const Profile = async () => {
               Username
             </span>
             <input id="username" name="username" type="text" defaultValue={checkUsername()}
+              className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
+          </label>
+          <label htmlFor="favnumber" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
+            <span className="text-lg ms-4 dark:text-white" >
+              Favorite Number
+            </span>
+            <input id="favnumber" name="favnumber" type="text" defaultValue={checkFavnumber()}
               className="bg-background-light rounded-full w-full ps-4 py-3 text-sm" />
           </label>
           <label htmlFor="name" className="flex flex-col mt-4 w-full md:w-4/5 xl:w-3/5">
