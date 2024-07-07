@@ -50,11 +50,9 @@ export const login = async (formData) => {
     },
     "1234"
   );
-  console.log(token);
 
   // Set token in cookie
   cookies().set("access-token", token);
-  console.log("Token Set: ", token);
 
   redirect("/hub/leagues");
 };

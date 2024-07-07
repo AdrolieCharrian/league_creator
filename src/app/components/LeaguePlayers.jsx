@@ -6,18 +6,19 @@ import {
   assignPlayerToTeam,
   removePlayerFromTeamAssigned,
   getUsersNotInLeague,
-  createInvitation
-} from '@/app/hub/actions';
+  createInvitation,
+} from "@/app/hub/actions";
 
 const LeaguePlayers = ({ leagueId }) => {
   const [leaguePlayers, setLeaguePlayers] = useState([]);
   const [showAssignTeamModal, setShowAssignTeamModal] = useState(false);
   const [playerToAssign, setPlayerToAssign] = useState(null);
   const [teams, setTeams] = useState([]);
-  const [selectedTeam, setSelectedTeam] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState("");
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -58,7 +59,9 @@ const LeaguePlayers = ({ leagueId }) => {
   const handleDeletePlayer = async (idPlayer) => {
     try {
       await removePlayerFromLeagueAndTeam(leagueId, idPlayer);
-      setLeaguePlayers((prevPlayers) => prevPlayers.filter(player => player.id !== idPlayer));
+      setLeaguePlayers((prevPlayers) =>
+        prevPlayers.filter((player) => player.id !== idPlayer)
+      );
     } catch (error) {
       console.error("Error deleting player:", error);
     }
@@ -67,8 +70,8 @@ const LeaguePlayers = ({ leagueId }) => {
   const handleRemovePlayerFromTeam = async (idPlayer) => {
     try {
       await removePlayerFromTeamAssigned(leagueId, idPlayer);
-      setLeaguePlayers((prevPlayers) => 
-        prevPlayers.map((player) => 
+      setLeaguePlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
           player.id === idPlayer ? { ...player, teamName: null } : player
         )
       );
@@ -87,11 +90,13 @@ const LeaguePlayers = ({ leagueId }) => {
       await assignPlayerToTeam(leagueId, playerToAssign.id, selectedTeam);
       setLeaguePlayers((prevPlayers) =>
         prevPlayers.map((player) =>
-          player.id === playerToAssign.id ? { ...player, teamName: selectedTeam } : player
+          player.id === playerToAssign.id
+            ? { ...player, teamName: selectedTeam }
+            : player
         )
       );
       setShowAssignTeamModal(false);
-      setSelectedTeam('');
+      setSelectedTeam("");
     } catch (error) {
       console.error("Error assigning team:", error);
     }
@@ -104,13 +109,37 @@ const LeaguePlayers = ({ leagueId }) => {
         alert("Invitation sent successfully!");
         setShowInviteModal(false);
       } catch (error) {
-        console.error("Error creating invitation:", error);
-        alert("Failed to send invitation.");
+        if (error.message === 'User already has an invitation to this league') {
+          alert("This user already has an invitation to the league.");
+        } else {
+          console.error("Error creating invitation:", error);
+          alert("Failed to send invitation.");
+        }
       }
     } else {
       alert("Please select a user to invite.");
     }
   };
+  
+
+  const handleSearch = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+
+    const filtered = users.filter((user) =>
+      user.email.toLowerCase().includes(term.toLowerCase())
+    );
+
+    if (filtered.length === 1) {
+      setSelectedUser(filtered[0].id);
+    } else {
+      setSelectedUser(null);
+    }
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="w-full p-4 mt-4">
@@ -119,7 +148,7 @@ const LeaguePlayers = ({ leagueId }) => {
           Players in league
         </h2>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md"
           onClick={() => setShowInviteModal(true)}
         >
           Invite Players
@@ -138,7 +167,7 @@ const LeaguePlayers = ({ leagueId }) => {
                   <>
                     <span className="mr-2">Team: {player.teamName}</span>
                     <button
-                      className="bg-yellow-500 text-white px-2 py-1 rounded-md mb-2 sm:mb-0 sm:mr-2"
+                      className="bg-yellow-500 hover:bg-yellow-700 text-white px-2 py-1 rounded-md mb-2 sm:mb-0 sm:mr-2"
                       onClick={() => handleRemovePlayerFromTeam(player.id)}
                     >
                       Remove from Team
@@ -153,7 +182,7 @@ const LeaguePlayers = ({ leagueId }) => {
                   </button>
                 )}
                 <button
-                  className="bg-red-500 text-white px-2 py-1 rounded-md"
+                  className="bg-red-500 hover:bg-red-800 text-white px-2 py-1 rounded-md"
                   onClick={() => handleDeletePlayer(player.id)}
                 >
                   Delete
@@ -184,13 +213,13 @@ const LeaguePlayers = ({ leagueId }) => {
             </select>
             <div className="mt-4 flex justify-end">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md"
                 onClick={handleConfirmAssignTeam}
               >
                 Assign Team
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                className="bg-red-500 hover:bg-red-800 text-white px-4 py-2 rounded-md ml-2"
                 onClick={() => setShowAssignTeamModal(false)}
               >
                 Cancel
@@ -207,29 +236,44 @@ const LeaguePlayers = ({ leagueId }) => {
               Invite Player
             </h2>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Select User</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Search User
+              </label>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                placeholder="Type email to search"
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Select User
+              </label>
               <select
                 className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                onChange={(e) => setSelectedUser(e.target.value)}
-                value={selectedUser || ''}
+                readOnly
               >
-                <option value="">Select a user</option>
-                {users.map((user) => (
+                {searchTerm === "" ? (
+                  <option value="">Select a user</option>
+                ) : null}
+                {filteredUsers.map((user) => (
                   <option key={user.id} value={user.id}>
-                    {user.name}
+                    {user.email}
                   </option>
                 ))}
               </select>
             </div>
             <div className="mt-4 flex justify-end">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md"
                 onClick={handleInvite}
               >
                 Invite
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                className="bg-red-500 hover:bg-red-800 text-white px-4 py-2 rounded-md ml-2"
                 onClick={() => setShowInviteModal(false)}
               >
                 Cancel

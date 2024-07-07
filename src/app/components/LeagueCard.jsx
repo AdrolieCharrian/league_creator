@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { getAdminFromLeague } from "../hub/actions";
 import { CldImage } from "next-cloudinary";
 import Image from "next/image";
+import { Trash2 } from "lucide-react";
 
 export default function LeagueCard({ league, onDelete }) {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -62,11 +63,11 @@ export default function LeagueCard({ league, onDelete }) {
             onClick={openConfirmModal}
             className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2"
           >
-            Delete
+            <Trash2/>
           </button>
           {isConfirmModalOpen && (
             <div
-              id="delete-confirmation-modal"
+              id="BadgeInfo/-confirmation-modal"
               tabIndex="-1"
               aria-hidden="true"
               className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"

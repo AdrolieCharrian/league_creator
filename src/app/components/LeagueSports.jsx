@@ -59,7 +59,7 @@ const LeagueSports = ({ leagueId }) => {
           Sports
         </h2>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md"
           onClick={() => setShowAddSportModal(true)}
         >
           Add Sport
@@ -74,7 +74,7 @@ const LeagueSports = ({ leagueId }) => {
             >
               {sport.name}
               <button
-                className="bg-red-500 text-white px-2 py-1 rounded-md"
+                className="bg-red-500 hover:bg-red-800 text-white px-2 py-1 rounded-md"
                 onClick={() => handleDeleteSport(sport.id_sport_league)}
               >
                 Delete
@@ -145,13 +145,13 @@ const LeagueSports = ({ leagueId }) => {
             </div>
             <div className="mt-4 flex justify-end">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md"
                 onClick={handleAddSport}
               >
                 Add Sport
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                className="bg-red-500 hover:bg-red-800 text-white px-4 py-2 rounded-md ml-2"
                 onClick={() => setShowAddSportModal(false)}
               >
                 Cancel

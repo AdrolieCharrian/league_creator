@@ -51,7 +51,7 @@ const Matches = ({ params: { id } }) => {
       {isitadmin && matches.length === 0 && (
         <button
           onClick={handleGenerateMatches}
-          className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="mb-4 bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white font-bold py-2 px-4 rounded"
         >
           Generate Matches
         </button>

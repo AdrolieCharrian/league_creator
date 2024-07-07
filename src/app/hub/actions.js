@@ -535,14 +535,29 @@ export const getUsersNotInLeague = async (idLeague) => {
 };
 
 export const createInvitation = async (idUser, idLeague) => {
+  // Comprobar si ya existe una invitación para este usuario y liga
+  const existingInvitation = await prisma.invitations.findFirst({
+    where: {
+      id_user: idUser,
+      id_league: parseInt(idLeague),
+    },
+  });
+
+  if (existingInvitation) {
+    throw new Error('User already has an invitation to this league');
+  }
+
+  // Crear una nueva invitación si no existe
   const invitation = await prisma.invitations.create({
     data: {
       id_user: idUser,
       id_league: parseInt(idLeague),
     },
   });
+
   return invitation;
 };
+
 
 // ---- Player inside team
 export const getPlayersFromTeam = async (idTeam) => {

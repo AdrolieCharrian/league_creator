@@ -224,7 +224,7 @@ const LeagueInfoForm = ({ leagueId }) => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full text-white bg-green-700 hover:bg-green-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="w-full text-white bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                   >
                     Save
                   </button>
@@ -245,7 +245,7 @@ const LeagueInfoForm = ({ leagueId }) => {
         <h2 className="text-xl mb-1 text-gray-700 dark:text-white">
           League info
         </h2>
-        <button onClick={openModal} className="bg-blue-500 text-white px-4 py-2 rounded-md">Update Image</button>
+        <button onClick={openModal} className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md">Update Image</button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -271,7 +271,7 @@ const LeagueInfoForm = ({ leagueId }) => {
             className="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
           ></textarea>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
+        <button type="submit" className="bg-sidebar-light hover:bg-sidebar-light2 dark:hover:bg-sidebar-dark2 dark:bg-sidebar-dark text-white px-4 py-2 rounded-md">
           Save
         </button>
       </form>
