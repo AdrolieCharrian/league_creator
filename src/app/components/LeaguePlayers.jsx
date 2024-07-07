@@ -142,7 +142,7 @@ const LeaguePlayers = ({ leagueId }) => {
   );
 
   return (
-    <div className="w-full p-4 mt-4">
+    <div className="w-full p-4 ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl text-gray-700 dark:text-white py-2">
           Players in league
