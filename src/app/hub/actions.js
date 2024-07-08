@@ -692,7 +692,7 @@ export const getLeaderboardData = async (leagueId) => {
       id_league: parseInt(leagueId),
     },
     include: {
-      teams: true,
+      teams: true, // Incluir el modelo relacionado 'teams'
     },
     orderBy: {
       points: "desc",
@@ -701,7 +701,8 @@ export const getLeaderboardData = async (leagueId) => {
 
   return scores.map((score, index) => ({
     rank: index + 1,
-    teamName: score.teams.name,
+    teamName: score.teams.name, // Nombre del equipo
+    teamAcronym: score.teams.acronym, // Acrónimo del equipo
     matchesPlayed: score.matches,
     wins: score.wins,
     draws: score.draws,
@@ -709,6 +710,7 @@ export const getLeaderboardData = async (leagueId) => {
     points: score.points,
   }));
 };
+
 // ---- Matches
 
 // ---- Configuration

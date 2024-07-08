@@ -40,7 +40,7 @@ const LeaderboardTable = ({ data }) => {
                 <td className="text-white py-2 px-4 border-b border-sidebar-light2 dark:border-sidebar-dark2">
                   {team.rank}
                 </td>
-                <td className="text-white  py-2 px-4 border-b border-sidebar-light2 dark:border-sidebar-dark2">
+                <td className="text-white py-2 px-4 border-b border-sidebar-light2 dark:border-sidebar-dark2">
                   {team.teamName}
                 </td>
                 <td className="text-white  py-2 px-4 border-b border-sidebar-light2 dark:border-sidebar-dark2">
@@ -101,7 +101,7 @@ const LeaderboardTable = ({ data }) => {
                   {team.rank}
                 </td>
                 <td className="text-white py-1 px-1 border-b border-sidebar-light2 dark:border-sidebar-dark2">
-                  {team.teamName}
+                  {team.teamAcronym}
                 </td>
                 <td className="text-white py-1 px-1 border-b border-sidebar-light2 dark:border-sidebar-dark2">
                   {team.matchesPlayed}
