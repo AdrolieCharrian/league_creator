@@ -8,34 +8,12 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model images {
-  id_image  Int      @id @default(autoincrement())
-  format    String
-  version   String
-  createdAt DateTime @default(now())
-
-  id_user   String?
-  id_league Int?
-  id_team   Int?
-
-  // Relaciones inversas
-  user   User?    @relation(fields: [id_user], references: [id], name: "UserImages")
-  league leagues? @relation(fields: [id_league], references: [id_league], name: "LeagueImages")
-  team   teams?   @relation(fields: [id_team], references: [id_team], name: "TeamImages")
-
-  @@index([id_user]) // Indices para optimizar búsquedas
-  @@index([id_league])
-  @@index([id_team])
-}
-
 model default_images {
   id_default_image Int      @id @default(autoincrement())
-  format           String
-  version          String
   createdAt        DateTime @default(now())
+  image            String?
 }
 
-// Define the User model, integrating both User and users fields
 model User {
   id             String           @id @default(cuid())
   name           String?
@@ -46,14 +24,16 @@ model User {
   surname        String?
   description    String?
   password       String?
+  favnumber      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   accounts       Account[]
-  sessions       Session[]
   Authenticator  Authenticator[]
+  sessions       Session[]
   league_players league_players[]
-  images         images[]         @relation("UserImages")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  adminLeagues   leagues[]        @relation("UserLeaguesAdmin")
+  invitations    Invitations[]
+  //teams          teams[]          @relation("UserTeamsAdmin")
 }
 
 model leagues {
@@ -62,23 +42,24 @@ model leagues {
   description    String?
   type           String?
   maxteams       Int              @default(16)
-  images         images[]         @relation("LeagueImages")
+  adminId        String
+  image          String?
   league_players league_players[]
+  admin          User             @relation("UserLeaguesAdmin", fields: [adminId], references: [id])
   score          score[]
   sports_custom  sports_custom[]
   sports_league  sports_league[]
   teams          teams[]
+  invitations    Invitations[]
 }
 
 model league_players {
-  id_participation_league Int    @id @default(autoincrement())
+  id_participation_league Int            @id @default(autoincrement())
   id_player               String
   id_league               Int
-
-  // Define the relationships
-  user         User           @relation(fields: [id_player], references: [id])
-  leagues      leagues        @relation(fields: [id_league], references: [id_league])
-  players_team players_team[]
+  leagues                 leagues        @relation(fields: [id_league], references: [id_league])
+  user                    User           @relation(fields: [id_player], references: [id])
+  players_team            players_team[]
 }
 
 model teams {
@@ -86,12 +67,17 @@ model teams {
   name             String
   description      String?
   id_league        Int
-  images           images[]       @relation("TeamImages")
+  image            String?
+  acronym          String
+  // adminId          String
   matchesAsTeamOne matches[]      @relation("TeamOneRelation")
   matchesAsTeamTwo matches[]      @relation("TeamTwoRelation")
+  // admin            User           @relation("UserTeamsAdmin", fields: [adminId], references: [id])
   players_team     players_team[]
   score            score[]
   leagues          leagues        @relation(fields: [id_league], references: [id_league])
+
+  //@@index([id_league]) // Add index if needed, but not unique
 }
 
 model players_team {
@@ -120,14 +106,14 @@ model matches {
 
 model score {
   id_score  Int     @id @default(autoincrement())
-  type      String
+  type      String?
   id_league Int
   id_team   Int
-  matches   Int?
+  matches   Int? 
   wins      Int?
   loses     Int?
   points    Int?
-  draws     Int?
+  draws     Int?    
   leagues   leagues @relation(fields: [id_league], references: [id_league])
   teams     teams   @relation(fields: [id_team], references: [id_team])
 }
@@ -165,9 +151,6 @@ model sports_league {
   @@unique([id_league, id_sport_custom])
 }
 
-//------------------------------------------------------
-// GoogleAuth Scope
-
 model Account {
   userId            String
   type              String
@@ -180,11 +163,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -193,10 +174,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
 }
 
 model VerificationToken {
@@ -207,7 +187,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -217,8 +196,15 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Invitations {
+  id_invitation Int     @id @default(autoincrement())
+  id_league     Int
+  id_user       String
+  leagues       leagues @relation(fields: [id_league], references: [id_league])
+  user          User    @relation(fields: [id_user], references: [id])
 }
