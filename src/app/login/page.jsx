@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import { login } from "./actions";
-import { auth, signOut, signIn } from "auth";
+import { auth, signIn } from "auth";
 import React from "react";
 import "./login.css";
 import "../globals.css";
@@ -78,7 +78,7 @@ const Login = async () => {
             </button>
           </form>
         </div>
-        
+
       </div>
       {/* RIGHT/TOP SIDE */}
       <div className="relative bg-sidebar-light dark:bg-sidebar-dark flex flex-col items-center justify-center md:absolute right-0 md:h-screen md:w-2/5 xl:w-1/3 z-10">

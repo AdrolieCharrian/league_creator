@@ -5,7 +5,6 @@ import React, { useRef, useEffect } from "react";
 import { Merienda } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
-import { FaUserCircle } from "react-icons/fa"; //<FaUserCircle />
 import { CldImage } from "next-cloudinary";
 
 const merienda = Merienda({ subsets: ["latin"] });
@@ -27,7 +26,6 @@ const HomeComponent = (props) => {
     window.addEventListener("mousemove", handleOnMove);
     window.addEventListener("touchmove", handleOnMove);
 
-    // Cleanup event listeners on unmount
     return () => {
       window.removeEventListener("mousemove", handleOnMove);
       window.removeEventListener("touchmove", handleOnMove);
@@ -46,7 +44,7 @@ const HomeComponent = (props) => {
               <Link href="/">HOME</Link>
             </li>
             <li className="mr-6">
-              <a href="#">About</a>
+              <Link href="/about">About</Link>
             </li>
           </ul>
           <div className="flex items-center">
@@ -98,7 +96,7 @@ const HomeComponent = (props) => {
               <Link href="/">HOME</Link>
             </li>
             <li className="mr-6">
-              <a href="#">About</a>
+              <Link href="/about">About</Link>
             </li>
           </ul>
           <div className="flex items-center">
