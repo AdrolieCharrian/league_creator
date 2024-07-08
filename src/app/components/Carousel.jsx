@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Cat1 from "../../../public/Cat1.jpg"
@@ -28,7 +28,7 @@ const Carousel = () => {
     }
 
     return (
-        <div className={`flex justify-center items-center w-full h-64 md:min-h-96 sm:my-12 xl:my-36`}>
+        <div className={`flex justify-center items-center w-full h-64 md:min-h-96 my-12 md:my-20 sm:my-12 xl:my-36`}>
             <div onClick={prevSlide} className="z-10 rounded-full absolute bg-white w-10 h-10 left-4 flex justify-center items-center hover:cursor-pointer sm:left-20 xl:left-56">
                 <ChevronLeft />
             </div>
@@ -40,7 +40,7 @@ const Carousel = () => {
             <div onClick={nextSlide} className="rounded-full absolute bg-white w-10 h-10 right-4 flex justify-center items-center hover:cursor-pointer sm:right-20 xl:right-56">
                 <ChevronRight />
             </div>
-            <span className="flex absolute bottom-2 xl:bottom-14 gap-1">
+            <span className="flex absolute bottom-16 sm:bottom-8 md:bottom-2 xl:bottom-14 gap-1">
                 {slides.map((_, idx) => (
                     <button className={slide === idx ? "rounded-full w-2 h-2 bg-white outline-none" : "rounded-full w-2 h-2 bg-gray-500 outline-none"}
                         key={idx} onClick={() => setSlide(idx)}></button>
