@@ -16,7 +16,7 @@ const About = () => {
                 </ul>
                 <div className="flex gap-4">
                     <DarkButton />
-                    <button className="">
+                    <button className="w-full">
                         <Link className="" href="/login">
                             LogIn / SignIn
                         </Link>
@@ -27,9 +27,10 @@ const About = () => {
                 <div className="relative flex items-center justify-center">
                     <Carousel />
                 </div>
-                <div className="w-100 h-100 p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8">
+                {/* p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8 */}
+                <div className="w-100 h-100 p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8 xl:px-44">
                     <div className="text-white mb-8 xl:mb-16">
-                        <p className="text-xl mb-2 md:text-4xl text-center">
+                        <p className="text-xl mb-2 md:text-4xl text-center xl:mb-4">
                             Welcome to League Manager!
                         </p>
                         <p className="text-sm md:text-xl text-center">We created for you a new tool to create and manage leagues and teams.
@@ -38,7 +39,7 @@ const About = () => {
                     <div className="text-white mb-3 xl:mb-8">
                         <p className="mb-1 md:text-xl">Step 1</p>
                         <p className="text-xs md:text-base">Create your account and fill in your info, or log in with your google account.
-                            You can change your info in your profile.
+                            You can change your info in the profile.
                         </p>
                     </div>
                     <div className="text-white mb-3 xl:mb-8">
