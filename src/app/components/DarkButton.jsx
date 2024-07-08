@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Sun,Moon } from "lucide-react";
 
 export default function DarkButton() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -30,9 +31,9 @@ export default function DarkButton() {
   return (
     <button
       onClick={toggleDarkMode}
-      className=" bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black text-center rounded-full border-2 w-1/4 py-3 md:w-1/4 xl:w-2/6"
+      className=" bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black text-center rounded-full border-2 p-3"
     >
-      {isDarkMode ? "Light" : "Dark"}
+      {isDarkMode ? <Sun/> : <Moon/>}
     </button>
   );
 }

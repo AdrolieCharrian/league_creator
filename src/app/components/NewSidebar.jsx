@@ -3,7 +3,7 @@ import "./sidebar.css";
 import "../globals.css"
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut,Sun,Moon } from "lucide-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { accountSignOut } from "../login/actions";
@@ -118,7 +118,7 @@ export default function NewSidebar({ children, name, image, session, user }) {
               onClick={toggleDarkMode}
               className="px-1 py-1 text-sm bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
             >
-              {isDarkMode ? "Light" : "Dark"}
+              {isDarkMode ? <Sun/> : <Moon/>}
             </button>
           </div>
           {children}
@@ -192,7 +192,7 @@ export default function NewSidebar({ children, name, image, session, user }) {
                 onClick={toggleDarkMode}
                 className="px-2 py-1 bg-gray-200 rounded-full hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white text-black"
               >
-                {isDarkMode ? "Light" : "Dark"}
+                {isDarkMode ? <Sun/> : <Moon/>}
               </button>
             </div>
           </div>
