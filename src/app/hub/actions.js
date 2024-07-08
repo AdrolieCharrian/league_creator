@@ -93,6 +93,20 @@ export const createNewLeague = async (idAdmin, newLeague) => {
 };
 
 export const deleteLeague = async (idLeague) => {
+  await prisma.players_team.deleteMany({
+    where: {
+      teams: {
+        id_league: idLeague,
+      },
+    },
+  });
+
+  await prisma.teams.deleteMany({
+    where: {
+      id_league: idLeague,
+    },
+  });
+
   await prisma.league_players.deleteMany({
     where: {
       id_league: idLeague,
@@ -105,6 +119,7 @@ export const deleteLeague = async (idLeague) => {
     },
   });
 };
+
 
 export const getAdminFromLeague = async (idLeague) => {
   const adminFromLeague = await prisma.leagues.findUnique({
@@ -854,4 +869,41 @@ export const identifyWinner = async (idMatch) => {
   } else {
     return { status: true, winner: null };
   }
+};
+
+// ---- config teams:
+
+export const deleteTeamWithPlayers = async (teamId) => {
+  await prisma.$transaction(async (prismaClient) => {
+    // Eliminar todas las entradas de score donde el equipo está involucrado
+    await prismaClient.score.deleteMany({
+      where: {
+        id_team: teamId,
+      },
+    });
+
+    // Eliminar todas las entradas de matches donde el equipo está involucrado
+    await prismaClient.matches.deleteMany({
+      where: {
+        OR: [
+          { id_team_one: teamId },
+          { id_team_two: teamId },
+        ],
+      },
+    });
+
+    // Eliminar todos los jugadores del equipo
+    await prismaClient.players_team.deleteMany({
+      where: {
+        id_team: teamId,
+      },
+    });
+
+    // Finalmente, eliminar el equipo
+    await prismaClient.teams.delete({
+      where: {
+        id_team: teamId,
+      },
+    });
+  });
 };
