@@ -16,14 +16,15 @@ export default function LeagueCard({ league, onDelete }) {
     setIsConfirmModalOpen(true);
   };
 
-  const closeConfirmModal = () => {
+  const closeConfirmModal = (event) => {
+    event.stopPropagation(); // Detener la propagación del evento
     setIsConfirmModalOpen(false);
   };
 
-  const handleDelete = (e) => {
-    e.stopPropagation()
+  const handleDelete = (event) => {
+    event.stopPropagation(); // Detener la propagación del evento
     onDelete(league.id_league);
-    closeConfirmModal();
+    closeConfirmModal(event);
   };
 
   const handleNavigate = async (id) => {
@@ -37,7 +38,7 @@ export default function LeagueCard({ league, onDelete }) {
       className="w-100 rounded-lg overflow-hidden shadow-lg text-center bg-background-light mt-1 relative"
       onClick={() => handleNavigate(league.id_league)}
     >
-      {league.image ?
+      {league.image ? (
         <CldImage
           className="cursor-pointer duration-500 p-3"
           width="300"
@@ -45,14 +46,16 @@ export default function LeagueCard({ league, onDelete }) {
           alt="league-img"
           crop="fill"
           src={league.image}
-        /> :
+        />
+      ) : (
         <Image
           src="/sidebar/logo.png"
           width={300}
           height={300}
           className="cursor-pointer duration-500 w-full p-3"
           alt=""
-        />}
+        />
+      )}
       <div className="py-4">
         <div className="font-bold text-xl mb-2">{league.name}</div>
       </div>
@@ -63,7 +66,7 @@ export default function LeagueCard({ league, onDelete }) {
             onClick={openConfirmModal}
             className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2"
           >
-            <Trash2/>
+            <Trash2 />
           </button>
           {isConfirmModalOpen && (
             <div
@@ -71,8 +74,12 @@ export default function LeagueCard({ league, onDelete }) {
               tabIndex="-1"
               aria-hidden="true"
               className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+              onClick={closeConfirmModal} // Permitir cerrar el modal al hacer clic fuera del contenido
             >
-              <div className="relative w-full max-w-md max-h-full">
+              <div
+                className="relative w-full max-w-md max-h-full"
+                onClick={(e) => e.stopPropagation()} // Evitar cerrar el modal al hacer clic dentro del contenido
+              >
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                   <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -102,7 +109,9 @@ export default function LeagueCard({ league, onDelete }) {
                     </button>
                   </div>
                   <div className="p-4">
-                    <p>Are you sure you want to delete this league?</p>
+                    <p className="dark:text-white">
+                      Are you sure you want to delete this league?
+                    </p>
                     <div className="flex justify-end mt-4">
                       <button
                         onClick={handleDelete}

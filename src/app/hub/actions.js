@@ -93,32 +93,81 @@ export const createNewLeague = async (idAdmin, newLeague) => {
 };
 
 export const deleteLeague = async (idLeague) => {
-  await prisma.players_team.deleteMany({
+  // Obtener los equipos relacionados con la liga
+  const teams = await prisma.teams.findMany({
+    where: { id_league: idLeague },
+    select: { id_team: true },
+  });
+
+  const teamIds = teams.map(team => team.id_team);
+
+  // Eliminar partidos donde participen equipos de la liga
+  await prisma.matches.deleteMany({
     where: {
-      teams: {
-        id_league: idLeague,
-      },
+      OR: [
+        { id_team_one: { in: teamIds } },
+        { id_team_two: { in: teamIds } }
+      ]
+    }
+  });
+
+  // Eliminar deportes personalizados asociados con la liga
+  await prisma.sports_custom.deleteMany({
+    where: {
+      id_league: idLeague,
     },
   });
 
+  // Eliminar relaciones entre deportes y ligas
+  await prisma.sports_league.deleteMany({
+    where: {
+      id_league: idLeague,
+    },
+  });
+
+  // Eliminar puntajes relacionados con equipos de la liga
+  await prisma.score.deleteMany({
+    where: {
+      id_team: { in: teamIds }
+    },
+  });
+
+  // Eliminar jugadores del equipo relacionado con la liga
+  await prisma.players_team.deleteMany({
+    where: {
+      id_team: { in: teamIds }
+    },
+  });
+
+  // Eliminar equipos relacionados con la liga
   await prisma.teams.deleteMany({
     where: {
       id_league: idLeague,
     },
   });
 
+  // Eliminar jugadores relacionados con la liga
   await prisma.league_players.deleteMany({
     where: {
       id_league: idLeague,
     },
   });
 
+  // Eliminar invitaciones relacionadas con la liga
+  await prisma.Invitations.deleteMany({
+    where: {
+      id_league: idLeague,
+    },
+  });
+
+  // Finalmente, eliminar la liga
   await prisma.leagues.delete({
     where: {
       id_league: idLeague,
     },
   });
 };
+
 
 
 export const getAdminFromLeague = async (idLeague) => {
@@ -443,12 +492,7 @@ export const createNewTeam = async (formData, leagueId, image) => {
     );
   }
 
-  await prisma.players_team.create({
-    data: {
-      id_player: leaguePlayer.id_participation_league,
-      id_team: createdTeam.id_team,
-    },
-  });
+ 
 };
 
 // ---- Teams inside league
