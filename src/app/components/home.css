@@ -12,3 +12,15 @@
     margin: 0px 10vw 0px 15vw;
     width: 75vw;
 }
+
+.carousel-item{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease-in-out;
+}
+.carousel-item.active{
+    opacity: 1;
+}
