@@ -31,7 +31,7 @@ const Carousel = () => {
     }
 
     return (
-        <div className="w-full bg-opacity-50 bg-white">
+        <div className="w-full bg-opacity-15 bg-white">
             <div className={`flex justify-center items-center w-full h-64 md:min-h-96 my-12 md:my-20 sm:my-12 xl:my-36`}>
                 <div onClick={prevSlide} className="z-10 rounded-full absolute bg-white w-10 h-10 left-4 flex justify-center items-center hover:cursor-pointer sm:left-20 xl:left-56">
                     <ChevronLeft />
