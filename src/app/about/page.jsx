@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import Carousel from "../components/Carousel";
+import CarouselComponent from "../components/Carousel";
 import DarkButton from "../components/DarkButton";
 import "../components/home.css";
 import "../globals.css"
@@ -25,7 +25,7 @@ const About = () => {
             </nav>
             <div className="w-100 h-100 bg-sidebar-light dark:bg-sidebar-dark">
                 <div className="relative flex items-center justify-center">
-                    <Carousel />
+                    <CarouselComponent />
                 </div>
                 <div className="w-100 h-100 p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8 xl:px-44">
                     <div className="text-white mb-8 xl:mb-16">
