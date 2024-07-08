@@ -15,12 +15,12 @@ const About = () => {
                     </li>
                 </ul>
                 <div className="flex gap-4">
-                    <DarkButton />
                     <button className="w-full">
                         <Link className="" href="/login">
                             LogIn / SignIn
                         </Link>
                     </button>
+                    <DarkButton />
                 </div>
             </nav>
             <div className="w-100 h-100 bg-sidebar-light dark:bg-sidebar-dark">

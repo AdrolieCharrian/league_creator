@@ -7,7 +7,7 @@ import Cat2 from "../../../public/Cat2.jpg"
 import Cat3 from "../../../public/Cat3.jpg"
 import "./home.css"
 
-const Carousel = (props) => {
+const Carousel = () => {
     const [slide, setSlide] = useState(0)
     const slides = [Cat1, Cat2, Cat3]
 
