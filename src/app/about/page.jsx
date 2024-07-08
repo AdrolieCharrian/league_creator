@@ -27,7 +27,6 @@ const About = () => {
                 <div className="relative flex items-center justify-center">
                     <Carousel />
                 </div>
-                {/* p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8 */}
                 <div className="w-100 h-100 p-4 sm:p-8 sm:pt-6 xl:p-16 xl:pt-8 xl:px-44">
                     <div className="text-white mb-8 xl:mb-16">
                         <p className="text-xl mb-2 md:text-4xl text-center xl:mb-4">
@@ -68,7 +67,7 @@ const About = () => {
                     <div className="text-white mb-3">
                         <p className="mb-1 md:text-xl">Last Step</p>
                         <p className="text-xs md:text-base">After everything is ready to go, all you have to do is generate all the games that will
-                            take place in the "matches" tab. Whenever the winner is decided you just have to select which team won and the
+                            take place in the matches tab. Whenever the winner is decided you just have to select which team won and the
                             leaderboard will update itself.
                         </p>
                     </div>
